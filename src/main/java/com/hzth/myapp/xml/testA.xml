@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE person SYSTEM "person.dtd">
+<person>
+	<name>
+		<xname>zhangsan</xname>
+		<cname>zhangsi</cname>
+	</name>
+	<sex>
+	male
+	</sex>
+	<height dw="cm">
+	178
+	</height>
+	<birthday>
+	1985-10-10
+	</birthday>
+	<phone>
+	123456789
+	</phone>
+	<address>
+	beijing
+	</address>
+</person>

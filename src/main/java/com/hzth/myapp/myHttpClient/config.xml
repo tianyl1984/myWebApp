@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aletheia>
+	<filters>
+		<in>
+			<filter name="com.hzth.myapp.myHttpClient.filter.request.UserAgent">
+				<property name="agent">Lynx 2.8.7</property>
+			</filter>
+		</in>
+		<out>
+			<filter name="com.hzth.myapp.myHttpClient.filter.response.Location" />
+		</out>
+	</filters>
+</aletheia>

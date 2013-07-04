@@ -1,0 +1,10 @@
+<!ELEMENT person(name,sex,height,birthday,phone,address?)>
+<!ELEMENT name(xname,cname?)>
+<!ELEMENT xname(#PCDATA)>
+<!ELEMENT cname(#PCDATA)>
+<!ELEMENT sex(male|famale)>
+<!ELEMENT height(PCDATA)>
+<!ELEMENT birthday(PCDATA)>
+<!ELEMENT phone(PCDATA)>
+<!ELEMENT address(PCDATA)>
+<!ATTLIST height dw (cm|m) #REQUIRED>
