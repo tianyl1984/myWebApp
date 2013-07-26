@@ -45,8 +45,6 @@ public class Test {
 		// MessageBox dm_ret
 
 		// E8 0D 4B 39
-
-		System.out.println(Integer.valueOf("19", 16));
 		if (true) {
 			return;
 		}

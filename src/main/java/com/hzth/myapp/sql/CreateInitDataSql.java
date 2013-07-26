@@ -15,17 +15,17 @@ import com.hzth.myapp.core.util.UUID;
 public class CreateInitDataSql {
 
 	public static void main(String[] args) {
-		String moduleId = "20130624091441394629340866507032";
+		String moduleId = "20130709144957796540366406936606";
 		Connection conn = null;
 		Connection conn2 = null;
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("localhost", "dc_ex", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_cc", "sa", "hzth-801");
 			// 标准库连接
-			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_empty", "sa", "hzth-801");
-			// createModule(moduleId, conn);
-			// createOperation(moduleId, conn);
+			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_ex", "sa", "hzth-801");
+			createModule(moduleId, conn);
+			createOperation(moduleId, conn);
 			// createConfiguration(conn, conn2);
 			// createDict(conn, conn2);
 			// createAttachmentconfig(conn, conn2);
@@ -42,22 +42,17 @@ public class CreateInitDataSql {
 			// tables.add("bd_operation");
 			// tables.add("sc_topic");
 			// createTable(tables, conn, conn2);
-			List<String> ids = new ArrayList<String>();
-			ids.add("20130628111550465356162010494885");
-			for (String id : ids) {
-				createOperationById(id, conn);
-			}
 			// List<String> ids = new ArrayList<String>();
-			// ids.add("20130517152114907430310864986612");
-			// ids.add("20130517152140543472310773862181");
-			// ids.add("20130517152158168798015664635517");
-			// ids.add("20130517153242328807829601663665");
-			// ids.add("20130517153112524200224847514021");
-			// System.out.println("--开始");
+			// ids.add("20130712125746946131175975781613");
+			// for (String id : ids) {
+			// createOperationById(id, conn2);
+			// }
+			// List<String> ids = new ArrayList<String>();
+			// ids.add("20130705163414045213943997083822");
+			// ids.add("20130715155426408488293812601213");
 			// for (String id : ids) {
 			// createDictById(id, conn);
 			// }
-			// createDictById2("", conn2);
 			System.out.println("-----end-----");
 		} catch (Exception e) {
 			e.printStackTrace();

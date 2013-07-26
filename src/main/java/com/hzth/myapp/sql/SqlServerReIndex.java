@@ -14,13 +14,13 @@ public class SqlServerReIndex {
 	public static void main(String[] args) throws Exception {
 		Connection conn2 = getConnection();
 		select(conn2);
-		DBUtil.close(conn2);
+		SqlHelper.close(conn2);
 		for (int i = 0; i < 100; i++) {
 			Connection conn = getConnection();
 			// delete(conn);
 			// insert(conn);
 			update(conn);
-			DBUtil.close(conn);
+			SqlHelper.close(conn);
 			// update(conn);
 		}
 	}
@@ -49,7 +49,7 @@ public class SqlServerReIndex {
 			ps.setString(17, score.getTs());
 			ps.setString(18, score.getDf());
 			ps.execute();
-			DBUtil.close(ps);
+			SqlHelper.close(ps);
 		}
 	}
 
@@ -60,7 +60,7 @@ public class SqlServerReIndex {
 			PreparedStatement ps = conn.prepareStatement(deleteSql);
 			ps.setString(1, score.getId());
 			ps.execute();
-			DBUtil.close(ps);
+			SqlHelper.close(ps);
 		}
 	}
 
@@ -95,8 +95,8 @@ public class SqlServerReIndex {
 			scores.add(score);
 		}
 		System.out.println("完成查询");
-		DBUtil.close(rs);
-		DBUtil.close(ps);
+		SqlHelper.close(rs);
+		SqlHelper.close(ps);
 	}
 
 	private static void update(Connection conn) throws Exception {
@@ -122,7 +122,7 @@ public class SqlServerReIndex {
 			ps.setString(17, score.getDf());
 			ps.setString(18, score.getId());
 			ps.execute();
-			DBUtil.close(ps);
+			SqlHelper.close(ps);
 			System.out.println("update:" + score.getId());
 		}
 	}

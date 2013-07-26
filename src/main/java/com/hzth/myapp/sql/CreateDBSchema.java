@@ -53,8 +53,8 @@ public class CreateDBSchema {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DBUtil.close(conn);
-			DBUtil.close(conn2);
+			SqlHelper.close(conn);
+			SqlHelper.close(conn2);
 		}
 	}
 
@@ -395,7 +395,7 @@ public class CreateDBSchema {
 							System.out.println("执行失败\n" + sql);
 							flag = false;
 						} finally {
-							DBUtil.close(st);
+							SqlHelper.close(st);
 							sql = null;
 						}
 					} else {
@@ -406,7 +406,7 @@ public class CreateDBSchema {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DBUtil.close(conn);
+			SqlHelper.close(conn);
 		}
 		System.out.println(flag ? "全部成功执行" : "有执行错误");
 	}
@@ -431,9 +431,9 @@ public class CreateDBSchema {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DBUtil.close(resultSet);
-			DBUtil.close(ps);
-			DBUtil.close(conn);
+			SqlHelper.close(resultSet);
+			SqlHelper.close(ps);
+			SqlHelper.close(conn);
 		}
 	}
 

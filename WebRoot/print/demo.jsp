@@ -16,9 +16,19 @@
 				newNode.innerHTML = plusHtml;
 				document.body.appendChild(newNode);
 			}
-		    var lodop = document.getElementById('LODOP_EM');
+		    var lodop = null;
+		    if(navigator.appVersion.indexOf("MSIE") >= 0){
+		    	lodop = document.getElementById('LODOP');
+		    }else{
+		    	lodop = document.getElementById('LODOP_EM');
+		    }
+		    if(typeof(lodop.VERSION) == "undefined"){
+		    	alert("未安装打印控件！！！");
+		    	return;
+		    }
 		    lodop.PRINT_INIT("");
 		    lodop.ADD_PRINT_HTM(10,10,"100%","100%",$("#aaa").html());
+// 		    lodop.SET_PRINT_PAGESIZE(1,0,0,null);
 		    lodop.PREVIEW();
 		}
 	</script>
@@ -36,7 +46,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach begin="0" end="50" step="1" var="index">
+			<c:forEach begin="0" end="10" step="1" var="index">
 			<tr>
 				<td>${index }</td>
 				<td>张三${index }</td>

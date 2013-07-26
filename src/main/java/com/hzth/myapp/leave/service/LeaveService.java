@@ -128,7 +128,7 @@ public class LeaveService {
 			if (count > 0) {
 				// throw new RuntimeException("此版本已有申请存在，不能删除！");
 			}
-			// TODO 历史信息未验证
+			// 历史信息未验证
 		}
 		repositoryService.deleteDeployment(deploymentId, true);
 	}

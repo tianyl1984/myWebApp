@@ -37,13 +37,65 @@
 	            tbl.css("display", "none");
 			}
 			
+			function changeToGrid2(){
+				var tbl = $("#tab2");
+	            var obj = $.adapter.tableToArray($("#tabbody2"));
+	            var newObj = {width:700,height:400,title:"Grid From Table",resizable:true,freezeCols:1,editable:false,numberCell:false};
+	            newObj.dataModel = {data:obj.data};
+	            newObj.tdAttr = obj.tdAttr;
+				newObj.colModel = [
+				                   {title:"姓名"},
+				                   {title:"语文",colModel:[{title:"分数",sortable:false,width:100},{title:"排名",dataType:"integer"}]},
+				                   {title:"aaa",colModel:[{title:"分数",sortable:false,width:100},{title:"排名"}]},
+				                   {title:"bbb"},
+				                   {title:"ccc"}
+				                   ];
+	            $("#grid_table2").pqGrid(newObj);
+	            tbl.css("display", "none");
+			}
+			
+			
+			
 			$(document).ready(function(){
-				changeToGrid();
+				changeToGrid2();
 			})
 		</script>
 	</head>
 	<body>
-	<table id="tab">
+	<div style="display: none">
+		<table id="tab">
+			<thead>
+				<tr>
+					<th rowspan="2">姓名</th>
+					<th colspan="2">语文</th>
+					<th colspan="2">aaa</th>
+					<th rowspan="2">bbb</th>
+					<th rowspan="2">ccc</th>
+				</tr>
+				<tr>
+					<th>分数</th>
+					<th>排名</th>
+					<th>分数</th>
+					<th>排名</th>
+				</tr>
+			</thead>
+			<tbody id="tabbody">
+			<c:forEach begin="1" end="500" var="index">
+				<tr>
+					<td>张三${index }</td>
+					<td>分数${index }</td>
+					<td>${index }</td>
+					<td>分数aaa${index }</td>
+					<td>aaa${index }</td>
+					<td>bbb${index }</td>
+					<td>ccc${index }</td>
+				</tr>
+			</c:forEach>
+			</tbody>
+		</table>
+		<div id="grid_table"></div>
+	</div>
+	<table id="tab2">
 		<thead>
 			<tr>
 				<th rowspan="2">姓名</th>
@@ -59,10 +111,9 @@
 				<th>排名</th>
 			</tr>
 		</thead>
-		<tbody id="tabbody">
-		<c:forEach begin="1" end="500" var="index">
+		<tbody id="tabbody2">
 			<tr>
-				<td>张三${index }</td>
+				<td rowspan="3">张三${index }</td>
 				<td>分数${index }</td>
 				<td>${index }</td>
 				<td>分数aaa${index }</td>
@@ -70,9 +121,24 @@
 				<td>bbb${index }</td>
 				<td>ccc${index }</td>
 			</tr>
-		</c:forEach>
+			<tr>
+				<td>分数${index }</td>
+				<td>${index }</td>
+				<td>分数aaa${index }</td>
+				<td>aaa${index }</td>
+				<td>bbb${index }</td>
+				<td>ccc${index }</td>
+			</tr>
+			<tr>
+				<td>分数${index }</td>
+				<td>${index }</td>
+				<td>分数aaa${index }</td>
+				<td>aaa${index }</td>
+				<td>bbb${index }</td>
+				<td>ccc${index }</td>
+			</tr>
 		</tbody>
 	</table>
-	<div id="grid_table"></div>
+	<div id="grid_table2"></div>
 	</body>
 </html>

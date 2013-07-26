@@ -59,6 +59,8 @@ public class CheckPdm {
 		abbreviationList.add("re");
 		abbreviationList.add("lu");
 		abbreviationList.add("sr");
+		abbreviationList.add("cc");
+		abbreviationList.add("rs");
 
 		// abbreviationList.add("om");
 		// abbreviationList.add("da");
