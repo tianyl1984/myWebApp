@@ -2,7 +2,6 @@ package com.hzth.myapp.jfreechart;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 
 import javax.swing.JPanel;
 
@@ -55,52 +54,47 @@ public class XYSeriesDemo3 extends ApplicationFrame {
 		JFreeChart jfreechart = ChartFactory.createXYBarChart("XY Series Demo 3", "X", false, "Y", intervalxydataset, PlotOrientation.VERTICAL, true, true, false);
 		XYPlot xyplot = (XYPlot) jfreechart.getPlot();
 		NumberAxis numAxis = new NumberAxis("YYY");
-		numAxis.setRange(0, 1000);
+		numAxis.setRange(0, 1d);
 		xyplot.setRangeAxis(numAxis);
-		IntervalMarker intervalmarker = new IntervalMarker(0D, 200D);
+
+		IntervalMarker intervalmarker = new IntervalMarker(0D, 0.2);
 		intervalmarker.setLabel("Target Range");
-		intervalmarker.setLabelFont(new Font("SansSerif", 2, 11));
 		intervalmarker.setLabelAnchor(RectangleAnchor.TOP_RIGHT);
 		intervalmarker.setLabelTextAnchor(TextAnchor.CENTER_LEFT);
 		intervalmarker.setPaint(Color.BLACK);
 		xyplot.addRangeMarker(intervalmarker, Layer.BACKGROUND);
 
-		IntervalMarker intervalmarker2 = new IntervalMarker(200, 400);
+		IntervalMarker intervalmarker2 = new IntervalMarker(0.2, 0.4);
 		intervalmarker2.setLabel("Target Range");
-		intervalmarker2.setLabelFont(new Font("SansSerif", 2, 11));
 		intervalmarker2.setLabelAnchor(RectangleAnchor.RIGHT);
 		intervalmarker2.setLabelTextAnchor(TextAnchor.CENTER_LEFT);
 		intervalmarker2.setPaint(Color.BLUE);
 		xyplot.addRangeMarker(intervalmarker2, Layer.BACKGROUND);
 
-		IntervalMarker intervalmarker3 = new IntervalMarker(400, 600);
+		IntervalMarker intervalmarker3 = new IntervalMarker(0.4, 0.6);
 		intervalmarker3.setLabel("Target Range");
-		intervalmarker3.setLabelFont(new Font("SansSerif", 2, 11));
 		intervalmarker3.setLabelAnchor(RectangleAnchor.RIGHT);
 		intervalmarker3.setLabelTextAnchor(TextAnchor.CENTER_LEFT);
 		intervalmarker3.setPaint(Color.CYAN);
 		xyplot.addRangeMarker(intervalmarker3, Layer.BACKGROUND);
 
-		IntervalMarker intervalmarker4 = new IntervalMarker(600, 800);
+		IntervalMarker intervalmarker4 = new IntervalMarker(0.6, 0.8);
 		intervalmarker4.setLabel("Target Range");
-		intervalmarker4.setLabelFont(new Font("SansSerif", 2, 11));
 		intervalmarker4.setLabelAnchor(RectangleAnchor.RIGHT);
 		intervalmarker4.setLabelTextAnchor(TextAnchor.CENTER_LEFT);
 		intervalmarker4.setPaint(Color.GREEN);
 		xyplot.addRangeMarker(intervalmarker4, Layer.BACKGROUND);
 
-		IntervalMarker intervalmarker5 = new IntervalMarker(800, 1000);
+		IntervalMarker intervalmarker5 = new IntervalMarker(0.8, 1);
 		intervalmarker5.setLabel("Target Range");
-		intervalmarker5.setLabelFont(new Font("SansSerif", 2, 11));
 		intervalmarker5.setLabelAnchor(RectangleAnchor.RIGHT);
 		intervalmarker5.setLabelTextAnchor(TextAnchor.CENTER_LEFT);
 		intervalmarker5.setPaint(Color.ORANGE);
 		xyplot.addRangeMarker(intervalmarker5, Layer.BACKGROUND);
 
-		// NumberAxis axis = new NumberAxis("Axis 2");
 		String[] sv = new String[] { "", "A层级", "", "b层级", "", "c层级", "", "d层级", "", "e层级", "" };
 		SymbolAxis axis = new SymbolAxis("aaaa", sv);
-		axis.setRange(0d, 10);
+		axis.setRange(0d, 1);
 		xyplot.setRangeAxis(1, axis);
 		return jfreechart;
 	}

@@ -61,6 +61,9 @@ public class CheckPdm {
 		abbreviationList.add("sr");
 		abbreviationList.add("cc");
 		abbreviationList.add("rs");
+		abbreviationList.add("va");
+		abbreviationList.add("am");
+		abbreviationList.add("sm");
 
 		// abbreviationList.add("om");
 		// abbreviationList.add("da");

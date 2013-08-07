@@ -46,27 +46,16 @@
 				var obj={title:title,width:width,dataType:dataType,align:align,dataIndx:i};
 				colModel.push(obj);
 			});
-			var tdAttr = [];
 			$tbl.find("tr").each(function(i,tr){
+				if(i==0)return;
 				var $tr=$(tr);
 				var arr2=[];
-				var arr3 = [];
 				$tr.find("td").each(function(j,td){
 					arr2.push($.trim($(td).html()));
-					var att = {};
-					if(this.rowSpan != 1){
-						att.rowSpan = this.rowSpan;
-					}
-					arr3.push(att);
-					if(this.cellSpan != 1){
-						att.cellSpan = this.cellSpan;
-					}
 				});
 				data.push(arr2);
-				tdAttr.push(arr3);
 			});
-			
-			return {data:data,colModel:colModel,tdAttr:tdAttr};
+			return {data:data,colModel:colModel};
 		}
 	};
 })(jQuery);
@@ -942,7 +931,6 @@ fnSB._setOptions=function(){
             method: "GET",
             rPPOptions: [10, 20, 50, 100]
         },
-        tdAttr:[],
         draggable: false,
         editable: true,
 		editModel: {clicksToEdit:1,saveKey:''},
@@ -954,7 +942,8 @@ fnSB._setOptions=function(){
 		hoverMode:'row',
         minWidth: 50,
         numberCell: true,
-        numberCellWidth: 50,		
+        numberCellWidth: 50,
+        tdAttrs:[],
         resizable: false,	
 		scrollModel:{pace:"fast", horizontal:true},
 		selectionModel: {type:'row',mode:'range'},
@@ -1125,7 +1114,7 @@ fnSB._setOptions=function(){
 		data[rowIndxPage][this.customDataIndx]={selection:null};	
 	}	
     fn._create = function () {
-    	this.tdAttr = this.options.tdAttr;
+    	this.tdAttrs = this.options.tdAttrs;
         this.minWidth = this.options.minWidth;
         this.cols = [];
 		this.dataModel = this.options.dataModel;
@@ -2044,8 +2033,8 @@ fnSB._setOptions=function(){
 			}
 			this.refreshRequired=false;
 		}
-		else if(key == "tdAttr"){
-			this.options.tdAttr = value;
+		else if(key == "tdAttrs"){
+			this.options.tdAttrs = value;
 		}
 		else{
 			$.Widget.prototype._setOption.call(this, key, value);
@@ -3133,7 +3122,7 @@ fnSB._setOptions=function(){
 						colModel=children[tt];
 					}
 				}				
-				var childCount=(colModel.childCount)?colModel.childCount:1;											
+				var childCount=(colModel && colModel.childCount)?colModel.childCount:1;											
 				if(col==childCountSum){
 					colModel.leftPos=col;
 					arr[row][col]=colModel;
@@ -3394,6 +3383,10 @@ fnSB._setOptions=function(){
         if (this.columnBorders) const_cls += "pq-grid-td-border-right ";
         if (this.options.wrap == false) const_cls += "pq-wrap-text ";
         var buffer = ["<table style='table-layout:fixed;width:0px;position:absolute;top:0px;' cellpadding=0 cellspacing=0>"];
+        
+//        var aa = "<thead style='display:none'><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></thead>";
+//        buffer.push(aa);
+        
 		var thisColModel=this.colModel;
         for (var row = init; row <= finall; row++) {
 			var rowData=this.data[row],
@@ -3402,7 +3395,7 @@ fnSB._setOptions=function(){
             if (row / 2 == parseInt(row / 2)) row_cls += " pq-grid-oddRow";
 			if(objPQData.pqData && objPQData.selectedRow){
 				row_cls += " pq-row-select";
-			}
+			}			
             var row_str = "<tr pq-row-indx='" + row + "' class='" + row_cls + "'>"
             buffer.push(row_str);
             if (this.numberCell) {
@@ -3423,7 +3416,7 @@ fnSB._setOptions=function(){
 						cellSelection = selectedDataIndices[dataIndx];													
 					}
 				}
-                if (column.hidden) {
+                if (column.hidden) { 
                     continue;
                 } else if (this.hidearrHS[col]) {
                     hidearrHS1.push(col)
@@ -3448,8 +3441,11 @@ fnSB._setOptions=function(){
 				if(cellSelection){
 					cls = cls+ " pq-cell-select";
 				}
+//				console.log(row +":"+ col+":"+this._renderCell(objRender) + ":");
 				if(objRender.rowData.length > col){
-					var str = "<td " + ((this.tdAttr[row] &&  this.tdAttr[row][col] && this.tdAttr[row][col].rowSpan)?"rowspan='" + this.tdAttr[row][col].rowSpan + "'":"") + " class='" + cls + "' style='" + strStyle + "' pq-col-indx='" + col + "'>\
+					var colSpan;
+					colSpan = (this.tdAttrs[row] &&  this.tdAttrs[row][col] && this.tdAttrs[row][col].colSpan); 
+					var str = "<td " + (colSpan?"colspan='" + colSpan + "'":"") + " class='" + cls + "' style='" + strStyle + "' pq-col-indx='" + col + "'>\
 					" + this._renderCell(objRender) + "</td>";
 					buffer.push(str)
 				}
@@ -3595,26 +3591,3 @@ fnSB._setOptions=function(){
         var cnt = finalTime - initTime;
     }
 })(jQuery);
-var cons = {
-    log: function (str) {
-        try {
-            if ($.browser.msie && typeof str == 'object') throw "";
-            console.log(str);
-        } catch (e) {
-            var st = "";
-            if (typeof str == 'object') {
-                for (var key in str) {
-                    if (typeof str[key] != 'function') st += key + " = " + str[key]
-                }
-            } else {
-                if (document.getElementById('console') == undefined) {
-                    $("<textarea id='console' rows=8 cols=100>" + str + "</textarea>").appendTo(document.body);
-                }
-                var $console = $("#console")
-                $console.text($console.text() + '\r\n' + str);
-                $console[0].scrollTop = 10000000000000;
-            }
-        }
-    }
-};
-

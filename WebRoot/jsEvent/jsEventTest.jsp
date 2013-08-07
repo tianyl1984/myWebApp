@@ -69,6 +69,16 @@
 				$("#divChild").append("哈哈_");
 			}
 		}
+		
+		function testChrome1(){
+			document.addEventListener("DOMNodeInserted", function(e) {
+				console.log(e.target.innerHTML);
+			}, false);
+		}
+		
+		function testChrome2(){
+			$("#divChild").append("<div>aaaaaaaa</div>");
+		}
 	</script>
   </head>
   <body >
@@ -77,5 +87,7 @@
 	<input type="button" value="测试1" onclick="testm1(0.1)">
 	<input type="button" value="测试2" onclick="testm1(0.5)">
 	<input type="button" value="测试3" onclick="testm1(0.8)">
+	<input type="button" value="测试Chrome" onclick="testChrome1()">
+	<input type="button" value="测试Chrome2" onclick="testChrome2()">
   </body>
 </html>

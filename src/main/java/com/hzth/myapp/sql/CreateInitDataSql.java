@@ -21,11 +21,11 @@ public class CreateInitDataSql {
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_cc", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_no_test", "sa", "hzth-801");
 			// 标准库连接
-			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_ex", "sa", "hzth-801");
-			createModule(moduleId, conn);
-			createOperation(moduleId, conn);
+			conn2 = SqlHelper.getSqlServerConnection("localhost", "dctest", "sa", "hzth-801");
+			// createModule(moduleId, conn);
+			// createOperation(moduleId, conn);
 			// createConfiguration(conn, conn2);
 			// createDict(conn, conn2);
 			// createAttachmentconfig(conn, conn2);
@@ -42,15 +42,15 @@ public class CreateInitDataSql {
 			// tables.add("bd_operation");
 			// tables.add("sc_topic");
 			// createTable(tables, conn, conn2);
-			// List<String> ids = new ArrayList<String>();
-			// ids.add("20130712125746946131175975781613");
-			// for (String id : ids) {
-			// createOperationById(id, conn2);
-			// }
-			// List<String> ids = new ArrayList<String>();
-			// ids.add("20130705163414045213943997083822");
+			List<String> ids = new ArrayList<String>();
+			ids.add("20130802151643352129934366794111");
+			for (String id : ids) {
+				createOperationById(id, conn);
+			}
+			// List<String> ids2 = new ArrayList<String>();
+			// ids2.add("20130724165005262601735721347213");
 			// ids.add("20130715155426408488293812601213");
-			// for (String id : ids) {
+			// for (String id : ids2) {
 			// createDictById(id, conn);
 			// }
 			System.out.println("-----end-----");
@@ -268,7 +268,7 @@ public class CreateInitDataSql {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			String sql = "select * from bd_operation where id = '" + id + "' or id_parent = '" + id + "' order by id";
+			String sql = "select * from bd_operation where id = '" + id + "' order by id";
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
 			ResultSetMetaData metaData = rs.getMetaData();

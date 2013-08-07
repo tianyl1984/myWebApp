@@ -43,7 +43,7 @@ public class CreateDBSchema {
 			// 标准库
 			conn = SqlHelper.getSqlServerConnection("127.0.0.1", "aa", "sa", "hzth-801");
 			// 需对比的库
-			conn2 = SqlHelper.getSqlServerConnection("127.0.0.1", "ys", "sa", "hzth-801");
+			conn2 = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_bd_test", "sa", "hzth-801");
 			Map<String, TableInfo> tableMap = getTableInfo(conn);
 			Map<String, TableInfo> tableMap2 = getTableInfo(conn2);
 			showTableDiff(tableMap, tableMap2);

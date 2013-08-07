@@ -1,3 +1,4 @@
+/*product:开发框架V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: fw_attachment                                         */
@@ -66,10 +67,13 @@ go
 insert into fw_attachmentsetting(id,limitFileExtention,ft,fu) values('20120529172911015406605916273091','','2012-05-29 17:29:11','20120507134700000110225236178825');
 insert into fw_attachmentconfig(id,code,saveDir,dirLevel,extension,description,ft,fu) values('20120529172911031725770385248824','default','K:\temp',1,'','','2012-05-29 17:29:11','20120507134700000110225236178825');
 /*tag1.0 end*/
+
+go
+/*product:开发框架V1.0.8*/
 /*tag1.0.8 start*/
 insert into fw_attachmentconfig(id,code,saveDir,dirLevel,fileSize,fileCount,extension,description,ft,lt,fu,lu) values('20130413143416257473632078172989','fw_ueditor','f:/temp','1',null,null,'','','2013-04-13 14:34:16',null,'20120507134700000110225236178825',null);
 /*tag1.0.8 end*/
-
+go
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: bd_applicationgroup                                   */
@@ -7290,6 +7294,249 @@ alter table bd_receiver add sendToOcsFlag char(1);
 alter table bd_receiver add timingMsgFlag char(1);
 alter table bd_receiver add timingTime char(19);
 /*tag1.5 end*/
+/*tag1.6 start*/
+/*==============================================================*/
+/* Table: ma_materials                                          */
+/*==============================================================*/
+create table ma_materials (
+   id                   char(32)             not null,
+   id_materialshandinuser char(32)             null,
+   id_materialskind     char(32)             null,
+   name                 varchar(200)         null,
+   description          varchar(200)         null,
+   handinTime           char(19)             null,
+   id_approvaluser      char(32)             null,
+   approvalView         varchar(200)         null,
+   approvalTime         char(19)             null,
+   approvalStatus       char(1)              null,
+   ft                   char(19)             null,
+   lt                   char(19)             null,
+   fu                   char(32)             null,
+   lu                   char(32)             null
+)
+go
+
+alter table ma_materials
+   add constraint PK_MA_MATERIALS primary key nonclustered (id)
+go
+
+/*==============================================================*/
+/* Table: ma_materialsapprovaluser                              */
+/*==============================================================*/
+create table ma_materialsapprovaluser (
+   id                   char(32)             not null,
+   id_materialskind     char(32)             null,
+   id_materialsnotice   char(32)             null,
+   id_user              char(32)             null,
+   ft                   char(19)             null,
+   lt                   char(19)             null,
+   fu                   char(32)             null,
+   lu                   char(32)             null
+)
+go
+
+alter table ma_materialsapprovaluser
+   add constraint PK_MA_MATERIALSAPPROVALUSER primary key nonclustered (id)
+go
+
+/*==============================================================*/
+/* Table: ma_materialshandinuser                                */
+/*==============================================================*/
+create table ma_materialshandinuser (
+   id                   char(32)             not null,
+   id_materialsnotice   char(32)             null,
+   id_user              char(32)             null,
+   status               char(1)              null,
+   ft                   char(19)             null,
+   lt                   char(19)             null,
+   fu                   char(32)             null,
+   lu                   char(32)             null
+)
+go
+
+alter table ma_materialshandinuser
+   add constraint PK_MA_MATERIALSHANDINUSER primary key nonclustered (id)
+go
+
+/*==============================================================*/
+/* Table: ma_materialskind                                      */
+/*==============================================================*/
+create table ma_materialskind (
+   id                   char(32)             not null,
+   id_parent            char(32)             null,
+   name                 varchar(100)         null,
+   num                  int                  null,
+   description          varchar(200)         null,
+   enableFlag           char(1)              null,
+   ft                   char(19)             null,
+   lt                   char(19)             null,
+   fu                   char(32)             null,
+   lu                   char(32)             null
+)
+go
+
+alter table ma_materialskind
+   add constraint PK_MA_MATERIALSKIND primary key nonclustered (id)
+go
+
+/*==============================================================*/
+/* Table: ma_materialsnotice                                    */
+/*==============================================================*/
+create table ma_materialsnotice (
+   id                   char(32)             not null,
+   id_user              char(32)             null,
+   id_department        char(32)             null,
+   title                varchar(200)         null,
+   content              text                 null,
+   sendTime             char(19)             null,
+   deadline             char(10)             null,
+   approvalFlag         char(1)              null,
+   ft                   char(19)             null,
+   lt                   char(19)             null,
+   fu                   char(32)             null,
+   lu                   char(32)             null
+)
+go
+
+alter table ma_materialsnotice
+   add constraint PK_MA_MATERIALSNOTICE primary key nonclustered (id)
+go
+
+alter table ma_materials
+   add constraint FK_MA_MATER_REFERENCE_BD_USER4 foreign key (id_approvaluser)
+      references bd_user (id)
+go
+
+alter table ma_materials
+   add constraint FK_MA_MATER_REFERENCE_MA_MATER4 foreign key (id_materialskind)
+      references ma_materialskind (id)
+go
+
+alter table ma_materials
+   add constraint FK_MA_MATER_REFERENCE_MA_MATER5 foreign key (id_materialshandinuser)
+      references ma_materialshandinuser (id)
+go
+
+alter table ma_materialsapprovaluser
+   add constraint FK_MA_MATER_REFERENCE_BD_USER2 foreign key (id_user)
+      references bd_user (id)
+go
+
+alter table ma_materialsapprovaluser
+   add constraint FK_MA_MATER_REFERENCE_MA_MATER3 foreign key (id_materialskind)
+      references ma_materialskind (id)
+go
+
+alter table ma_materialsapprovaluser
+   add constraint FK_MA_MATER_REFERENCE_MA_MATER1 foreign key (id_materialsnotice)
+      references ma_materialsnotice (id)
+go
+
+alter table ma_materialshandinuser
+   add constraint FK_MA_MATER_REFERENCE_BD_USER3 foreign key (id_user)
+      references bd_user (id)
+go
+
+alter table ma_materialshandinuser
+   add constraint FK_MA_MATER_REFERENCE_MA_MATER2 foreign key (id_materialsnotice)
+      references ma_materialsnotice (id)
+go
+
+alter table ma_materialskind
+   add constraint FK_MA_MATER_REFERENCE_MA_MATER6 foreign key (id_parent)
+      references ma_materialskind (id)
+go
+
+alter table ma_materialsnotice
+   add constraint FK_MA_MATER_REFERENCE_BD_DEPAR foreign key (id_department)
+      references bd_department (id)
+go
+
+alter table ma_materialsnotice
+   add constraint FK_MA_MATER_REFERENCE_BD_USER1 foreign key (id_user)
+      references bd_user (id)
+go
+
+insert into bd_module(id,name,nameI18n,code,num,deployFlag,ft,lt,fu,lu) values('20120712131535343435525409725777','材料管理','bd_module_ma','ma',7,'1','2012-07-12 13:15:35',null,'20120507134700000110225236178825',null);
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120712131717812690794002092950','20120712131535343435525409725777',null,'材料管理','bd_operation_ma','materialsmanagement','0','/ma/materialsNotice!index.action','0','1',1,'app-Materials','500','850','','2012-07-12 13:17:17','2012-07-25 09:24:43','20120507134700000110225236178825','20120507134700000110225236178825');
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120730172553242163655873035456','20120712131535343435525409725777','20120712131717812690794002092950','材料类型','ma_materialsKindMana','ma_materialsKindMana','2','/ma/materialsKind!materials.action','0','1',1,'','','','','2012-07-30 17:25:53',null,'20120507134700000110225236178825',null);
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120730172634382625304309517000','20120712131535343435525409725777','20120712131717812690794002092950','收批材料','ma_sandApprovalMater','ma_sandApprovalMater','2','/ma/materialsNotice!sendApprovalIndex.action','0','1',2,'','','','','2012-07-30 17:26:34',null,'20120507134700000110225236178825',null);
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120730172933929232764794843756','20120712131535343435525409725777','20120730172634382625304309517000','发材料通知','ma_sendMaterialsNoti','ma_sendMaterialsNoti','2','/ma/materialsNotice!listOfSendMaterialsNotice.action','0','1',1,'','','','','2012-07-30 17:29:33',null,'20120507134700000110225236178825',null);
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120730173014851233013748019340','20120712131535343435525409725777','20120730172634382625304309517000','审批材料','ma_approvalMaterials','ma_approvalMaterials','2','/ma/materialsApprovalUser!listOfApprovalNotice.action','0','1',2,'','','','','2012-07-30 17:30:14',null,'20120507134700000110225236178825',null);
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120730172719757428283569716447','20120712131535343435525409725777','20120712131717812690794002092950','上交材料','ma_handinMaterials','ma_handinMaterials','2','/ma/materialsHandinUser!listOfReceiveMaterialsNotice.action','0','1',3,'','','','','2012-07-30 17:27:19',null,'20120507134700000110225236178825',null);
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120730172808023072912584566907','20120712131535343435525409725777','20120712131717812690794002092950','材料库','ma_materialsLibray','ma_materialsLibray','2','/ma/materials!toMaterialsLibray.action','0','1',4,'','','','','2012-07-30 17:28:08',null,'20120507134700000110225236178825',null);
+go
+create table ma_viewuser (
+   id_materialsnotice   char(32)             null,
+   id_user              char(32)             null
+)
+go
+
+alter table ma_viewuser
+   add constraint FK_MA_VIEWU_REFERENCE_MA_MATER foreign key (id_materialsnotice)
+      references ma_materialsnotice (id)
+go
+
+alter table ma_viewuser
+   add constraint FK_MA_VIEWU_REFERENCE_BD_USER foreign key (id_user)
+      references bd_user (id)
+go
+--材料配置（到截止日期后是否可以上交）
+INSERT [dbo].[bd_configuration] ([id], [id_module], [kind], [configurationMode], [name], [code], [description], [visibleFlag], [ft], [lt], [fu], [lu]) VALUES (N'20130521132957420627368878461506', N'20120712131535343435525409725777', N'1', N'1', N'到达截止日期后是否允许上交', N'materialsTimelimitFlag', N'', N'0', N'2013-05-21 13:29:57', N'2013-05-21 13:51:32', N'20120507134700000110225236178825', N'20120507134700000110225236178825');
+INSERT [dbo].[bd_configurationitem] ([id], [id_configuration], [name], [value], [defaultFlag], [ft], [lt], [fu], [lu]) VALUES (N'20130521132957416854508121392440', N'20130521132957420627368878461506', N'允许', N'0', N'1', NULL, N'2013-05-21 13:51:32', NULL, N'20120507134700000110225236178825');
+INSERT [dbo].[bd_configurationitem] ([id], [id_configuration], [name], [value], [defaultFlag], [ft], [lt], [fu], [lu]) VALUES (N'20130521132957416992227161439999', N'20130521132957420627368878461506', N'不允许', N'1', NULL, NULL, N'2013-05-21 13:51:32', NULL, N'20120507134700000110225236178825');
+go
+--材料增加字段
+alter table ma_materialsnotice  add timelimitFlag char(1);
+go
+create table ma_viewrecord (
+   id                   char(32)             not null,
+   id_materials         char(32)             null,
+   id_viewUser          char(32)             null,
+   id_attachment        char(32)             null,
+   kind                 char(1)              null,
+   viewTime             char(19)             null,
+   ft                   char(19)             null,
+   lt                   char(19)             null,
+   fu                   char(32)             null,
+   lu                   char(32)             null
+)
+go
+
+alter table ma_viewrecord
+   add constraint PK_MA_VIEWRECORD primary key nonclustered (id)
+go
+
+alter table ma_viewrecord
+   add constraint FK_MA_VIEWR_REFERENCE_MA_MATER foreign key (id_materials)
+      references ma_materials (id)
+go
+
+alter table ma_viewrecord
+   add constraint FK_MA_VIEWR_REFERENCE_FW_ATTAC foreign key (id_attachment)
+      references fw_attachment (id)
+go
+
+alter table ma_viewrecord
+   add constraint FK_MA_VIEWR_REFERENCE_BD_USER foreign key (id_viewUser)
+      references bd_user (id)
+go
+/*tag1.6 end*/
+/*tag1.7 start*/
+alter table bd_student alter column address varchar(500);
+go
+alter table bd_student alter column linkAddress varchar(500);
+go
+alter table bd_student alter column homePage varchar(500);
+go
+alter table bd_studentparents alter column telephone varchar(200);
+go
+alter table bd_subject add num int;
+go
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130705143439580003112210583154','20120517154526218931722289396740','20120806174045451014936108234784','教室课表','bd_course_viewCourseTable_classroomCourseTable','vct_roomCourseTable','2',null,'/bd/viewClassroomCourseTable!getSearchInfo.action','0','0',5,'','','','','2013-07-05 14:34:39',null,'20120507134700000110225236178825',null);
+/*tag1.7 end*/
+go
+/*product:文件直通车V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: af_classification                                     */
@@ -7532,10 +7779,16 @@ INSERT [dbo].[bd_operation] ([id], [id_module], [id_parent], [name], [nameI18n],
 INSERT [dbo].[bd_operation] ([id], [id_module], [id_parent], [name], [nameI18n], [code], [operationDict], [url], [openMode], [datascopeFlag], [num], [icon], [winHeight], [winWidth], [description], [ft], [lt], [fu], [lu]) VALUES (N'20130301093846500864785314706122', N'20130115103450437162088868334225', N'20130115103746203026860839080496', N'文件库', N'af_filelibrary', N'af_filelibrary', N'2', N'/af/fileRecord!filelibrary.action', N'0', N'1', 2, N'', N'', N'', N'', N'2013-03-01 09:38:46', N'2013-03-01 09:40:17', N'20120507134700000110225236178825', N'20120507134700000110225236178825')
 INSERT [dbo].[bd_operation] ([id], [id_module], [id_parent], [name], [nameI18n], [code], [operationDict], [url], [openMode], [datascopeFlag], [num], [icon], [winHeight], [winWidth], [description], [ft], [lt], [fu], [lu]) VALUES (N'20130301094358890912918062503412', N'20130115103450437162088868334225', N'20130115103746203026860839080496', N'自定义分类', N'af_classifi', N'af_classifi', N'2', N'/af/classification!classificationIndex.action', N'0', N'1', 4, N'', N'', N'', N'', N'2013-03-01 09:43:58', NULL, N'20120507134700000110225236178825', NULL)
 /*tag1.0 end*/
+
+go
+/*product:文件直通车V1.0.1*/
 /*tag1.0.1 start*/
 alter table af_resourcepackage add evalueScore int;
 alter table af_resourcepackage alter column gradeLevel varchar(500);
 /*tag1.0.1 end*/
+
+go
+/*product:通讯录V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: al_classbook                                          */
@@ -7570,6 +7823,76 @@ insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict
 insert into fw_attachmentconfig(id,code,saveDir,dirLevel,fileSize,fileCount,extension,description,ft,lt,fu,lu) values('20130418152359042568678138735132','al_classBookPic','d:\temp','3',null,'1','jpg;gif;jpeg;bmp','','2013-04-18 15:23:59',null,'20120507134700000110225236178825',null);
 
 /*tag1.0 end*/
+go
+/*product:通讯录V1.1*/
+/*tag1.1 start*/
+/*==============================================================*/
+/* Table: al_aloffice                                           */
+/*==============================================================*/
+create table al_aloffice (
+   id                   char(32)             not null,
+   name                 varchar(100)         null,
+   officeBuilding       varchar(100)         null,
+   roomNum              varchar(200)         null,
+   extension            varchar(200)         null,
+   id_user              char(32)             null,
+   lu                   char(32)             null,
+   fu                   char(32)             null,
+   lt                   char(19)             null,
+   ft                   char(19)             null,
+   id_school            char(32)             null
+)
+go
+
+alter table al_aloffice
+   add constraint PK_AL_ALOFFICE primary key nonclustered (id)
+go
+
+/*==============================================================*/
+/* Table: al_officeuser                                         */
+/*==============================================================*/
+create table al_officeuser (
+   id                   char(32)             not null,
+   id_aloffice          char(32)             null,
+   id_teacher           char(32)             null,
+   lu                   char(32)             null,
+   fu                   char(32)             null,
+   lt                   char(19)             null,
+   ft                   char(19)             null
+)
+go
+
+alter table al_officeuser
+   add constraint PK_AL_OFFICEUSER primary key nonclustered (id)
+go
+
+alter table al_aloffice
+   add constraint FK_AL_ALOFF_REFERENCE_BD_USER foreign key (id_user)
+      references bd_user (id)
+go
+
+alter table al_aloffice
+   add constraint FK_AL_ALOFF_REFERENCE_BD_SCHOO foreign key (id_school)
+      references bd_school (id)
+go
+
+alter table al_officeuser
+   add constraint FK_AL_OFFIC_REFERENCE_AL_ALOFF foreign key (id_aloffice)
+      references al_aloffice (id)
+go
+
+alter table al_officeuser
+   add constraint FK_AL_OFFIC_REFERENCE_BD_USER foreign key (id_teacher)
+      references bd_teacher (id)
+go
+
+update bd_operation set name='办公室管理',nameI18n='bd_operation_al',code='al',operationDict='0',url='/al/classBook!index.action',openMode='0',datascopeFlag='0',num=1,icon='app-Addresslist',winHeight='100%',winWidth='100%' where id = '20130418150331399984772805225577';
+update bd_operation set name='办公室管理',nameI18n='al_office_officemanage',code='al_office_officemanage',operationDict='2',url='',openMode='0',datascopeFlag='0',num=1,icon='',winHeight='',winWidth='' where id = '20130418150608189456080366691323';
+
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130515110804325126642729426738','20130418150028919620989016565881',null,'通讯录','al_addresslist_addresslist','al_addresslist_addresslist','2',null,'','0','0',2,'','','','','2013-05-15 11:08:04','2013-05-15 11:14:32','20120507134700000110225236178825','20120507134700000110225236178825');
+/*tag1.1 end*/
+go
+/*product:排课V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: ac_acresultteachingweek                               */
@@ -7890,6 +8213,9 @@ INSERT [dbo].[bd_configurationitem] ([id], [id_configuration], [name], [value], 
 INSERT [dbo].[bd_configurationitem] ([id], [id_configuration], [name], [value], [defaultFlag], [ft], [lt], [fu], [lu]) VALUES (N'20130326161634526601276468855205', N'20130326161634526121966226837542', N'支持', N'1', N'1', NULL, NULL, NULL, NULL);
 
 /*tag1.0 end*/
+
+go
+/*product:周历V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: wc_wcrecord                                           */
@@ -7967,6 +8293,9 @@ INSERT [dbo].[bd_operation] ([id], [id_module], [id_parent], [name], [nameI18n],
 INSERT [dbo].[bd_operation] ([id], [id_module], [id_parent], [name], [nameI18n], [code], [operationDict], [url], [openMode], [datascopeFlag], [num], [icon], [winHeight], [winWidth], [description], [ft], [lt], [fu], [lu]) VALUES (N'20121123110108169296185913398053', N'20121123104909041768952714457220', N'20121123105707437495866397248963', N'发布及排序周历', N'wc_fbpxzl', N'wc_fbpxzl', N'2', N'', N'0', N'0', 3, N'', N'', N'', N'', N'2012-11-23 11:01:08', NULL, N'20120507134700000110225236178825', NULL)
 go
 /*tag1.0 end*/
+
+go
+/*product:周历V1.1*/
 /*tag1.1 start*/
 /*==============================================================*/
 /* Table: wc_warning                                            */
@@ -8000,6 +8329,9 @@ go
 
 insert into bd_dictionaryvalue(id,id_dictionary,id_parent,code,value,valueI18n,num,description,enableFlag,editableFlag,systemFlag,ft,lt,fu,lu) values('20130509092038692868869621079073','20130325191038222741788749418279',null,'3','周历提醒','',2,null,'1',null,null,'2013-05-09 09:20:38',null,'20120507134700000110225236178825',null);
 /*tag1.1 end*/
+
+go
+/*product:车辆管理V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: cm_assigncar                                          */
@@ -8184,7 +8516,8 @@ INSERT [dbo].[bd_operation] ([id], [id_module], [id_parent], [name], [nameI18n],
 --附件配置
 INSERT [dbo].[fw_attachmentconfig] ([id], [code], [saveDir], [dirLevel], [fileSize], [fileCount], [extension], [description], [ft], [lt], [fu], [lu]) VALUES (N'20130225145109312697071374237293', N'carManagePic', N'e:/temp', 3, 10, 1, N'jpg;gif;jpeg;bmp', N'图片文件', N'2013-02-26 09:33:39', N'2013-03-08 15:45:25', N'20120507134700000110225236178825', N'20120507134700000110225236178825')
 /*tag1.0 end*/
-
+go
+/*product:车辆管理V1.1*/
 /*tag1.1 start*/
 /*==============================================================*/
 /* Table: cm_privatecar                                         */
@@ -8219,6 +8552,8 @@ insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict
 insert into bd_dictionary(id,name,code,kind,editableFlag) values('20130403144640050137343551039807','私家车类型','privateCarType','0','1');
 
 /*tag1.1 end*/
+go
+/*product:车辆管理V1.2*/
 /*tag1.2 start*/
 alter table cm_ordercar add useDept varchar(20);
 alter table cm_ordercar add backPersonList varchar(400);
@@ -8228,7 +8563,8 @@ insert into bd_configurationitem(id,id_configuration,name,value,defaultFlag,ft,l
 insert into bd_configurationitem(id,id_configuration,name,value,defaultFlag,ft,lt,fu,lu) values('20130514182851719254091625206502','20130514182851720883324002699423','不支持手机短信','0','1',null,null,null,null);
 
 /*tag1.2 end*/
-
+go
+/*product:课堂考勤V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: ca_attendanceitem                                     */
@@ -8478,6 +8814,13 @@ insert into ca_attendanceitem(id,name,englishName,code,warningFlag,dayValue,week
 insert into ca_performancekind(id,name,englishName,kind,minScore,maxScore,warningFlag,dayValue,weekValue,monthValue,schooltermValue,num,status,ft,lt,fu,lu) values('20120720094714406862059813730179','加分','plusScore','1','2','6','0',null,null,null,null,'1','1','2012-07-20 09:47:14','2012-07-31 16:26:38','20120507134700000110225236178825','20120529173459906914742441019681');
 insert into ca_performancekind(id,name,englishName,kind,minScore,maxScore,warningFlag,dayValue,weekValue,monthValue,schooltermValue,num,status,ft,lt,fu,lu) values('20120720094818562644680342395593','扣分','cutscore','0','1','5','1','2','5','20','100','2','1','2012-07-20 09:48:18','2012-07-20 16:04:25','20120507134700000110225236178825','20120507134700000110225236178825');
 /*tag1.0 end*/
+go
+/*product:课堂考勤V1.2*/
+/*tag1.2 start*/
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130617082332273798205176834627','20120716141433062243814708850288','20120725093620843067520973307689','已考勤教师统计','ca_kqjstj','ca_kqjstj','2',null,'/ca/attendanceManage!attendanceTeacherCount.action','0','0',6,'','','','','2013-06-17 08:23:32',null,'20120507134700000110225236178825',null);
+/*tag1.2 end*/
+go
+/*product:校本培训V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: ct_answerresult                                       */
@@ -8727,6 +9070,8 @@ insert into fw_attachmentconfig(id,code,saveDir,dirLevel,fileSize,fileCount,exte
 insert into fw_attachmentconfig(id,code,saveDir,dirLevel,fileSize,fileCount,extension,description,ft,lt,fu,lu) values('20130413143416257473632078172981','ct_voice','f:/temp','1',null,'1','mp3;wma','音频文件','2013-04-13 14:34:16',null,'20120507134700000110225236178825',null);
 
 /*tag1.0 end*/
+go
+/*product:公文流转V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: od_documentauditor                                    */
@@ -8855,6 +9200,8 @@ INSERT [dbo].[bd_dictionary] ([id], [name], [code], [description], [kind], [enab
 
 INSERT [dbo].[fw_attachmentconfig] ([id], [code], [saveDir], [dirLevel], [fileSize], [fileCount], [extension], [description], [ft], [lt], [fu], [lu]) VALUES (N'20130319183443558733346236559842', N'document', N'd:/temp/', 1, NULL, NULL, N'docx;doc;xls;xlsx', N'仅限Word、Excel', N'2013-03-19 18:34:43', N'2013-03-25 14:23:01', N'20120507134700000110225236178825', N'20120507134700000110225236178825');
 /*tag1.0 end*/
+go
+/*product:选课V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: ec_ecactivity                                         */
@@ -9196,6 +9543,8 @@ GO
 INSERT [dbo].[fw_attachmentconfig] ([id], [code], [saveDir], [dirLevel], [fileSize], [fileCount], [extension], [description], [ft], [lt], [fu], [lu]) VALUES (N'20120730175623754060541848122987', N'ecTeacherPic', N'd:\temp', 3, 1, 1, N'jpg;gif;jpeg;bmp', N'', N'2012-07-30 17:56:23', N'2012-08-30 08:56:40', N'20120507134700000110225236178825', N'20120507134700000110225236178825')
 GO
 /*tag1.0 end*/
+go
+/*product:选课V1.1*/
 /*tag1.1 start*/
 alter table ec_ececlass add hierarchical varchar(50);
 alter table ec_eccourse add hierarchical varchar(50);
@@ -9237,6 +9586,34 @@ insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu,customtypedict) values('20130511114254727299371882246804','20120519112704750048565957749371','20130511105538983295706796218258','学生选课','ec_sc_index_studentCourse','ec_scStudent','2','/ec/scStudentCourse!index.action','0','0',5,'','','','','2013-05-11 11:42:54','2013-05-13 18:03:34','20120507134700000110225236178825','20120507134700000110225236178825',null);
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu,customtypedict) values('20130511114316025386981943066341','20120519112704750048565957749371','20130511105538983295706796218258','选课结果','ec_sc_index_electiveResult','ec_scResult','2','/ec/scStudentCourse!resultList.action','0','0',6,'','','','','2013-05-11 11:43:16','2013-05-13 18:03:53','20120507134700000110225236178825','20120507134700000110225236178825',null);
 /*tag1.1 end*/
+go
+/*product:电子书包V1.0*/
+/*tag1.0 start*/
+/*==============================================================*/
+/* Table: es_program                                            */
+/*==============================================================*/
+create table es_program (
+   id                   char(32)             not null,
+   id_user              char(32)             null,
+   name                 varchar(50)          null,
+   discription          varchar(200)         null,
+   pkgId                varchar(100)         null,
+   versionName          varchar(20)          null,
+   versionNum           int                  null,
+   iconId               char(32)             null,
+   ft                   char(19)             null,
+   lt                   char(19)             null,
+   fu                   char(32)             null,
+   lu                   char(32)             null
+)
+go
+
+alter table es_program
+   add constraint PK_ES_PROGRAM primary key nonclustered (id)
+go
+/*tag1.0 end*/
+go
+/*product:考务V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: ex_coursestandard                                     */
@@ -10631,9 +11008,13 @@ insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth) values('20130307092136847346650134953104','20121217095310156774106831288143','20130307092136847346650134953396','失分统计','ex_paperLostScore','ex_paperLostScore','2','/ex/paperAnalysis!toLostScore.action','0','0',4,'','','');
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth) values('20130307092136847346650134953100','20121217095310156774106831288143','20130307092136847346650134953396','得分明细','ex_paperScoreDetail','ex_paperScoreDetail','2','/ex/paperAnalysis!toScoreDetail.action','0','0',5,'','','');
 /*tag1.0 end*/
+go
+/*product:考务V1.1*/
 /*tag1.1 start*/
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130506162539027296099611107780','20121217095310156774106831288143','20130111141638069699150312666123','学生历史成绩','ex_studenthistroy','ex_studenthistroy','2',null,'/ex/scoreCount!studentHistoryIndex.action','0','0',1,'','','','','2013-05-06 16:25:39',null,null,null);
 /*tag1.1 end*/
+go
+/*product:对外招考V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: er_recruitexaminfo                                    */
@@ -10945,6 +11326,14 @@ go
 
 insert into fw_attachmentconfig(id,code,saveDir,dirLevel,fileSize,fileCount,extension,description,ft,lt,fu,lu) values('20130118161914346823480322093212','er_studentPic','d:\temp',3,1,1,'jpg;gif;jpeg;bmp','','2013-01-18 16:19:14','2013-01-18 16:24:51','20120507134700000110225236178825','20120507134700000110225236178825');
 /*tag1.0 end*/
+go
+/*product:对外招考V1.1*/
+/*tag1.1 start*/
+alter table er_recruitexamroom alter column invigilator1 text;
+alter table er_recruitexamroom alter column patrolInvigilator text;
+/*tag1.1 end*/
+go
+/*product:固定资产V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: fa_applypurchaserecord                                */
@@ -11235,209 +11624,14 @@ INSERT [dbo].[bd_dictionaryvalue] ([id], [id_dictionary], [id_parent], [code], [
 INSERT [dbo].[bd_dictionaryvalue] ([id], [id_dictionary], [id_parent], [code], [value], [num], [description], [enableFlag], [editableFlag], [systemFlag], [ft], [lt], [fu], [lu]) VALUES (N'20121226143627855428840546926552', N'20121226143342621879062049548944', NULL, N'3', N'出售', 3, NULL, N'1', NULL, NULL, N'2012-12-26 14:36:27', NULL, N'20120507134700000110225236178825', NULL)
 INSERT [dbo].[bd_dictionaryvalue] ([id], [id_dictionary], [id_parent], [code], [value], [num], [description], [enableFlag], [editableFlag], [systemFlag], [ft], [lt], [fu], [lu]) VALUES (N'20121226143636418020586266043034', N'20121226143342621879062049548944', NULL, N'4', N'盘亏', 4, NULL, N'1', NULL, NULL, N'2012-12-26 14:36:36', NULL, N'20120507134700000110225236178825', NULL)
 /*tag1.0 end*/
-
+go
+/*product:固定资产V1.0.1*/
 /*tag1.0.1 start*/
 update bd_module set name = '校园资产' where id = '20121226161341355053882328665302';
 update bd_operation set name = '校园资产' where id = '20121226161627496975444471346478';
 /*tag1.0.1 end*/
-/*tag1.0 start*/
-/*==============================================================*/
-/* Table: ma_materials                                          */
-/*==============================================================*/
-create table ma_materials (
-   id                   char(32)             not null,
-   id_materialshandinuser char(32)             null,
-   id_materialskind     char(32)             null,
-   name                 varchar(200)         null,
-   description          varchar(200)         null,
-   handinTime           char(19)             null,
-   id_approvaluser      char(32)             null,
-   approvalView         varchar(200)         null,
-   approvalTime         char(19)             null,
-   approvalStatus       char(1)              null,
-   ft                   char(19)             null,
-   lt                   char(19)             null,
-   fu                   char(32)             null,
-   lu                   char(32)             null
-)
 go
-
-alter table ma_materials
-   add constraint PK_MA_MATERIALS primary key nonclustered (id)
-go
-
-/*==============================================================*/
-/* Table: ma_materialsapprovaluser                              */
-/*==============================================================*/
-create table ma_materialsapprovaluser (
-   id                   char(32)             not null,
-   id_materialskind     char(32)             null,
-   id_materialsnotice   char(32)             null,
-   id_user              char(32)             null,
-   ft                   char(19)             null,
-   lt                   char(19)             null,
-   fu                   char(32)             null,
-   lu                   char(32)             null
-)
-go
-
-alter table ma_materialsapprovaluser
-   add constraint PK_MA_MATERIALSAPPROVALUSER primary key nonclustered (id)
-go
-
-/*==============================================================*/
-/* Table: ma_materialshandinuser                                */
-/*==============================================================*/
-create table ma_materialshandinuser (
-   id                   char(32)             not null,
-   id_materialsnotice   char(32)             null,
-   id_user              char(32)             null,
-   status               char(1)              null,
-   ft                   char(19)             null,
-   lt                   char(19)             null,
-   fu                   char(32)             null,
-   lu                   char(32)             null
-)
-go
-
-alter table ma_materialshandinuser
-   add constraint PK_MA_MATERIALSHANDINUSER primary key nonclustered (id)
-go
-
-/*==============================================================*/
-/* Table: ma_materialskind                                      */
-/*==============================================================*/
-create table ma_materialskind (
-   id                   char(32)             not null,
-   id_parent            char(32)             null,
-   name                 varchar(100)         null,
-   num                  int                  null,
-   description          varchar(200)         null,
-   enableFlag           char(1)              null,
-   ft                   char(19)             null,
-   lt                   char(19)             null,
-   fu                   char(32)             null,
-   lu                   char(32)             null
-)
-go
-
-alter table ma_materialskind
-   add constraint PK_MA_MATERIALSKIND primary key nonclustered (id)
-go
-
-/*==============================================================*/
-/* Table: ma_materialsnotice                                    */
-/*==============================================================*/
-create table ma_materialsnotice (
-   id                   char(32)             not null,
-   id_user              char(32)             null,
-   id_department        char(32)             null,
-   title                varchar(200)         null,
-   content              text                 null,
-   sendTime             char(19)             null,
-   deadline             char(10)             null,
-   approvalFlag         char(1)              null,
-   ft                   char(19)             null,
-   lt                   char(19)             null,
-   fu                   char(32)             null,
-   lu                   char(32)             null
-)
-go
-
-alter table ma_materialsnotice
-   add constraint PK_MA_MATERIALSNOTICE primary key nonclustered (id)
-go
-
-alter table ma_materials
-   add constraint FK_MA_MATER_REFERENCE_BD_USER4 foreign key (id_approvaluser)
-      references bd_user (id)
-go
-
-alter table ma_materials
-   add constraint FK_MA_MATER_REFERENCE_MA_MATER4 foreign key (id_materialskind)
-      references ma_materialskind (id)
-go
-
-alter table ma_materials
-   add constraint FK_MA_MATER_REFERENCE_MA_MATER5 foreign key (id_materialshandinuser)
-      references ma_materialshandinuser (id)
-go
-
-alter table ma_materialsapprovaluser
-   add constraint FK_MA_MATER_REFERENCE_BD_USER2 foreign key (id_user)
-      references bd_user (id)
-go
-
-alter table ma_materialsapprovaluser
-   add constraint FK_MA_MATER_REFERENCE_MA_MATER3 foreign key (id_materialskind)
-      references ma_materialskind (id)
-go
-
-alter table ma_materialsapprovaluser
-   add constraint FK_MA_MATER_REFERENCE_MA_MATER1 foreign key (id_materialsnotice)
-      references ma_materialsnotice (id)
-go
-
-alter table ma_materialshandinuser
-   add constraint FK_MA_MATER_REFERENCE_BD_USER3 foreign key (id_user)
-      references bd_user (id)
-go
-
-alter table ma_materialshandinuser
-   add constraint FK_MA_MATER_REFERENCE_MA_MATER2 foreign key (id_materialsnotice)
-      references ma_materialsnotice (id)
-go
-
-alter table ma_materialskind
-   add constraint FK_MA_MATER_REFERENCE_MA_MATER6 foreign key (id_parent)
-      references ma_materialskind (id)
-go
-
-alter table ma_materialsnotice
-   add constraint FK_MA_MATER_REFERENCE_BD_DEPAR foreign key (id_department)
-      references bd_department (id)
-go
-
-alter table ma_materialsnotice
-   add constraint FK_MA_MATER_REFERENCE_BD_USER1 foreign key (id_user)
-      references bd_user (id)
-go
-
-insert into bd_module(id,name,nameI18n,code,num,deployFlag,ft,lt,fu,lu) values('20120712131535343435525409725777','材料管理','bd_module_ma','ma',7,'1','2012-07-12 13:15:35',null,'20120507134700000110225236178825',null);
-insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120712131717812690794002092950','20120712131535343435525409725777',null,'材料管理','bd_operation_ma','materialsmanagement','0','/ma/materialsNotice!index.action','0','1',1,'app-Materials','500','850','','2012-07-12 13:17:17','2012-07-25 09:24:43','20120507134700000110225236178825','20120507134700000110225236178825');
-insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120730172553242163655873035456','20120712131535343435525409725777','20120712131717812690794002092950','材料类型','ma_materialsKindMana','ma_materialsKindMana','2','/ma/materialsKind!materials.action','0','1',1,'','','','','2012-07-30 17:25:53',null,'20120507134700000110225236178825',null);
-insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120730172634382625304309517000','20120712131535343435525409725777','20120712131717812690794002092950','收批材料','ma_sandApprovalMater','ma_sandApprovalMater','2','/ma/materialsNotice!sendApprovalIndex.action','0','1',2,'','','','','2012-07-30 17:26:34',null,'20120507134700000110225236178825',null);
-insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120730172933929232764794843756','20120712131535343435525409725777','20120730172634382625304309517000','发材料通知','ma_sendMaterialsNoti','ma_sendMaterialsNoti','2','/ma/materialsNotice!listOfSendMaterialsNotice.action','0','1',1,'','','','','2012-07-30 17:29:33',null,'20120507134700000110225236178825',null);
-insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120730173014851233013748019340','20120712131535343435525409725777','20120730172634382625304309517000','审批材料','ma_approvalMaterials','ma_approvalMaterials','2','/ma/materialsApprovalUser!listOfApprovalNotice.action','0','1',2,'','','','','2012-07-30 17:30:14',null,'20120507134700000110225236178825',null);
-insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120730172719757428283569716447','20120712131535343435525409725777','20120712131717812690794002092950','上交材料','ma_handinMaterials','ma_handinMaterials','2','/ma/materialsHandinUser!listOfReceiveMaterialsNotice.action','0','1',3,'','','','','2012-07-30 17:27:19',null,'20120507134700000110225236178825',null);
-insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120730172808023072912584566907','20120712131535343435525409725777','20120712131717812690794002092950','材料库','ma_materialsLibray','ma_materialsLibray','2','/ma/materials!toMaterialsLibray.action','0','1',4,'','','','','2012-07-30 17:28:08',null,'20120507134700000110225236178825',null);
-/*tag1.0 end*/
-/*tag1.2 start*/
-create table ma_viewuser (
-   id_materialsnotice   char(32)             null,
-   id_user              char(32)             null
-)
-go
-
-alter table ma_viewuser
-   add constraint FK_MA_VIEWU_REFERENCE_MA_MATER foreign key (id_materialsnotice)
-      references ma_materialsnotice (id)
-go
-
-alter table ma_viewuser
-   add constraint FK_MA_VIEWU_REFERENCE_BD_USER foreign key (id_user)
-      references bd_user (id)
-go
-/*tag1.2 end*/
-/*tag1.3 start*/
---材料配置（到截止日期后是否可以上交）
-INSERT [dbo].[bd_configuration] ([id], [id_module], [kind], [configurationMode], [name], [code], [description], [visibleFlag], [ft], [lt], [fu], [lu]) VALUES (N'20130521132957420627368878461506', N'20120712131535343435525409725777', N'1', N'1', N'到达截止日期后是否允许上交', N'materialsTimelimitFlag', N'', N'0', N'2013-05-21 13:29:57', N'2013-05-21 13:51:32', N'20120507134700000110225236178825', N'20120507134700000110225236178825');
-INSERT [dbo].[bd_configurationitem] ([id], [id_configuration], [name], [value], [defaultFlag], [ft], [lt], [fu], [lu]) VALUES (N'20130521132957416854508121392440', N'20130521132957420627368878461506', N'允许', N'0', N'1', NULL, N'2013-05-21 13:51:32', NULL, N'20120507134700000110225236178825');
-INSERT [dbo].[bd_configurationitem] ([id], [id_configuration], [name], [value], [defaultFlag], [ft], [lt], [fu], [lu]) VALUES (N'20130521132957416992227161439999', N'20130521132957420627368878461506', N'不允许', N'1', NULL, NULL, N'2013-05-21 13:51:32', NULL, N'20120507134700000110225236178825');
-
---材料增加字段
-alter table ma_materialsnotice  add timelimitFlag char(1);
-/*tag1.3 end*/
+/*product:德育常规检查V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: mc_checkrecord                                        */
@@ -11769,6 +11963,8 @@ INSERT [dbo].[bd_operation] ([id], [id_module], [id_parent], [name], [nameI18n],
 
 go
 /*tag1.0 end*/
+go
+/*product:通知V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: no_notice                                             */
@@ -11884,7 +12080,8 @@ insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120709170408747295462167756673','20120529104254156891479285363655','20120529104507859253679595056027','未读通知','no_unread','no_unread','2','/no/receiveNotice!listOfReceiveNotice.action?actionKind=unread','0','1',2,'','','','','2012-07-09 17:04:08',null,'20120507134700000110225236178825',null);
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120709170636997858312736531917','20120529104254156891479285363655','20120529104507859253679595056027','我的关注','no_attention','no_attention','2','/no/noticeVo!myattention.action','0','1',5,'','','','','2012-07-09 17:06:37',null,'20120507134700000110225236178825',null);
 /*tag1.0 end*/
-
+go
+/*product:在线学习V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: ol_learninganswer                                     */
@@ -12025,6 +12222,8 @@ insert into fw_attachmentconfig(id,code,saveDir,dirLevel,fileSize,fileCount,exte
 insert into fw_attachmentconfig(id,code,saveDir,dirLevel,fileSize,fileCount,extension,description,ft,lt,fu,lu) values('20130415170226396166772412300658','ol_subjectAttachment','d:\temp','3',null,'1','','','2013-04-15 17:02:26','2013-04-16 14:19:28','20120507134700000110225236178825','20120507134700000110225236178825');
 
 /*tag1.0 end*/
+go
+/*product:普适性学习V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: ps_appraiser                                          */
@@ -12381,6 +12580,9 @@ insert into bd_dictionaryvalue(id,id_dictionary,id_parent,code,value,valueI18n,n
 insert into bd_dictionaryvalue(id,id_dictionary,id_parent,code,value,valueI18n,num,description,enableFlag,editableFlag,systemFlag,ft,lt,fu,lu) values('20130508100330985444293367266073','20130508100157311030624726775567',null,'xbkc','校本课程','',3,null,'1',null,null,'2013-05-08 10:03:30',null,'20120507134700000110225236178825',null);
 insert into bd_dictionaryvalue(id,id_dictionary,id_parent,code,value,valueI18n,num,description,enableFlag,editableFlag,systemFlag,ft,lt,fu,lu) values('20130508100340637699437941085566','20130508100157311030624726775567',null,'qtkc','其他课程','',4,null,'1',null,null,'2013-05-08 10:03:40',null,'20120507134700000110225236178825',null);
 /*tag1.0 end*/
+
+go
+/*product:备课（教案管理）V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: pl_annotation                                         */
@@ -12653,6 +12855,8 @@ insert into fw_attachmentconfig(id,code,saveDir,dirLevel,fileSize,fileCount,exte
 insert into fw_attachmentconfig(id,code,saveDir,dirLevel,fileSize,fileCount,extension,description,ft,lt,fu,lu) values('20130427090433362132586620656436','prepareLesson_courseware','d:/temp','1',null,'1','ppt;pptx','仅ppt','2013-04-27 09:04:33','2013-04-27 09:13:04','20120507134700000110225236178825','20120507134700000110225236178825');
 
 /*tag1.0 end*/
+go
+/*product:公示V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: pu_publicity                                          */
@@ -12769,6 +12973,9 @@ insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict
 
 ALTER TABLE pu_publicity ALTER COLUMN title VARCHAR(500);
 /*tag1.0 end*/
+
+go
+/*product:调查问卷V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: qn_option                                             */
@@ -13035,10 +13242,13 @@ INSERT [dbo].[bd_operation] ([id], [id_module], [id_parent], [name], [nameI18n],
 INSERT [dbo].[bd_operation] ([id], [id_module], [id_parent], [name], [nameI18n], [code], [operationDict], [url], [openMode], [datascopeFlag], [num], [icon], [winHeight], [winWidth], [description], [ft], [lt], [fu], [lu]) VALUES (N'20121121111224437220234505726915', N'20121115105005796486107811382326', N'20121115105457343460735454436083', N'参与调查', N'qn_participation', N'qn_participation', N'2', N'/qn/questionnaire!toParticipation.action', N'0', N'1', 2, N'', N'', N'', N'', N'2012-11-21 11:12:24', N'2012-11-21 11:30:36', N'20120507134700000110225236178825', N'20120507134700000110225236178825')
 INSERT [dbo].[fw_attachmentconfig] ([id], [code], [saveDir], [dirLevel], [fileSize], [fileCount], [extension], [description], [ft], [lt], [fu], [lu]) VALUES (N'20121211104239687222667627382876', N'Questionnaire', N'd:\temp', 3, NULL, 1, N'jpg;.gif;bmp;png;jpeg;BMP;PNG;JPG;GIF;JPEG', N'', N'2012-12-11 10:42:39', N'2012-12-11 10:43:03', N'20120507134700000110225236178825', N'20120507134700000110225236178825')
 /*tag1.0 end*/
+go
+/*product:调查问卷V1.1*/
 /*tag1.1 start*/
 INSERT [dbo].[bd_operation] ([id], [id_module], [id_parent], [name], [nameI18n], [code], [operationDict], [url], [openMode], [datascopeFlag], [num], [icon], [winHeight], [winWidth], [description], [ft], [lt], [fu], [lu], [customTypeDict]) VALUES (N'20130416180004237614410886239591', N'20121115105005796486107811382326', N'20121115105457343460735454436083', N'我的统计', N'qn_myResult', N'qn_myResult', N'2', N'/qn/questionnaire!toMyResult.action', N'0', N'1', 4, N'', N'', N'', N'', N'2013-04-16 18:00:04', N'2013-04-16 18:00:38', N'20120507134700000110225236178825', N'20120507134700000110225236178825', null);
 /*tag1.1 end*/
-
+go
+/*product:自我展示V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: sd_activity                                           */
@@ -13185,8 +13395,8 @@ insert into bd_dictionaryvalue(id,id_dictionary,id_parent,code,value,valueI18n,n
 
 insert into fw_attachmentconfig(id,code,saveDir,dirLevel,fileSize,fileCount,extension,description,ft,lt,fu,lu) values('20130325093903028431953317548224','selfDisplay','d:/temp',1,null,1,'flv;mp3;doc;docx;xls;xlsx;ppt;pptx;pdf;jpg;gif;bmp;png;jpeg','','2013-03-25 09:39:03','2013-03-25 09:55:30','20120507134700000110225236178825','20120507134700000110225236178825');
 /*tag1.0 end*/
-
-
+go
+/*product:社团管理V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: so_society                                            */
@@ -13437,9 +13647,13 @@ INSERT [dbo].[bd_operation] ([id], [id_module], [id_parent], [name], [nameI18n],
 
 insert into fw_attachmentconfig(id,code,saveDir,dirLevel,fileSize,fileCount,extension,description,ft,lt,fu,lu) values('20130325093826632314147331000314','society','d:/temp',1,null,null,'','','2013-03-25 09:38:26',null,'20120507134700000110225236178825',null);
 /*tag1.0 end*/
+go
+/*product:社团管理V1.0.1*/
 /*tag1.0.1 start*/
 alter table so_societyActivity alter column kind varchar(20);
 /*tag1.0.1 end*/
+go
+/*product:潜能工程(特殊学生)V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: ss_guidanceteacher                                    */
@@ -13534,6 +13748,8 @@ INSERT [dbo].[bd_dictionaryvalue] ([id], [id_dictionary], [id_parent], [code], [
 INSERT [dbo].[bd_dictionaryvalue] ([id], [id_dictionary], [id_parent], [code], [value], [num], [description], [enableFlag], [editableFlag], [systemFlag], [ft], [lt], [fu], [lu]) VALUES (N'20121015165036289322079572648382', N'20121015164821139161273534930864', NULL, N'0', N'成绩', 1, NULL, N'1', NULL, NULL, N'2012-10-15 16:50:36', N'2012-11-07 11:20:26', N'20120507134700000110225236178825', N'20120507134700000110225236178825')
 INSERT [dbo].[bd_dictionaryvalue] ([id], [id_dictionary], [id_parent], [code], [value], [num], [description], [enableFlag], [editableFlag], [systemFlag], [ft], [lt], [fu], [lu]) VALUES (N'20121015165043301233113197393274', N'20121015164821139161273534930864', NULL, N'2', N'家庭', 3, NULL, N'1', NULL, NULL, N'2012-10-15 16:50:43', NULL, N'20120507134700000110225236178825', NULL)
 /*tag1.0 end*/
+go
+/*product:学生评价(学生考评)V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: sa_assessmentitem                                     */
@@ -13713,11 +13929,15 @@ insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120710093521359796289075292332','20120702162242734606888080152550','20120702162440140724702086570722','评价查询','sa_pjcx','sa_pjcx','2','/sa/studentAssessment!studentAssessmentByStudent.action','0','0',3,'','','','','2012-07-10 09:35:21',null,'20120507134700000110225236178825',null);
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120710093836250468410453701836','20120702162242734606888080152550','20120702162440140724702086570722','查询我的评价（学生）','sa_cxpj','sa_cxpj','2','/sa/studentAssessment!toStudentAssessmentForParent.action','0','0',4,'','','','','2012-07-10 09:38:36',null,'20120507134700000110225236178825',null);
 /*tag1.0 end*/
+go
+/*product:学生档案V1.0*/
 /*tag1.0 start*/
 insert into bd_module(id,name,nameI18n,code,num,deployFlag,ft,lt,fu,lu) values('20130327150002234771381496294791','学生档案','bd_module_sf','sf',null,'1','2013-03-27 15:00:02',null,'20120507134700000110225236178825',null);
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130327170624406790575762212630','20130327150002234771381496294791',null,'学生档案','bd_module_sf','sf','0',null,'/sf/studentfiles!index.action','0','0',1,'app-studentfiles','100%','100%','','2013-03-27 17:06:24','2013-03-27 17:32:01','20120507134700000110225236178825','20120507134700000110225236178825');
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130327170831421796671509593426','20130327150002234771381496294791','20130327170624406790575762212630','查看学生档案','sf_studentFiles','studentFiles','2',null,'','0','0',1,'','','','','2013-03-27 17:08:31','2013-03-27 17:09:27','20120507134700000110225236178825','20120507134700000110225236178825');
 /*tag1.0 end*/
+go
+/*product:招生V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: ns_entrancetestcourse                                 */
@@ -13781,6 +14001,85 @@ insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120730171823945771406478996784','20120530094924734209116975889427','20120530095312218920822007508881','入学测试课程','ns_entranceTestCours','ns_entranceTestCours','2','/ns/entranceTestCourseVo!list.action','0','1',4,'','','','','2012-07-30 17:18:23',null,'20120507134700000110225236178825',null);
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120730171905570414987538061167','20120530094924734209116975889427','20120530095312218920822007508881','入学测试成绩','ns_entranceTestScore','ns_entranceTestScore','2','/bd/studentRegistration!listOfInputScore.action','0','1',5,'','','','','2012-07-30 17:19:05',null,'20120507134700000110225236178825',null);
 /*tag1.0 end*/
+go
+/*product:教师考勤V1.0*/
+/*tag1.0 start*/
+/*==============================================================*/
+/* Table: ta_teacherattendanceprogram                           */
+/*==============================================================*/
+create table ta_teacherattendanceprogram (
+   id                   char(32)             not null,
+   startTime            char(5)              null,
+   endTime              char(5)              null,
+   name                 varchar(100)         null,
+   workDay              varchar(100)         null,
+   ipLimit              varchar(1000)        null,
+   status               char(1)              null,
+   startDate            char(10)             null,
+   ft                   char(19)             null,
+   lt                   char(19)             null,
+   fu                   char(32)             null,
+   lu                   char(32)             null
+)
+go
+
+alter table ta_teacherattendanceprogram
+   add constraint PK_TA_TEACHERATTENDANCEPROGRAM primary key nonclustered (id)
+go
+
+/*==============================================================*/
+/* Table: ta_teacherattendancerecord                            */
+/*==============================================================*/
+create table ta_teacherattendancerecord (
+   id                   char(32)             not null,
+   id_user              char(32)             null,
+   id_checkUser         char(32)             null,
+   attendanceDate       char(10)             null,
+   kind                 char(1)              null,
+   startTime            char(5)              null,
+   startSupplement      char(5)              null,
+   startStatus          char(1)              null,
+   endTime              char(5)              null,
+   endSupplement        char(5)              null,
+   endStatus            char(1)              null,
+   attendanceKind       char(1)              null,
+   checkStatus          char(1)              null,
+   supplementKind       char(1)              null,
+   note                 varchar(100)         null,
+   time                 char(19)             null,
+   ip                   varchar(50)          null,
+   ft                   char(19)             null,
+   lt                   char(19)             null,
+   fu                   char(32)             null,
+   lu                   char(32)             null
+)
+go
+
+alter table ta_teacherattendancerecord
+   add constraint PK_TA_TEACHERATTENDANCERECORD primary key nonclustered (id)
+go
+
+alter table ta_teacherattendancerecord
+   add constraint Reference_680 foreign key (id_checkUser)
+      references bd_user (id)
+go
+
+alter table ta_teacherattendancerecord
+   add constraint Reference_681 foreign key (id_user)
+      references bd_user (id)
+go
+
+insert into bd_module(id,name,nameI18n,code,num,deployFlag,ft,lt,fu,lu) values('20130514160445952693470396472459','教师考勤','bd_module_ta','ta',null,'1','2013-05-14 16:04:45','2013-05-14 16:05:54','20120507134700000110225236178825','20120507134700000110225236178825');
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130514160741739630291523415365','20130514160445952693470396472459',null,'教师考勤','bd_operation_ta','ta','0',null,'/ta/teacherAttendanceProgram!index.action','0','0',1,'app-TeacherAttendance','100%','100%','','2013-05-14 16:07:41','2013-05-16 17:03:48','20120507134700000110225236178825','20120507134700000110225236178825');
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130514161730018069164580429166','20130514160445952693470396472459','20130514160741739630291523415365','考勤方案','ta_teacherattendance_attendanceProgram','ta_attendanceProgram','2',null,'/ta/teacherAttendanceProgram!list.action','0','0',1,'','','','','2013-05-14 16:17:30','2013-05-16 17:01:15','20120507134700000110225236178825','20120507134700000110225236178825');
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130514161758433285462322197188','20130514160445952693470396472459','20130514160741739630291523415365','审批处理','ta_teacherattendance_attendanceCheck','ta_attendanceCheck','2',null,'/ta/teacherAttendanceRecord!unCheck.action','0','0',2,'','','','','2013-05-14 16:17:58','2013-05-16 17:01:48','20120507134700000110225236178825','20120507134700000110225236178825');
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130514161825473034735025576369','20130514160445952693470396472459','20130514160741739630291523415365','我的考勤','ta_teacherattendance_myAttendance','ta_myAttendance','2',null,'/ta/teacherAttendanceRecord!myList.action','0','0',3,'','','','','2013-05-14 16:18:25','2013-05-16 17:02:14','20120507134700000110225236178825','20120507134700000110225236178825');
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130514161850139956013413871588','20130514160445952693470396472459','20130514160741739630291523415365','补签记录','ta_teacherattendance_supplementRecord','ta_supplementRecord','2',null,'/ta/teacherAttendanceRecord!mySupplement.action','0','0',4,'','','','','2013-05-14 16:18:50','2013-05-16 17:02:43','20120507134700000110225236178825','20120507134700000110225236178825');
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130522092053894892860153085758','20130514160445952693470396472459','20130514160741739630291523415365','考勤统计','ta_teacherattendance_attendanceQuery','ta_attendanceQuery','2',null,'/ta/teacherAttendanceRecord!queryList.action','0','0',5,'','','','','2013-05-22 09:20:53',null,'20120507134700000110225236178825',null);
+/*tag1.0 end*/
+
+go
+/*product:教师评价(教师考评)V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: ce_evaluationactivity                                 */
@@ -14074,8 +14373,8 @@ insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130408093021187919509362838107','20130318095651327516078606182828','20130318100015516439030113407708','我的统计得分','ce_teacherEvaluation_MyStatisticsModel','cd_evaluationMyStatisticsModel','2','/ce/scoreModelIndex!index.action','0','0',8,'','','','','2013-04-08 09:30:21',null,'20120507134700000110225236178825',null);
 
 /*tag1.0 end*/
-
-
+go
+/*product:教师档案V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: tf_abroadstudy                                        */
@@ -15178,14 +15477,16 @@ insert into tf_filesitem(id,name,id_parent,syscode,type,kind,iswrite,isaudit,not
 insert into tf_filesitem(id,name,id_parent,syscode,type,kind,iswrite,isaudit,note,lu,fu,lt,ft) values('20130402154708781560580137449900','工作总结','20130402153324852892305396952064','GZZJ','1','1','0','0','','20120507134700000110225236178825','20120507134700000110225236178825','2013-04-15 16:03:56','2013-04-02 15:47:08');
 
 /*tag1.0 end*/
-
-
+go
+/*product:班主任工作V1.0*/
 /*tag1.0 start*/
 insert into bd_module(id,name,nameI18n,code,num,deployFlag,ft,lt,fu,lu) values('20130420145358535521119306477530','班主任工作','bd_module_tm','tm',null,'1','2013-04-20 14:53:58',null,'20120507134700000110225236178825',null);
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130420145540411423211572588563','20130420145358535521119306477530',null,'班主任工作','bd_operation_tm','tm','0',null,'/tm/teacherManual!index.action','0','0',1,'app-TeacherManual','100%','100%','','2013-04-20 14:55:40','2013-04-20 15:36:13','20120507134700000110225236178825','20120507134700000110225236178825');
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130420145706251714391483511635','20130420145358535521119306477530','20130420145540411423211572588563','班主任工作','tm_teacherManual_index_teacherManual','tm_teacherManual','2',null,'/tm/teacherManual!teacherManualIndex.action','0','0',1,'','','','','2013-04-20 14:57:06','2013-04-20 15:32:40','20120507134700000110225236178825','20120507134700000110225236178825');
 
 /*tag1.0 end*/
+go
+/*product:教科研V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: tr_issueguide                                         */
@@ -15329,12 +15630,16 @@ insert into bd_dictionaryvalue(id,id_dictionary,id_parent,code,value,valueI18n,n
 insert into bd_dictionaryvalue(id,id_dictionary,id_parent,code,value,valueI18n,num,description,enableFlag,editableFlag,systemFlag,ft,lt,fu,lu) values('20130413100127114346330692059667','20130413095955614355173865355701',null,'0','中学一级教师','','1',null,'1',null,null,'2013-04-13 10:01:27',null,'20120507134700000110225236178825',null);
 insert into fw_attachmentconfig(id,code,saveDir,dirLevel,fileSize,fileCount,extension,description,ft,lt,fu,lu) values('20130418173756313544724235051657','issuesourceFile','d:/temp','3',null,'1','','任意','2013-04-18 17:37:56','2013-04-22 17:16:38','20120507134700000110225236178825','20120507134700000110225236178825');
 /*tag1.0 end*/
+go
+/*product:教科研V1.0.1*/
 /*tag1.0.1 start*/
 alter table tr_teachingissue add id_declareUser char(32);
 go
 alter table tr_teachingissue add constraint FK_TR_TEACH_REFERENCE_BD_USER foreign key (id_declareUser) references bd_user (id)
 go
 /*tag1.0.1 end*/
+go
+/*product:教科研V1.0.2*/
 /*tag1.0.2 start*/
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130427160224838573484216067771','20130326093757042791253955709489','20130326100156872882821809457511','管理课题指南','tr_glktzn','tr_glktzn','2',null,'','0','0',1,'','','','','2013-04-27 16:02:24','2013-05-06 08:51:21','20120507134700000110225236178825','20130325105633721936330412684101');
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130428182812042562277095857647','20130326093757042791253955709489','20130326100156872882821809457511','资料管理','tr_zlgl','tr_zlgl','2',null,'','0','0',7,'','','','','2013-04-28 18:28:12','2013-05-06 08:51:43','20120507134700000110225236178825','20130325105633721936330412684101');
@@ -15342,6 +15647,8 @@ insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130502105817589592030860974298','20130326093757042791253955709489','20130326100156872882821809457511','审核','tr_sh','tr_sh','2',null,'','0','0',9,'','','','','2013-05-02 10:58:17','2013-05-06 08:52:28','20130325105856997717730973100094','20130325105633721936330412684101');
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130506102541410116552544875663','20130326093757042791253955709489','20130326100156872882821809457511','申报课题','tr_sbkt','tr_sbkt','2',null,'','0','0',10,'','','','','2013-05-06 10:25:41',null,'20130325105633721936330412684101',null);
 /*tag1.0.2 end*/
+go
+/*product:工资V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
 /* Table: fi_wage                                               */
@@ -15373,24 +15680,23 @@ insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20121017174730600595508902768712','20121015085922826707592361934822','20121015090244531817719388193489','发布工资','fi_fbgz','fi_fbgz','2','/fi/wage!list.action','0','0',1,'','','','','2012-10-17 17:47:30',null,'20120507134700000110225236178825',null);
 insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20121017174822274328293583317182','20121015085922826707592361934822','20121015090244531817719388193489','我的工资','fi_wdgz','fi_wdgz','2','/fi/myWage!list.action','0','0',2,'','','','','2012-10-17 17:48:22',null,'20120507134700000110225236178825',null);
 /*tag1.0 end*/
+go
+/*product:工资V1.1*/
 /*tag1.1 start*/
 alter table fi_wage add wageKind varchar(50);
 /*tag1.1 end*/
-
-
-/*tag1.0 start*/
+go
+/*product:工资V1.2*/
+/*tag1.2 start*/
 /*==============================================================*/
-/* Table: es_program                                            */
+/* Table: fi_salary                                             */
 /*==============================================================*/
-create table es_program (
+create table fi_salary (
    id                   char(32)             not null,
-   id_user              char(32)             null,
+   id_teacher           char(32)             null,
+   payDate              char(10)             null,
    name                 varchar(50)          null,
-   discription          varchar(200)         null,
-   pkgId                varchar(100)         null,
-   versionName          varchar(20)          null,
-   versionNum           int                  null,
-   iconId               char(32)             null,
+   salaryFlag           char(1)              null,
    ft                   char(19)             null,
    lt                   char(19)             null,
    fu                   char(32)             null,
@@ -15398,22 +15704,93 @@ create table es_program (
 )
 go
 
-alter table es_program
-   add constraint PK_ES_PROGRAM primary key nonclustered (id)
+alter table fi_salary
+   add constraint PK_FI_SALARY primary key nonclustered (id)
 go
-/*tag1.0 end*/
 
+/*==============================================================*/
+/* Table: fi_salaryamount                                       */
+/*==============================================================*/
+create table fi_salaryamount (
+   id                   char(32)             not null,
+   id_salary            char(32)             null,
+   id_salaryitem        char(32)             null,
+   count                int                  null,
+   ft                   char(19)             null,
+   lt                   char(19)             null,
+   fu                   char(32)             null,
+   lu                   char(32)             null
+)
+go
+
+alter table fi_salaryamount
+   add constraint PK_FI_SALARYAMOUNT primary key nonclustered (id)
+go
+
+/*==============================================================*/
+/* Table: fi_salaryitem                                         */
+/*==============================================================*/
+create table fi_salaryitem (
+   id                   char(32)             not null,
+   id_parent            char(32)             null,
+   itemName             varchar(50)          null,
+   ft                   char(19)             null,
+   lt                   char(19)             null,
+   fu                   char(32)             null,
+   lu                   char(32)             null
+)
+go
+
+alter table fi_salaryitem
+   add constraint PK_FI_SALARYITEM primary key nonclustered (id)
+go
+
+alter table fi_salary
+   add constraint FK_FI_SALAR_REFERENCE_BD_TEACH foreign key (id_teacher)
+      references bd_teacher (id)
+go
+
+alter table fi_salaryamount
+   add constraint Reference_364 foreign key (id_salary)
+      references fi_salary (id)
+go
+
+alter table fi_salaryamount
+   add constraint Reference_365 foreign key (id_salaryitem)
+      references fi_salaryitem (id)
+go
+
+alter table fi_salaryitem
+   add constraint Reference_363 foreign key (id_parent)
+      references fi_salaryitem (id)
+go
+
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130516144045894696653315651964','20121015085922826707592361934822',null,'工资','bd_operation_gongzi','gongzi','0',null,'/fi/salary!index.action','0','0',2,'app-Wage','100%','100%','','2013-05-16 14:40:45','2013-05-16 14:44:37','20120507134700000110225236178825','20120507134700000110225236178825');
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130516150907572417540618923806','20121015085922826707592361934822','20130516144045894696653315651964','发布工资','fi_pubgz','fi_pubgz','2',null,'/fi/salary!list.action','0','0',1,'','','','','2013-05-16 15:09:07','2013-05-16 15:09:35','20120507134700000110225236178825','20120507134700000110225236178825');
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130516151030913514292347071702','20121015085922826707592361934822','20130516144045894696653315651964','我的工资','fi_mygz','fi_mygz','2',null,'/fi/salary!myList.action','0','0',2,'','','','','2013-05-16 15:10:30','2013-05-16 15:11:00','20120507134700000110225236178825','20120507134700000110225236178825');
+/*tag1.2 end*/
+go
+/*product:报修V1.0*/
 /*tag1.0 start*/
 /*==============================================================*/
-/* Table: mo_mood                                               */
+/* Table: re_earlywarningsetting                                */
 /*==============================================================*/
-create table mo_mood (
+create table re_earlywarningsetting (
+   id                   char(32)             not null,
+   warningTime          int                  null,
+   ft                   char(19)             null,
+   lt                   char(19)             null,
+   fu                   char(32)             null,
+   lu                   char(32)             null
+)
+go
+
+/*==============================================================*/
+/* Table: re_maintanancestaff                                   */
+/*==============================================================*/
+create table re_maintanancestaff (
    id                   char(32)             not null,
    id_user              char(32)             null,
-   note                 varchar(500)         null,
-   loginTime            char(19)             null,
-   loginStatus          char(1)              null,
-   loginIp              char(15)             null,
    ft                   char(19)             null,
    lt                   char(19)             null,
    fu                   char(32)             null,
@@ -15421,61 +15798,72 @@ create table mo_mood (
 )
 go
 
-alter table mo_mood
-   add constraint PK_MO_MOOD primary key nonclustered (id)
+alter table re_maintanancestaff
+   add constraint PK_RE_MAINTANANCESTAFF primary key nonclustered (id)
 go
 
 /*==============================================================*/
-/* Table: mo_moodkind                                           */
+/* Table: re_repairsrecord                                      */
 /*==============================================================*/
-create table mo_moodkind (
+create table re_repairsrecord (
    id                   char(32)             not null,
-   name                 varchar(20)          null,
-   description          varchar(500)         null,
+   num                  char(11)             null,
+   reportDate           char(10)             null,
+   thing                varchar(200)         null,
+   faultPosition        varchar(200)         null,
+   faultDescription     varchar(500)         null,
+   id_user              char(32)             null,
+   telephoneNum         varchar(30)          null,
+   repairDate           char(10)             null,
+   faultCause           varchar(500)         null,
+   id_maintanancestaff  char(32)             null,
+   status               char(1)              null,
+   deleteFlag           char(1)              null,
    ft                   char(19)             null,
    lt                   char(19)             null,
    fu                   char(32)             null,
-   lu                   char(32)             null
+   lu                   char(32)             null,
+   id_assigner          char(32)             null,
+   assignTime           char(19)             null
 )
 go
 
-alter table mo_moodkind
-   add constraint PK_MO_MOODKIND primary key nonclustered (id)
+alter table re_earlywarningsetting
+   add constraint PK_RE_EARLYWARNINGSETTING primary key nonclustered (id)
 go
 
-/*==============================================================*/
-/* Table: mo_moodmoodkind                                       */
-/*==============================================================*/
-create table mo_moodmoodkind (
-   id_mood              char(32)             null,
-   id_moodkind          char(32)             null
-)
+alter table re_repairsrecord
+   add constraint PK_RE_REPAIRSRECORD primary key nonclustered (id)
 go
 
-alter table mo_mood
-   add constraint FK_MO_MOOD_REFERENCE_BD_USER foreign key (id_user)
+alter table re_maintanancestaff
+   add constraint FK_RE_MAINT_REFERENCE_BD_USER foreign key (id_user)
       references bd_user (id)
 go
 
-alter table mo_moodmoodkind
-   add constraint FK_SP_MOODMOODCATEGORY_SP_MOOD foreign key (id_mood)
-      references mo_mood (id)
+alter table re_repairsrecord
+   add constraint FK_RE_REPAI_REFERENCE_RE_MAINT foreign key (id_maintanancestaff)
+      references re_maintanancestaff (id)
 go
 
-alter table mo_moodmoodkind
-   add constraint FK_MOODMOODCATEG_MOODCATEG foreign key (id_moodkind)
-      references mo_moodkind (id)
+alter table re_repairsrecord
+   add constraint Reference_755 foreign key (id_user)
+      references bd_user (id)
 go
 
-insert into bd_module(id,name,nameI18n,code,num,deployFlag,ft,lt,fu,lu) values('20120620172813369920105922727032','心情','bd_module_mo','mo',10,'1','2012-06-20 17:28:13',null,'20120507134700000110225236178825',null);
-insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120620171958638082253439131067','20120620172813369920105922727032',null,'心情','bd_operation_mo','mo','0','/mo/mood!index.action','0','1',0,'app-Mood','100%','100%','','2012-06-20 17:19:58','2012-07-25 10:31:48','20120507134700000110225236178825','20120507134700000110225236178825');
-insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120628135449713275379753459643','20120620172813369920105922727032',null,'心情Widget','bd_operation_mo_widget','123','1','/mo/mood!todayMoodWidget.action','0','1',0,'widget-mood','100','100','','2012-06-28 13:54:49','2012-07-25 10:32:13','20120507134700000110225236178825','20120507134700000110225236178825');
-insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120629110856110074363176844684','20120620172813369920105922727032','20120620171958638082253439131067','心情类别','mo_ssss','op_mo_type','2','','0','0',0,'','','','','2012-06-29 11:08:56',null,'20120507134700000110225236178825',null);
-insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120711085421918407344994090335','20120620172813369920105922727032','20120620171958638082253439131067','心情履历','mo_bb','op_mo_record','2','','0','0',1,'','','','','2012-07-11 08:54:21','2012-07-11 08:56:41','20120507134700000110225236178825','20120507134700000110225236178825');
-insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120711090419769525351565094921','20120620172813369920105922727032','20120620171958638082253439131067','今日心情','mo_cc','op_mo_today','2','','0','0',2,'','','','','2012-07-11 09:04:19',null,'20120507134700000110225236178825',null);
-insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20120711090729732495663990064479','20120620172813369920105922727032','20120620171958638082253439131067','心情统计','mo_dd','op_mo_statistics','2','','0','0',3,'','','','','2012-07-11 09:07:29',null,'20120507134700000110225236178825',null);
+alter table re_repairsrecord
+   add constraint Reference_756 foreign key (id_assigner)
+      references bd_user (id)
+go
+
+insert into bd_module(id,name,nameI18n,code,num,deployFlag,ft,lt,fu,lu) values('20130624091441394629340866507032','报修系统','bd_module_re','re',null,'1','2013-06-24 09:14:41',null,'20120507134700000110225236178825',null);
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130624091913096112359076477360','20130624091441394629340866507032',null,'报修系统','bd_operation_re','re','0',null,'/re/repairIndex!toIndex.action','0','0',1,'app-repairsystem','100%','100%','','2013-06-24 09:19:13','2013-06-24 09:33:41','20120507134700000110225236178825','20120507134700000110225236178825');
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130624092618174747460556571494','20130624091441394629340866507032','20130624091913096112359076477360','我的报修','re_myrepairrecord','re_myrepairrecord','2',null,'/re/repairIndex!toMyRepairRecord.action','0','0',1,'','','','','2013-06-24 09:26:18',null,'20120507134700000110225236178825',null);
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130624092726962953900257564202','20130624091441394629340866507032','20130624091913096112359076477360','所有报修','re_allrepairrecord','re_allrepairrecord','2',null,'/re/repairIndextoAllRepairRecord.action','0','0',2,'','','','','2013-06-24 09:27:26',null,'20120507134700000110225236178825',null);
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130624092938936111351126507265','20130624091441394629340866507032','20130624091913096112359076477360','设置','re_setting','re_setting','2',null,'/re/repairIndex!toSetting.action','0','0',3,'','','','','2013-06-24 09:29:38',null,'20120507134700000110225236178825',null);
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130625161215584527031410225575','20130624091441394629340866507032','20130624092726962953900257564202','删除报修单','re_delete_repairrecord','re_delete_repairrecord','2',null,'','0','0',1,'','','','','2013-06-25 16:12:15',null,'20120507134700000110225236178825',null);
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130625161523938977942598183211','20130624091441394629340866507032','20130624092726962953900257564202','派单','re_schedule_repairrecord','re_schedule_repairrecord','2',null,'','0','0',2,'','','','','2013-06-25 16:15:23',null,'20120507134700000110225236178825',null);
+insert into bd_operation(id,id_module,id_parent,name,nameI18n,code,operationDict,customTypeDict,url,openMode,datascopeFlag,num,icon,winHeight,winWidth,description,ft,lt,fu,lu) values('20130625161617053039229124839226','20130624091441394629340866507032','20130624092726962953900257564202','接单','re_accept_repairrecord','re_accept_repairrecord','2',null,'','0','0',3,'','','','','2013-06-25 16:16:17',null,'20120507134700000110225236178825',null);
 /*tag1.0 end*/
 
-
-
-
+go

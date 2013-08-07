@@ -44,8 +44,8 @@ public class MeterChart extends ApplicationFrame {
 		MeterPlot meterplot = new MeterPlot(valuedataset);
 		meterplot.setUnits("分");
 		meterplot.setRange(new Range(0.0D, 500D));
-		meterplot.addInterval(new MeterInterval("未上线", new Range(0.0D, 350D), Color.lightGray, new BasicStroke(2.0F), new Color(0, 255, 0, 64)));
-		meterplot.addInterval(new MeterInterval("一本线", new Range(350D, 400D), Color.lightGray, new BasicStroke(2.0F), new Color(255, 255, 0, 64)));
+		meterplot.addInterval(new MeterInterval("未上线", new Range(0.0D, 350D), Color.lightGray, new BasicStroke(2.0F), new Color(0x45, 0x72, 0xA7)));
+		meterplot.addInterval(new MeterInterval("一本线", new Range(350D, 400D), Color.lightGray, new BasicStroke(2.0F), Color.PINK));
 		meterplot.addInterval(new MeterInterval("二本线", new Range(400D, 460D), Color.lightGray, new BasicStroke(2.0F), new Color(255, 0, 0, 128)));
 		meterplot.addInterval(new MeterInterval("三本线", new Range(460D, 500D), Color.lightGray, new BasicStroke(2.0F), new Color(255, 0, 0, 128)));
 		meterplot.setNeedlePaint(Color.darkGray);
