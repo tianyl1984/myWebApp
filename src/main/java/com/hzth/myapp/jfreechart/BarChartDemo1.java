@@ -22,6 +22,7 @@ import org.jfree.chart.plot.IntervalMarker;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.GradientBarPainter;
+import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.ApplicationFrame;
@@ -57,9 +58,11 @@ public class BarChartDemo1 extends ApplicationFrame {
 
 		categoryplot.setOutlineVisible(true);
 
-		categoryplot.getRenderer().setSeriesPaint(0, Color.RED);
+		categoryplot.getRenderer().setSeriesPaint(0, new Color(0x1b, 0x95, 0xd9));
 
-		((BarRenderer) categoryplot.getRenderer()).setBarPainter(new GradientBarPainter(0d, 0d, 1d));
+		// ((BarRenderer) categoryplot.getRenderer()).setBarPainter(new GradientBarPainter(0d, 0d, 1d));
+		((BarRenderer) categoryplot.getRenderer()).setBarPainter(new StandardBarPainter());
+		((BarRenderer) categoryplot.getRenderer()).setItemMargin(-0.01);
 
 		NumberAxis numberaxis = (NumberAxis) categoryplot.getRangeAxis();
 		numberaxis.setAutoTickUnitSelection(false);

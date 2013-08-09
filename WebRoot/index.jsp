@@ -51,6 +51,7 @@
   	<li><a href="${path}/pqgrid/demo.jsp">pqgrid测试</a></li>
   	<li><a href="${path}/print/demo.jsp">打印测试</a></li>
   	<li><a href="${path}/jqplot/demo.jsp">jqplot测试</a></li>
+  	<li><a href="${path}/validate/demo.jsp">js验证框架</a></li>
   </ul>
   <input type="checkbox" onclick="aaa(this)" value="aaaaa" name="bbb" id="ttt">点击<br>
   <input type="button" onclick="a3()" value="弹出层"><br>

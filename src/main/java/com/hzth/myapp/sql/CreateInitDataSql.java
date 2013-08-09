@@ -15,17 +15,17 @@ import com.hzth.myapp.core.util.UUID;
 public class CreateInitDataSql {
 
 	public static void main(String[] args) {
-		String moduleId = "20130709144957796540366406936606";
+		String moduleId = "20130802110930234800209938544625";
 		Connection conn = null;
 		Connection conn2 = null;
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_no_test", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_va", "sa", "hzth-801");
 			// 标准库连接
-			conn2 = SqlHelper.getSqlServerConnection("localhost", "dctest", "sa", "hzth-801");
-			// createModule(moduleId, conn);
-			// createOperation(moduleId, conn);
+			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_ex", "sa", "hzth-801");
+			createModule(moduleId, conn);
+			createOperation(moduleId, conn);
 			// createConfiguration(conn, conn2);
 			// createDict(conn, conn2);
 			// createAttachmentconfig(conn, conn2);
@@ -42,17 +42,16 @@ public class CreateInitDataSql {
 			// tables.add("bd_operation");
 			// tables.add("sc_topic");
 			// createTable(tables, conn, conn2);
-			List<String> ids = new ArrayList<String>();
-			ids.add("20130802151643352129934366794111");
-			for (String id : ids) {
-				createOperationById(id, conn);
-			}
-			// List<String> ids2 = new ArrayList<String>();
-			// ids2.add("20130724165005262601735721347213");
-			// ids.add("20130715155426408488293812601213");
-			// for (String id : ids2) {
-			// createDictById(id, conn);
+			// List<String> ids = new ArrayList<String>();
+			// ids.add("20130809131147013956733712409749");
+			// for (String id : ids) {
+			// createOperationById(id, conn2);
 			// }
+			List<String> ids2 = new ArrayList<String>();
+			ids2.add("20130802105252656118618497243521");
+			for (String id : ids2) {
+				createDictById(id, conn);
+			}
 			System.out.println("-----end-----");
 		} catch (Exception e) {
 			e.printStackTrace();
