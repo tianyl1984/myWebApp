@@ -62,17 +62,17 @@
 			}
 			
 			function changeToGrid3(){
-				alert($("#tab3").width() + ":" + $("#tab3").height());
+// 				alert($("#tab3").width() + ":" + $("#tab3").height());
 				$("#grid_table3").width($("#tab3").width());
 				$("#grid_table3").height($("#tab3").height());
 				$("#grid_table3").width(500);
-				$("#grid_table3").height(100);
+				$("#grid_table3").height(200);
 				com.ue.pqgrid.changeTable("tab3","grid_table3");
 			}
 			
 			$(document).ready(function(){
-				changeToGrid2();
-// 				changeToGrid3();
+// 				changeToGrid2();
+				changeToGrid3();
 			})
 		</script>
 	</head>
@@ -110,7 +110,7 @@
 		</table>
 		<div id="grid_table"></div>
 	</div>
-	<table id="tab22" freezeCols="2">
+	<table id="tab22" freezeCols="2" style="display: none">
 		<thead>
 			<tr>
 				<th rowspan="2">姓名</th>
@@ -179,10 +179,15 @@
 	<table id="tab3">
 		<thead>
 			<tr>
-				<th>1</th>
-				<th>2</th>
-				<th>3</th>
-				<th>4</th>
+				<th>Header1</th>
+				<th colspan="2">Header2</th>
+				<th>Header4</th>
+			</tr>
+			<tr>
+				<th>Header11</th>
+				<th>Header22</th>
+				<th>Header33</th>
+				<th>Header44</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -192,47 +197,47 @@
 				<td>3</td>
 				<td>4</td>
 			</tr>
+			<tr>
+				<td>1</td>
+				<td>2</td>
+				<td>3</td>
+				<td>4</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>2</td>
+				<td>3</td>
+				<td>4</td>
+			</tr>
 		</tbody>
 	</table>
 	<div id="grid_table3"></div>
-<table freezecols="1" id="tab2">
+<table freezecols="1" id="tab2" style="display: none">
 		<thead>
 			<tr>
-				
 				<th rowspan="2">姓名</th>
-				
 				<th rowspan="2">优秀率</th>
-				
 				<th rowspan="2">及格率</th>
-				
 				<th rowspan="2">平均分</th>
-				
 				<th colspan="3">年级排名</th>
-				
 				<th colspan="4">a排名</th>
-				
 				<th colspan="4">b排名</th>
-				
 			</tr>
 			<tr>
 				<th>及格率</th>
 				<th>优秀率</th>
 				<th>平均分</th>
-				
 				<th>及格率</th>
 				<th>优秀率</th>
 				<th>平均分</th>
 				<th>达标情况</th>
-				
 				<th>及格率</th>
 				<th>优秀率</th>
 				<th>平均分</th>
 				<th>达标情况</th>
-				
 			</tr>
 		</thead>
 		<tbody>
-			
 			<tr>
 				<td>教师47</td>
 				<td>16.98%</td>
@@ -241,13 +246,6 @@
 				<td>1</td>
 				<td>1</td>
 				<td>1</td>
-				
-				
-				
-				
-				
-				
-				
 				<td>
 					<span>1</span>
 				</td>
@@ -258,13 +256,6 @@
 					<span>1</span>
 				</td>
 				<td>0项未达标</td>
-				
-				
-				
-				
-				
-				
-				
 				<td>
 					<span>1</span>
 				</td>
@@ -275,9 +266,7 @@
 					<span>1</span>
 				</td>
 				<td>0项未达标</td>
-				
 			</tr>
-			
 		</tbody>
 	</table>
 	</body>

@@ -50,6 +50,7 @@ com.ue.pqgrid = {
         newObj.tdAttrs = tdAttr;
         
         //目前只支持rowspan最大为2的
+        var rowSize = $("tr",$thead).size();
         $("tr",$thead).each(function(i){
         	$("th",$(this)).each(function(j){
 	        	var col = {};
@@ -63,7 +64,7 @@ com.ue.pqgrid = {
         		}
         		col.rowspan = $th.attr("rowspan")?parseInt($th.attr("rowspan"),10):1;
         		col.colspan = $th.attr("colspan")?parseInt($th.attr("colspan"),10):1;
-        		if(col.colspan > 1){
+        		if(col.rowspan == 1 && i < rowSize - 1){//只占一行
 	        		col.colModel = [];
         		}
         		if(i == 0){
@@ -72,21 +73,19 @@ com.ue.pqgrid = {
         			var rows = newObj.colModel;
         			for(var k=0;k<rows.length;k++){
         				var row = newObj.colModel[k];
-        				if(row.colspan == 1){
+        				if(!row.colModel){
         					continue;
-        				}else{
-        					if(row.colModel.length == row.colspan){
-        						continue;
-        					}else{
-	        					row.colModel.push(col);
-	        					break;
-        					}
         				}
+    					if(row.colModel.length == row.colspan){
+    						continue;
+    					}else{
+        					row.colModel.push(col);
+        					break;
+    					}
         			}
         		}
         	});
         });
         $div.pqGrid(newObj);
-//        $tbl.css("display", "none");
 	}
 };

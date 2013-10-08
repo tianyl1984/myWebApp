@@ -15,20 +15,20 @@ import com.hzth.myapp.core.util.UUID;
 public class CreateInitDataSql {
 
 	public static void main(String[] args) {
-		String moduleId = "20130802110930234800209938544625";
+		String moduleId = "20130410161947084607867596720976";
 		Connection conn = null;
 		Connection conn2 = null;
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_va", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_rs", "sa", "hzth-801");
 			// 标准库连接
-			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_ex", "sa", "hzth-801");
-			createModule(moduleId, conn);
-			createOperation(moduleId, conn);
+			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_empty", "sa", "hzth-801");
+			// createModule(moduleId, conn);
+			// createOperation(moduleId, conn);
 			// createConfiguration(conn, conn2);
 			// createDict(conn, conn2);
-			// createAttachmentconfig(conn, conn2);
+			createAttachmentconfig(conn, conn2);
 			// createOperate(conn, conn2);
 			// List<String> tables = new ArrayList<String>();
 			// tables.add("bd_studentregistration");
@@ -39,16 +39,21 @@ public class CreateInitDataSql {
 			// tables.add("ca_attendanceitem");
 			// tables.add("ca_leaverecord");
 			// tables.add("");
-			// tables.add("bd_operation");
-			// tables.add("sc_topic");
+			// tables.add("fw_attachmentsetting");
+			// tables.add("fw_attachmentconfig");
 			// createTable(tables, conn, conn2);
 			// List<String> ids = new ArrayList<String>();
-			// ids.add("20130809131147013956733712409749");
+			// ids.add("20130916153938547871117212098093");
+			// ids.add("20130916153617462845585711988674");
+			// ids.add("20130912153017548520032644811539");
+			// ids.add("20130912152344292987224912224968");
+			// ids.add("20130912152223291258097621944094");
+			// ids.add("20130912091527946345728051737439");
 			// for (String id : ids) {
-			// createOperationById(id, conn2);
+			// createOperationById(id, conn);
 			// }
 			List<String> ids2 = new ArrayList<String>();
-			ids2.add("20130802105252656118618497243521");
+			// ids2.add("20130325191038222741788749418279");
 			for (String id : ids2) {
 				createDictById(id, conn);
 			}

@@ -3,11 +3,13 @@ package com.hzth.myapp;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
@@ -16,6 +18,10 @@ import sun.misc.BASE64Encoder;
 
 import com.hzth.myapp.core.util.FileUtil;
 import com.hzth.myapp.core.util.UUID;
+import com.hzth.myapp.sql.ColumnInfo;
+import com.hzth.myapp.sql.CreateDBSchema;
+import com.hzth.myapp.sql.SqlHelper;
+import com.hzth.myapp.sql.TableInfo;
 import com.sun.jna.Library;
 
 public class Test {
@@ -32,55 +38,55 @@ public class Test {
 	}
 
 	public static void main(String[] args) throws Exception {
-		// copyFiles(new File("F:/source2"));
-		// m1();
-		// System.out.println(UUID.getUUID());
-		// m2();
-		// m3();
-
-		// Set dm = createobject("dm.dmsoft")
-		// dm.SetPath "c:\"
-		// dm_ret = dm.SetDictPwd("123456789")
-		// dm_ret = dm.SetDict(0,"aa.txt")
-		// MessageBox dm_ret
-
-		// E8 0D 4B 39
-		if (true) {
-			return;
-		}
-
-		FileInputStream fis = new FileInputStream(new File("E:/3.1233/123456.txt"));
-		byte[] b = new byte[500];
-		int length = fis.read(b);
-		fis.close();
-		FileOutputStream fos = null;
+		Connection conn = null;
 		try {
-			fos = new FileOutputStream(new File("C:/Users/tianyl/Desktop/1111.txt"));
-			for (int i = 0; i < length; i++) {
-				if (i < 4) {
+			System.out.println("-----start-----");
+			// 有数据的连接
+			conn = SqlHelper.getSqlServerConnection("127.0.0.1", "v3_bak", "sa", "hzth-801");
+
+			ResultSet rs = conn.prepareStatement("select id from bd_student").executeQuery();
+			List<String> studentIds = new ArrayList<String>();
+			while (rs.next()) {
+				studentIds.add(rs.getString("id"));
+			}
+
+			Map<String, TableInfo> tabMap = CreateDBSchema.getTableInfo(conn);
+			label1: for (String tab : tabMap.keySet()) {
+				if (tab.equals("bd_student")) {
 					continue;
 				}
-				fos.write(b[i]);
+				List<String> cols = new ArrayList<String>();
+				for (String col : tabMap.get(tab).getColumnInfoMap().keySet()) {
+					ColumnInfo colInfo = tabMap.get(tab).getColumnInfoMap().get(col);
+					if (colInfo.getLength() - 32 == 0) {
+						cols.add(col);
+					}
+				}
+				cols.remove("fu");
+				cols.remove("lu");
+				if (cols.size() > 0) {
+					ResultSet rs2 = conn.prepareStatement("select * from " + tab).executeQuery();
+					while (rs2.next()) {
+						boolean flag = false;
+						for (String col : cols) {
+							String str = rs2.getString(col);
+							if (studentIds.contains(str)) {
+								// System.out.println(tab + ":" + col);
+								System.out.println("update " + tab + " set " + col + " = (select id from bd_student s where s.oldId = " + tab + "." + col + ") where " + col + " in (select oldId from bd_student);");
+								flag = true;
+							}
+						}
+						if (flag) {
+							continue label1;
+						}
+					}
+				}
 			}
-			// fos.write('D');
-			// fos.write('M');
-			// fos.write('D');
-			// fos.write('M');
-			// fos.write(Integer.valueOf("E8", 16));
-			// fos.write(Integer.valueOf("0D", 16));
-			// fos.write(Integer.valueOf("4B", 16));
-			// fos.write(Integer.valueOf("39", 16));
-			// fos.write(Integer.valueOf("00", 16));
-			// fos.write(Integer.valueOf("C2", 16));
-			// fos.write(Integer.valueOf("BD", 16));
-			// fos.write(Integer.valueOf("DD", 16));
-			fos.flush();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (fos != null) {
-				fos.close();
-			}
+			SqlHelper.close(conn);
 		}
 	}
 
