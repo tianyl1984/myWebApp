@@ -171,8 +171,9 @@
 			// --*-- 执行回调
 			if (isResize) {
 				config.resizeFun();
+				//com.ue.common.resetSize();
 			} else {
-				config.dragFun();
+				config.dragFun(x, y);
 			}
 		};
 		

@@ -29,7 +29,7 @@
 		com.ue.aa = {
 			a : "1111",
 			a1:function(b){
-				alert(this.callee.toString())
+// 				alert(this.callee.toString())
 // 				alert(this.a+":"+b);
 			}
 		};
@@ -38,9 +38,17 @@
 // 		alert(f);
 		f.apply(com.ue.aa, ["222"]);
 // 		com.ue.aa.a1("222")
+
+		function js1(){
+			var f = function foo(){
+				return typeof foo;
+			}
+			alert((typeof foo) + ":" + f());
+		}
 	</script>
 	</head>
 	<body>
 		<input type="button" value="测试cpu变化" onclick="showCpuChart()">
+		<input type="button" value="函数表达式" onclick="js1()">
 	</body>
 </html>

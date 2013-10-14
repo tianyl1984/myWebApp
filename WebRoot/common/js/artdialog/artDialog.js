@@ -103,6 +103,9 @@
 			DOM.close[config.cancel === false ? 'hide' : 'show']();
 			DOM.max[config.max === false ? 'hide' : 'show']();
 			DOM.min[config.min === false ? 'hide' : 'show']();
+			if (config.isWidget){
+				$(DOM.outer).addClass('widgetWrap');
+			}
 			if (!config.max && config.min){
 				DOM.min[0].style.right = '20px';
 			}
@@ -317,6 +320,25 @@
 			config.height = height;
 			height = scaleHeight;
 			
+			// rewrite code... 防止iframe宽度指定无效
+			if (!isNaN(parseInt(width))){
+				width = parseInt(width);
+				wrapStyle.width = 'auto';
+				style.width = Math.max(that.config.minWidth, width) + 'px';
+				contentStyle.width = style.width;
+				wrapStyle.width = wrap[0].offsetWidth + 'px'; // 防止未定义宽度的表格遇到浏览器右边边界伸缩
+			} else {
+				style.width = width;
+				width === 'auto' && wrap.css('width', 'auto');
+			}
+			
+			if (!isNaN(parseInt(height))){
+				height = parseInt(height);
+				style.height = Math.max(that.config.minHeight, height) + 'px';
+			} else {
+				style.height = height;
+			}
+			/**
 			if (typeof width === 'number') {
 				wrapStyle.width = 'auto';
 				style.width = Math.max(that.config.minWidth, width) + 'px';
@@ -326,12 +348,12 @@
 				style.width = width;
 				width === 'auto' && wrap.css('width', 'auto');
 			};
-			
 			if (typeof height === 'number') {
 				style.height = Math.max(that.config.minHeight, height) + 'px';
 			} else if (typeof height === 'string') {
 				style.height = height;
 			};
+			*/
 			contentStyle.height = style.height;
 			
 			that._ie6SelectFix();
@@ -454,6 +476,11 @@
 			// 使用display:none隐藏以后，window发生resize，再show以后窗口出现变形bug, 此处手动再次设置size和position
 			that.size(that.config.width, that.config.height);
 			that.position(that.config.left, that.config.top);
+			
+			// 执行show回调
+			if (that.config.showFun){
+				that.config.showFun();
+			}
 			return this;
 		},
 		
@@ -473,7 +500,6 @@
 			$.post(url,function(data){
 				that.content(data);
 			});
-			console.log("dialog load 470")
 		},
 		
 		/**最大化 还原*/
@@ -483,8 +509,16 @@
 			var targetDialog = art.dialog.list[that.config.id];
 			
 			if (that.config.width === '100%' && that.config.height === '100%') {
-				targetDialog.size(win.attr('data-w'), win.attr('data-h'));
-				targetDialog.position(win.attr('data-l'), win.attr('data-t'));
+				if (win.attr('data-w') && win.attr('data-h')){
+					targetDialog.size(win.attr('data-w'), win.attr('data-h'));
+				} else {
+					targetDialog.size(850, 500);
+				}
+				if (win.attr('data-l') && win.attr('data-t')){
+					targetDialog.position(win.attr('data-l'), win.attr('data-t'));
+				}else{
+					targetDialog.position('60%', '45%');
+				}
 				//that.config.width=win.attr('data-w');
 				//that.config.height=win.attr('data-h');
 				if (that.config.remaxFun){
@@ -555,6 +589,9 @@
 			DOM.content.html('');
 			DOM.buttons.html('');
 			
+			// extends code...
+			$(DOM.outer).removeClass('widgetWrap');
+			
 			if (artDialog.focus === that) artDialog.focus = null;
 			if (follow) follow[_expando + 'follow'] = null;
 			delete list[that.config.id];
@@ -603,7 +640,6 @@
 			// 设置最高层的样式
 			top && top.DOM.wrap.removeClass('aui_state_focus');
 			artDialog.focus = that;
-			
 			wrap.addClass('aui_state_focus');
 			
 			// 添加焦点
@@ -886,29 +922,31 @@
 				winSize = _$window.width() * _$window.height();
 			
 			winResize = function () {
-				var newSize,
+				if (!$(that.DOM.content).is(':hidden')){
+					var newSize,
 					oldSize = winSize,
 					elem = config.follow,
 					width = config.width,
 					height = config.height,
 					left = config.left,
 					top = config.top;
-				if ('all' in document) {
-					// IE6~7 window.onresize bug
-					newSize = _$window.width() * _$window.height();
-					winSize = newSize;
-					if (oldSize === newSize) return;
-				};
-				
-				if (width || height) that.size(width, height);
-				if (elem) {
-					that.follow(elem);
-				} else if (left || top) {
-					that.position(left, top);
-				} else {
-				};
+					if ('all' in document) {
+						// IE6~7 window.onresize bug
+						newSize = _$window.width() * _$window.height();
+						winSize = newSize;
+						if (oldSize === newSize) return;
+					};
+					
+					if (width || height) that.size(width, height);
+					if (elem) {
+						that.follow(elem);
+					} else if (left || top) {
+						that.position(left, top);
+					} else {
+					};
+				}
 			};
-		
+			
 			that._winResize = function () {
 				resizeTimer && clearTimeout(resizeTimer);
 				resizeTimer = setTimeout(function () {
@@ -922,8 +960,6 @@
 			// 监听点击
 			DOM.wrap
 			.bind('click', function (event) {
-				console.log("click");
-				return false;
 				var target = event.target, callbackID;
 				
 				if (target.disabled) return false; // IE BUG
@@ -945,8 +981,6 @@
 				that._ie6SelectFix();
 			})
 			.bind('mousedown', function () {
-				console.log("mousedown");
-//				return false;
 				that.focus(false);
 			});
 		},
@@ -1023,7 +1057,7 @@
 //		link.href = _path + '/skins/' + _skin + '.css?' + artDialog.fn.version;
 		
 		//换肤修改
-		link.href = '/myWebApp/common/css/popupLayer/css/default.css?' + artDialog.fn.version;
+		link.href = com.ue.global.path + '/framework/theme/' + com.ue.global.theme + '/component/popupLayer/css/default.css?' + artDialog.fn.version;
 		
 		_thisScript.parentNode.insertBefore(link, _thisScript);
 	};
@@ -1049,7 +1083,7 @@
 
 	/** 模板 */
 	artDialog.templates = [
-	'<div class="aui_outer" style="box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);">',
+	'<div class="aui_outer">',
 		'<table class="aui_border">',
 			'<tbody>',
 				'<tr>',
@@ -1067,13 +1101,13 @@
 										'<div class="aui_titleBar">',
 											'<div class="aui_title"></div>',
 											'<div class="op_menu">',
-											'<a onkeydown="return false;" class="aui_close" href="javascript:/*artDialog*/;">',
+											'<a onkeydown="return false;" class="aui_close" href="javascript:/*artDialog*/;" title="关闭">',
 												'\xd7',
 											'</a>',
-											'<a onkeydown="return false;" class="aui_max" href="javascript:/*artDialog*/;">',
+											'<a onkeydown="return false;" class="aui_max" href="javascript:/*artDialog*/;" title="最大化">',
 												'+',
 											'</a>',
-											'<a onkeydown="return false;" class="aui_min" href="javascript:/*artDialog*/;">',
+											'<a onkeydown="return false;" class="aui_min" href="javascript:/*artDialog*/;" title="最小化">',
 												'-',
 											'</a>',
 											'<a style="clear: both;"></a>',
@@ -1115,19 +1149,19 @@
 	artDialog.defaults = {
 									// 消息内容
 		content: '<div class="aui_loading"><span>loading..</span></div>',
-		title: '\u6d88\u606f',		// 标题. 默认'消息'
+		title: "消息",		// 标题. 默认'消息'
 		button: null,				// 自定义按钮
 		ok: null,					// 确定按钮回调函数
 		cancel: null,				// 取消按钮回调函数
 		init: null,					// 对话框初始化后执行的函数
 		close: null,				// 对话框关闭前执行的函数
-		okVal: '\u786E\u5B9A',		// 确定按钮文本. 默认'确定'
-		cancelVal: '\u53D6\u6D88',	// 取消按钮文本. 默认'取消'
+		okVal: "确定",		// 确定按钮文本. 默认'确定'
+		cancelVal: "取消",	// 取消按钮文本. 默认'取消'
 		width: 'auto',				// 内容宽度
 		height: 'auto',				// 内容高度
 		minWidth: 96,				// 最小宽度限制
 		minHeight: 32,				// 最小高度限制
-		padding: '20px 25px',		// 内容与边界填充距离
+		padding: '0px 0px',		// 内容与边界填充距离
 		skin: '',					// 皮肤名(多皮肤共存预留接口)
 		icon: null,					// 消息图标名称
 		time: null,					// 自动关闭时间
@@ -1148,12 +1182,13 @@
 		drag: true,					// 是否允许用户拖动位置
 		
 		// 新增属性
+		isWidget: false,			// 是否以widget样式显示
 		max: false,					// 是否显示最大化按钮
 		maxFun: function(){},		// 最大化时的回调
 		remaxFun: function(){},		// 还原时的回调
 		min: false,					// 是否显示最小化按钮
 		minFun: function(){},		// 最小化时的回调
-		
+		showFun: function(){},
 		resizeFun: function(){},	// 窗口改变大小时的回调
 		dragFun: function(){},		// 窗口拖动时的回调
 		

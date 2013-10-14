@@ -1,13 +1,4 @@
-/*
- * Inline Form Validation Engine 2.2, jQuery plugin
- *
- * Copyright(c) 2010, Cedric Dugas
- *
- * 2.0 Rewrite by Olivier Refalo
- *
- * Form validation engine allowing custom regex rules to be added.
- * Licensed under the MIT License
- */
+
 (function($) {
 
 	var methods = {
@@ -96,27 +87,16 @@
 			var form = this;
 			var options = form.data('jqv');
 			if (options.binded) {
-
 				// unbind fields
-				form.find("[class*=validate]").not("[type=checkbox]").unbind(
-						options.validationEventTrigger, methods._onFieldEvent);
-				form
-						.find(
-								"[class*=validate][type=checkbox],[class*=validate][type=radio]")
-						.unbind("click", methods._onFieldEvent);
-
+				form.find("[class*=validate]").not("[type=checkbox]").unbind(options.validationEventTrigger, methods._onFieldEvent);
+				form.find("[class*=validate][type=checkbox],[class*=validate][type=radio]").unbind("click", methods._onFieldEvent);
 				// unbind form.submit
 				form.unbind("submit", methods.onAjaxFormComplete);
-
 				// unbind live fields (kill)
-				form.find("[class*=validate]").not("[type=checkbox]").die(
-						options.validationEventTrigger, methods._onFieldEvent);
-				form.find("[class*=validate][type=checkbox]").die("click",
-						methods._onFieldEvent);
+				form.find("[class*=validate]").not("[type=checkbox]").die(options.validationEventTrigger, methods._onFieldEvent);
+				form.find("[class*=validate][type=checkbox]").die("click",methods._onFieldEvent);
 				// unbind form.submit
-
 				form.die("submit", methods.onAjaxFormComplete);
-
 				form.removeData('jqv');
 			}
 		},
@@ -164,15 +144,11 @@
 					.each(
 							function() {
 								var field = $(this);
-
 								var prompt = methods._getPrompt(field);
-								var promptText = $(prompt).find(
-										".formErrorContent").html();
+								var promptText = $(prompt).find(".formErrorContent").html();
 
 								if (prompt)
-									methods._updatePrompt(field, $(prompt),
-											promptText, undefined, false,
-											options);
+									methods._updatePrompt(field, $(prompt),promptText, undefined, false,options);
 							})
 		},
 		/**
@@ -234,7 +210,6 @@
 		_onFieldEvent : function(event) {
 			var field = $(this);
 			var form = field.closest('form');
-			console.log("触发：" + form.size() + ":" + form[0].id);
 			var options = form.data('jqv');
 			// validate the current field
 			window.setTimeout(function() {
@@ -469,11 +444,7 @@
 		 */
 		_validateField : function(field, options, skipAjaxValidation) {
 			if (!field.attr("id"))
-				$
-						.error("jQueryValidate: an ID attribute is required for this field: "
-								+ field.attr("name")
-								+ " class:"
-								+ field.attr("class"));
+				$.error("jQueryValidate: an ID attribute is required for this field: " + field.attr("name") + " class:" + field.attr("class"));
 
 			var rulesParsing = field.attr('class');
 			var getRules = /validate\[(.*)\]/.exec(rulesParsing);
@@ -677,7 +648,7 @@
 			default:
 				//修改内容为空格时的bug
 				if (!field.val() || !$.trim(field.val()))
-					return field.attr("errorMsg") || options.allrules[rules[i]].alertText;
+					return options.allrules[rules[i]].alertText;
 				break;
 			case "radio":
 			case "checkbox":
@@ -1069,8 +1040,6 @@
 		 */
 		_ajax : function(field, rules, i, options) {
 
-			console.log(options);
-			
 			var errorSelector = rules[i + 1];
 			var rule = options.allrules[errorSelector];
 			var extraData = rule.extraData;
@@ -1150,8 +1119,7 @@
 									} else
 										msg = rule.alertTextFail;
 
-									methods._showPrompt(errorField, msg, "",
-											true, options);
+									methods._showPrompt(errorField, msg, "", true, options);
 								} else {
 									if (options.ajaxValidCache[errorFieldId] !== undefined)
 										options.ajaxValidCache[errorFieldId] = true;
@@ -1488,54 +1456,55 @@
 		 */
 		_saveOptions : function(form, options) {
 			// is there a language localisation ?
-		if ($.validationEngineLanguage)
-			var allRules = $.validationEngineLanguage.allRules;
-		else
-			$.error("jQuery.validationEngine rules are not loaded, plz add localization files to the page");
-		// --- Internals DO NOT TOUCH or OVERLOAD ---
-		// validation rules and i18
-		$.validationEngine.defaults.allrules = allRules;
-		var userOptions = $.extend(true, {}, $.validationEngine.defaults, options);
-		form.data('jqv', userOptions);
-		return userOptions;
-	},
+			if ($.validationEngineLanguage)
+				var allRules = $.validationEngineLanguage.allRules;
+			else
+				$.error("jQuery.validationEngine rules are not loaded, plz add localization files to the page");
+			// --- Internals DO NOT TOUCH or OVERLOAD ---
+			// validation rules and i18
+			$.validationEngine.defaults.allrules = allRules;
+			var userOptions = $.extend( {}, $.validationEngine.defaults, options);
+			form.data('jqv', userOptions);
+			return userOptions;
+		},
 
-	/**
-	 * Removes forbidden characters from class name
-	 * @param {String} className
-	 */
-	_getClassName : function(className) {
-		return className.replace(":", "_").replace(".", "_");
-	},
+		/**
+		 * Removes forbidden characters from class name
+		 * @param {String} className
+		 */
+		_getClassName : function(className) {
+			return className.replace(":", "_").replace(".", "_");
+		},
 	
-	_getInputWithName: function(name){
-		var inputArray = [];
-		var inputTags = document.getElementsByName(name);
-		for(var i=0 ; i<inputTags.length ; i++){
-			if($(inputTags[i]).is("input")){
-				inputArray.push(inputTags[i]);
+		_getInputWithName: function(name){
+			var inputArray = [];
+			var inputTags = document.getElementsByName(name);
+			for(var i=0 ; i<inputTags.length ; i++){
+				if($(inputTags[i]).is("input")){
+					inputArray.push(inputTags[i]);
+				}
 			}
-		}
-		if(inputArray.length==1){
-			return inputArray[0];
-		}
-		return inputArray;
-	},
-	_getInputWithNameAndChecked: function(name){
-		var inputArray = [];
-		var inputTags = document.getElementsByName(name);
-		for(var i=0 ; i<inputTags.length ; i++){
-			if($(inputTags[i]).is("input") && inputTags[i].checked){
-				inputArray.push(inputTags[i]);
+			if(inputArray.length==1){
+				return inputArray[0];
 			}
+			return inputArray;
+		},
+		_getInputWithNameAndChecked: function(name){
+			var inputArray = [];
+			var inputTags = document.getElementsByName(name);
+			for(var i=0 ; i<inputTags.length ; i++){
+				if($(inputTags[i]).is("input") && inputTags[i].checked){
+					inputArray.push(inputTags[i]);
+				}
+			}
+			if(inputArray.length==1){
+				return inputArray[0];
+			}
+			return inputArray;
 		}
-		if(inputArray.length==1){
-			return inputArray[0];
-		}
-		return inputArray;
-	}
 	
 	};
+	
 	/**
 	 * 验证某一特定域，根据待验证标签的验证规则
 	 * @memberOf {TypeName} 
@@ -1545,6 +1514,7 @@
 		var form=field.parents("form");
 		$(form).validationEngine("validateField", field);
 	};
+	
 	/**
 	 * Plugin entry point.
 	 * You may pass an action as a parameter or a list of options.
@@ -1558,12 +1528,6 @@
 		var form = $(this);
 		if (!form[0])
 			return false; // stop here if the form does not exist
-		
-		//如果调过一次validationEngine()，第二次调用先detach
-		if (!method && form.data('jqv') && form.data('jqv') != null) {
-			methods["detach"].apply(form);
-		}
-		
 		if (typeof (method) == 'string' && method.charAt(0) != '_' && methods[method]) {
 			// make sure init is called once
 			if (method != "showPrompt" && method != "hidePrompt" && method != "hide" && method != "hideAll")
@@ -1577,12 +1541,12 @@
 			$.error('Method ' + method + ' does not exist in jQuery.validationEngine');
 		}
 	};
+	
 	$.fn.reloadValidationEngine=function(method){
 		var form = $(this);
 		if(!form[0]){
 			return false; 
 		}
-		
 		if(method && typeof method =='object'){
 			form.validationEngine("attach",method);
 		}else{
@@ -1590,6 +1554,7 @@
 		}
 		
 	};
+	
 	$.fn.mutliselectValidate = function() {
 		var rulesParsing = $(this).attr('class');
 		var getRules = /validate\[(.*)\]/.exec(rulesParsing);
@@ -1658,7 +1623,6 @@
 	// LEAK GLOBAL OPTIONS
 	$.validationEngine = {
 		defaults : {
-
 			// Name of the event triggering field validation
 			validationEventTrigger : "keyup click change",
 			// Automatically scroll viewport to the first error

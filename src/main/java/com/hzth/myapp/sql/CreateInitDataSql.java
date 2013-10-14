@@ -21,14 +21,14 @@ public class CreateInitDataSql {
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_rs", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_bd_wk", "sa", "hzth-801");
 			// 标准库连接
 			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_empty", "sa", "hzth-801");
 			// createModule(moduleId, conn);
 			// createOperation(moduleId, conn);
-			// createConfiguration(conn, conn2);
+			createConfiguration(conn, conn2);
 			// createDict(conn, conn2);
-			createAttachmentconfig(conn, conn2);
+			// createAttachmentconfig(conn, conn2);
 			// createOperate(conn, conn2);
 			// List<String> tables = new ArrayList<String>();
 			// tables.add("bd_studentregistration");
@@ -52,11 +52,11 @@ public class CreateInitDataSql {
 			// for (String id : ids) {
 			// createOperationById(id, conn);
 			// }
-			List<String> ids2 = new ArrayList<String>();
+			// List<String> ids2 = new ArrayList<String>();
 			// ids2.add("20130325191038222741788749418279");
-			for (String id : ids2) {
-				createDictById(id, conn);
-			}
+			// for (String id : ids2) {
+			// createDictById(id, conn);
+			// }
 			System.out.println("-----end-----");
 		} catch (Exception e) {
 			e.printStackTrace();

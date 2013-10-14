@@ -520,11 +520,11 @@ public class DcUtil {
 		// System.out.println(aa);
 		// // System.out.println(getUrlResponse("http://192.168.1.20:8080/dc/bd/mobile/calendarWeekData!getSchoolAllJson.action"));
 		// System.out.println(getUrlResponse("http://192.168.1.20:8080/dc/bd/teachingMaterial!list.action"));
-		boolean aa = login("http://192.168.30.38:8093/dc-exam", "administrator", "000000", "dataSource1");
-		System.out.println(aa);
+		// boolean aa = login("http://192.168.30.38:8093/dc-exam", "administrator", "000000", "dataSource1");
+		// System.out.println(aa);
 		// System.out.println(getCookies());
 		// System.out.println(getUrlResponse("http://192.168.1.20:8080/dc/bd/mobile/calendarWeekData!getSchoolAllJson.action"));
-		System.out.println(getUrlResponse("http://192.168.30.38:8093/dc-exam//bd//teachingMaterial!list.action"));
+		System.out.println(getUrlResponse("http://127.0.0.1:8085/dc-base/bd/teachingMaterial!ajaxLoadData.action?sys_username=jiaoshi94&sys_password=000000&sys_auto_authenticate=true&dataSourceName=dataSource1"));
 	}
 
 	static {

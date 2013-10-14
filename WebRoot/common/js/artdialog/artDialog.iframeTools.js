@@ -143,7 +143,7 @@ artDialog.open = function (url, options, cache) {
 			aConfig = api.config;
 			
 		titleBar.style.display = 'block';
-		$content.addClass('aui_state_full');
+		$content.addClass('aui_state_full ovh');
 		
 		loading && loading.hide();
 		
@@ -222,7 +222,7 @@ artDialog.open = function (url, options, cache) {
 			if (options.close && options.close.call(this, iframe.contentWindow, top) === false) {
 				return false;
 			};
-			$content.removeClass('aui_state_full');
+			$content.removeClass('aui_state_full ovh');
 			
 			// 重要！需要重置iframe地址，否则下次出现的对话框在IE6、7无法聚焦input
 			// IE删除iframe后，iframe仍然会留在内存中出现上述问题，置换src是最容易解决的方法
@@ -407,10 +407,14 @@ artDialog.tips = function (content, time) {
 		zIndex: _zIndex(),
 		title: false,
 		cancel: false,
+		drag: false,
+		resize: false,
+		width: 100,
+		height: 32,
 		fixed: true,
 		lock: false
 	})
-	.content('<div style="padding: 0 1em;">' + content + '</div>')
+	.content('<div style="margin: 0; padding: 0; width: 100px; height: 32px; line-height: 32px; text-align: center; overflow: hidden;">' + content + '</div>')
 	.time(time || 1.5);
 };
 

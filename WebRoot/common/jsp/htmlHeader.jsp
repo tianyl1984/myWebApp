@@ -16,7 +16,7 @@ var CONTEXTPATH = '${path}';
 <script type="text/javascript" src="${path }/common/js/jsMap.js"></script>
 
 <script type="text/javascript" src="${path }/common/js/artdialog/artDialog.js"></script>
-<%-- <script type="text/javascript" src="${path }/common/js/artdialog/artDialog.drag.js"></script> --%>
+<script type="text/javascript" src="${path }/common/js/artdialog/artDialog.drag.js"></script>
 <script type="text/javascript" src="${path }/common/js/artdialog/artDialog.iframeTools.js"></script>
 <script type="text/javascript" src="${path }/common/js/artdialog/artDialog.JQuery.js"></script>
 

@@ -71,6 +71,8 @@ public class CheckPdm {
 		abbreviationList.add("cs");
 		abbreviationList.add("wp");
 		abbreviationList.add("wk");
+		abbreviationList.add("th");
+		abbreviationList.add("mt");
 
 		// abbreviationList.add("om");
 		// abbreviationList.add("da");
@@ -112,9 +114,20 @@ public class CheckPdm {
 		// oracleExclued.add("tr");
 	}
 
+	/**
+	 * mysql包含的。为了提升效率
+	 */
+	private static final List<String> mysqlInclued = new ArrayList<String>();
+	static {
+		mysqlInclued.add("fw");
+		mysqlInclued.add("bd");
+		mysqlInclued.add("ma");
+		mysqlInclued.add("mt");
+	}
+
 	public static void main(String[] args) {
 		String dbType = "sqlserver";
-		// dbType = "mysql";
+		dbType = "mysql";
 		// dbType = "oracle";
 		File file = new File("C:/Users/tianyl/Desktop/sql/dc-" + dbType + ".sql");
 		List<String> errorMsgs = checkGrammar(file);
@@ -143,10 +156,23 @@ public class CheckPdm {
 			for (CommonSql sql : commonSqls) {
 				if (dbType.equals("mysql")) {
 					boolean flag = false;
+					// 不包含的
 					for (String temp : mysqlExclued) {
 						if (sql.getTable().startsWith(temp)) {
 							flag = true;
 							continue;
+						}
+					}
+					if (flag) {
+						continue;
+					}
+
+					flag = true;
+					// 包含的
+					for (String temp : mysqlInclued) {
+						if (sql.getTable().startsWith(temp)) {
+							flag = false;
+							break;
 						}
 					}
 					if (flag) {

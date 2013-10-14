@@ -69,7 +69,6 @@ $.fn = $.prototype = {
 	 * @param	{String}	名称
 	 */
     addClass: function (name) {
-    	console.log("artDialog addClass")
         if (!this.hasClass(name)) this[0].className += ' ' + name;
 
         return this;
@@ -80,7 +79,6 @@ $.fn = $.prototype = {
 	 * @param	{String}	名称
 	 */
     removeClass: function (name) {
-    	console.log("artDialog removeClass")
         var elem = this[0];
 
         if (!name) {
@@ -452,7 +450,6 @@ $.event = {
 	handler: function (cache) {
 		return function (event) {
 			event = $.event.fix(event || window.event);
-			console.log("handler")
 			for (var i = 0, list = cache.listeners, fn; fn = list[i++];) {
 				if (fn.call(cache.elem, event) === false) {
 					event.preventDefault();
@@ -464,7 +461,6 @@ $.event = {
 	
 	/** @inner Event对象兼容处理 */
 	fix: function (event) {
-		console.log("fix")
 		if (event.target) return event;
 		
 		var event2 = {

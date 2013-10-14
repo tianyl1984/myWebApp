@@ -14,7 +14,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.hzth.myapp.spring.MyContextHolder;
 
-public class MyFilter implements Filter {
+public class MyFilter2 implements Filter {
 
 	@Override
 	public void destroy() {
@@ -23,7 +23,7 @@ public class MyFilter implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-		System.out.println("MyFilter");
+		System.out.println("MyFilter2");
 		HttpServletRequest request = (HttpServletRequest) req;
 		String userTpye = request.getParameter("userType");
 		if (StringUtils.isNotBlank(userTpye)) {
