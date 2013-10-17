@@ -15,20 +15,20 @@ import com.hzth.myapp.core.util.UUID;
 public class CreateInitDataSql {
 
 	public static void main(String[] args) {
-		String moduleId = "20130410161947084607867596720976";
+		String moduleId = "20130917102013575885150146208745";
 		Connection conn = null;
 		Connection conn2 = null;
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_bd_wk", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.30.131", "mydc", "sa", "hzth-801");
 			// 标准库连接
 			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_empty", "sa", "hzth-801");
-			// createModule(moduleId, conn);
-			// createOperation(moduleId, conn);
-			createConfiguration(conn, conn2);
+			createModule(moduleId, conn);
+			createOperation(moduleId, conn);
+			// createConfiguration(conn, conn2);
 			// createDict(conn, conn2);
-			// createAttachmentconfig(conn, conn2);
+			createAttachmentconfig(conn, conn2);
 			// createOperate(conn, conn2);
 			// List<String> tables = new ArrayList<String>();
 			// tables.add("bd_studentregistration");
