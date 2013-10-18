@@ -24,11 +24,11 @@ public class CreateInitDataSql {
 			conn = SqlHelper.getSqlServerConnection("192.168.30.131", "mydc", "sa", "hzth-801");
 			// 标准库连接
 			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_empty", "sa", "hzth-801");
-			createModule(moduleId, conn);
-			createOperation(moduleId, conn);
+			// createModule(moduleId, conn);
+			// createOperation(moduleId, conn);
 			// createConfiguration(conn, conn2);
 			// createDict(conn, conn2);
-			createAttachmentconfig(conn, conn2);
+			// createAttachmentconfig(conn, conn2);
 			// createOperate(conn, conn2);
 			// List<String> tables = new ArrayList<String>();
 			// tables.add("bd_studentregistration");

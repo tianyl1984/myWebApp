@@ -16,6 +16,9 @@
 		<result-types>
 			<result-type name="myCustomType" class="com.hzth.myapp.user.action.MyCustomResultType"></result-type>
 		</result-types>
+		<action name="*" class="com.hzth.myapp.web.action.ExampleAction">
+			<result>/{1}.jsp</result>
+	    </action>
 	</package>
 	<package name="crud-default" namespace="/" extends="struts-default">
 		<global-results>

@@ -53,7 +53,6 @@
 	  	<li><a href="javascript:void(0)" onclick="a3()">弹出test.jsp</a></li>
 	</ul>
   
-  
   <div id="aaa">
 <c:set var="row" value="0"/>
 <c:set var="cell" value="0"/>

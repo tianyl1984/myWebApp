@@ -23,9 +23,12 @@ public class MyFilter implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-		System.out.println("MyFilter");
+		// System.out.println("MyFilter");
 		HttpServletRequest request = (HttpServletRequest) req;
 		String userTpye = request.getParameter("userType");
+
+		String aa = request.getQueryString();
+
 		if (StringUtils.isNotBlank(userTpye)) {
 			request.getSession().setAttribute("userType", userTpye);
 		}
