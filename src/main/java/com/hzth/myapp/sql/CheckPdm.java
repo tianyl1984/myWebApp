@@ -73,6 +73,7 @@ public class CheckPdm {
 		abbreviationList.add("wk");
 		abbreviationList.add("th");
 		abbreviationList.add("mt");
+		abbreviationList.add("ho");
 
 		// abbreviationList.add("om");
 		// abbreviationList.add("da");
@@ -122,7 +123,7 @@ public class CheckPdm {
 		mysqlInclued.add("fw");
 		mysqlInclued.add("bd");
 		mysqlInclued.add("ma");
-		mysqlInclued.add("mt");
+		mysqlInclued.add("ho");
 	}
 
 	public static void main(String[] args) {
