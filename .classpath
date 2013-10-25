@@ -39,5 +39,21 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/antlr-runtime-3.4.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jna-3.4.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jsch.agentproxy.connector-factory-0.0.6.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jsch.agentproxy.core-0.0.6.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jsch.agentproxy.pageant-0.0.6.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jsch.agentproxy.sshagent-0.0.6.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jsch.agentproxy.svnkit-trilead-ssh2-0.0.6.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jsch.agentproxy.usocket-jna-0.0.6.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jsch.agentproxy.usocket-nc-0.0.6.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/platform-3.4.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/sequence-library-1.0.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/sqljet-1.1.8.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/svnkit-1.7.11.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/svnkit-cli-1.7.11.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/svnkit-javahl16-1.7.11.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/trilead-ssh2-1.0.0-build217.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
