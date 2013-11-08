@@ -6,8 +6,7 @@ import java.util.regex.Pattern;
 public class Test2 {
 
 	public static void main(String[] args) {
-		// m1("1-1");
-		System.out.println(toDecimalString(1.153, 1));
+
 	}
 
 	public static String toDecimalString(Double num, int decimal) {

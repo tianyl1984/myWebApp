@@ -26,7 +26,7 @@ public class DocUtil {
 		XWPFTableRow row2 = tab.createRow();
 		row2.createCell().setText("asdf");
 
-		FileOutputStream out = new FileOutputStream("c:\\simple.docx");
+		FileOutputStream out = new FileOutputStream("e:\\simple.docx");
 		doc.write(out);
 		out.close();
 	}

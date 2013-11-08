@@ -15,13 +15,13 @@ import com.hzth.myapp.core.util.UUID;
 public class CreateInitDataSql {
 
 	public static void main(String[] args) {
-		String moduleId = "20131018145957188403737472382077";
+		String moduleId = "20131028111636303778896124664696";
 		Connection conn = null;
 		Connection conn2 = null;
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_im", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_bd_zd", "sa", "hzth-801");
 			// 标准库连接
 			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_empty", "sa", "hzth-801");
 			// createModule(moduleId, conn);
@@ -42,16 +42,29 @@ public class CreateInitDataSql {
 			// tables.add("fw_attachmentsetting");
 			// tables.add("fw_attachmentconfig");
 			// createTable(tables, conn, conn2);
-			// List<String> ids = new ArrayList<String>();
-			// ids.add("20131023095143068938383947685133");
-			// for (String id : ids) {
-			// createOperationById(id, conn);
-			// }
-			List<String> ids2 = new ArrayList<String>();
-			ids2.add("20130325191038222741788749418279");
-			for (String id : ids2) {
-				createDictById(id, conn);
+			List<String> ids = new ArrayList<String>();
+			ids.add("20131011092508004519981177704043");
+			ids.add("20131024150901943509603281671991");
+
+			for (String id : ids) {
+				createOperationById(id, conn);
 			}
+			// List<String> ids2 = new ArrayList<String>();
+			// ids2.add("20130327142247553972798367337170");
+			// ids2.add("20131031143457726524298391392328");
+			// ids2.add("20131018144100963759469457214763");
+			// ids2.add("20131018143810914132329563238909");
+			// ids2.add("20131018143624271140098470910055");
+			// ids2.add("20131018143143907314021548920838");
+			// ids2.add("20131018142711711944533688759273");
+			// ids2.add("20131015141443328217892693198733");
+			// ids2.add("20131011151702875527314998696335");
+			// ids2.add("20131011151316112822739514011540");
+			// ids2.add("20131011103333240330567697456215");
+			// ids2.add("20131011103245708943729840956948");
+			// for (String id : ids2) {
+			// createDictById(id, conn);
+			// }
 			System.out.println("-----end-----");
 		} catch (Exception e) {
 			e.printStackTrace();

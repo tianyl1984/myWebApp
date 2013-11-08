@@ -51,6 +51,7 @@
 	  	<li><a href="${path}/jqplot/demo.jsp">jqplot测试</a></li>
 	  	<li><a href="${path}/validate/demo.jsp">js验证框架</a></li>
 	  	<li><a href="javascript:void(0)" onclick="a3()">弹出test.jsp</a></li>
+	  	<li><a href="${path}/web/pojo!exportWebToDoc.action">导出word</a></li>
 	</ul>
   
   <div id="aaa">

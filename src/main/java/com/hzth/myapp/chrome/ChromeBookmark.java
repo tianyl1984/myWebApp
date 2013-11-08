@@ -21,6 +21,7 @@ public class ChromeBookmark {
 		br.close();
 		JSONObject json = JSONObject.fromObject(sb.toString());
 		JSONArray roots = json.getJSONObject("roots").getJSONObject("bookmark_bar").getJSONArray("children");
+		int count = 0;
 		for (int i = 0; i < roots.size(); i++) {
 			JSONObject obj = (JSONObject) roots.get(i);
 			String name = obj.get("name").toString();
@@ -30,9 +31,11 @@ public class ChromeBookmark {
 					JSONObject obj2 = (JSONObject) tagets.get(j);
 					if (obj2.getString("type").equals("url")) {
 						System.out.println(obj2.getString("name") + "   " + obj2.getString("url"));
+						count++;
 					}
 				}
 			}
 		}
+		System.out.println(count);
 	}
 }

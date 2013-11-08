@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ include file="/common/jsp/taglibs.jsp"%>
+<meta charset="utf-8" />
 <script type="text/javascript">
 var CONTEXTPATH = '${path}';
 </script>
@@ -14,7 +15,6 @@ var CONTEXTPATH = '${path}';
 <script type="text/javascript" src="${path }/common/js/common.js"></script>
 <script type="text/javascript" src="${path }/common/js/template.js"></script>
 <script type="text/javascript" src="${path }/common/js/jsMap.js"></script>
-
 <script type="text/javascript" src="${path }/common/js/artdialog/artDialog.js"></script>
 <script type="text/javascript" src="${path }/common/js/artdialog/artDialog.drag.js"></script>
 <script type="text/javascript" src="${path }/common/js/artdialog/artDialog.iframeTools.js"></script>

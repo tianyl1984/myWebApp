@@ -42,7 +42,7 @@ public class Test {
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("127.0.0.1", "v3_bak", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("127.0.0.1", "dc_bak", "sa", "hzth-801");
 
 			ResultSet rs = conn.prepareStatement("select id from bd_student").executeQuery();
 			List<String> studentIds = new ArrayList<String>();
