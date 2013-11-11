@@ -3,13 +3,12 @@
 <%@ include file="/common/jsp/taglibs.jsp"%>
 <html>
 	<head>
-    	<title>Title</title>
-    	<%@ include file="/common/jsp/htmlHeader.jsp"%>
-    	<script type="text/javascript">
+    <title>Title</title>
+	<script type="text/javascript">
 
-		</script>
+	</script>
 	</head>
 	<body>
-	
+		<div style="width: 300px;height: 50px;"></div>
 	</body>
 </html>

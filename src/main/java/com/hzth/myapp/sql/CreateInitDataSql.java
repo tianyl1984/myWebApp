@@ -44,33 +44,85 @@ public class CreateInitDataSql {
 			// createTable(tables, conn, conn2);
 			List<String> ids = new ArrayList<String>();
 			ids.add("20131011092508004519981177704043");
-			ids.add("20131024150901943509603281671991");
-
 			for (String id : ids) {
 				createOperationById(id, conn);
 			}
 			// List<String> ids2 = new ArrayList<String>();
 			// ids2.add("20130327142247553972798367337170");
-			// ids2.add("20131031143457726524298391392328");
-			// ids2.add("20131018144100963759469457214763");
-			// ids2.add("20131018143810914132329563238909");
-			// ids2.add("20131018143624271140098470910055");
-			// ids2.add("20131018143143907314021548920838");
-			// ids2.add("20131018142711711944533688759273");
-			// ids2.add("20131015141443328217892693198733");
-			// ids2.add("20131011151702875527314998696335");
-			// ids2.add("20131011151316112822739514011540");
-			// ids2.add("20131011103333240330567697456215");
-			// ids2.add("20131011103245708943729840956948");
 			// for (String id : ids2) {
 			// createDictById(id, conn);
 			// }
+
+			List<String> ids3 = new ArrayList<String>();
+			ids3.add("");
+			for (String id : ids3) {
+				createAttachmentconfig(id, conn);
+			}
 			System.out.println("-----end-----");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			SqlHelper.close(conn);
 			SqlHelper.close(conn2);
+		}
+	}
+
+	private static void createAttachmentconfig(String id, Connection conn) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			String sql = "select * from bd_dictionary where id = '" + id + "' order by id";
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			ResultSetMetaData metaData = rs.getMetaData();
+			List<String> labelList = new ArrayList<String>();
+			Map<String, Integer> typeMap = new HashMap<String, Integer>();
+			for (int col = 1; col <= metaData.getColumnCount(); col++) {
+				String label = metaData.getColumnLabel(col);
+				labelList.add(label);
+				typeMap.put(label, metaData.getColumnType(col));
+			}
+			while (rs.next()) {
+				String sql2 = "insert into bd_dictionary(";
+				for (String label : labelList) {
+					sql2 += label + ",";
+				}
+				sql2 = sql2.substring(0, sql2.length() - 1);
+				sql2 += ") values(";
+				for (String label : labelList) {
+					if (typeMap.get(label) - Types.INTEGER == 0) {// int型
+						Integer intResult = rs.getInt(label);
+						if (rs.wasNull()) {
+							intResult = null;
+						}
+						sql2 += intResult + ",";
+					} else if (typeMap.get(label) - Types.CHAR == 0 || typeMap.get(label) - Types.VARCHAR == 0) {// char varchar
+						String str = rs.getString(label);
+						if (label.toLowerCase().equals("customtypedict")) {// 判断是否为操作的分类，分类设为空
+							str = null;
+						}
+						if (rs.wasNull()) {
+							str = null;
+						}
+						if (str == null) {
+							sql2 += str + ",";
+						} else {
+							sql2 += "'" + str + "',";
+						}
+					} else {
+						throw new RuntimeException("不支持的数据类型：" + typeMap.get(label));
+					}
+				}
+				sql2 = sql2.substring(0, sql2.length() - 1);
+				sql2 += ");";
+				System.out.println(sql2);
+				// FileUtil.append("C:/Users/tianyl/Desktop/aa.sql", sql2 + "\n");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			SqlHelper.close(rs);
+			SqlHelper.close(ps);
 		}
 	}
 

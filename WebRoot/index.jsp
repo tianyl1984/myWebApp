@@ -52,6 +52,7 @@
 	  	<li><a href="${path}/validate/demo.jsp">js验证框架</a></li>
 	  	<li><a href="javascript:void(0)" onclick="a3()">弹出test.jsp</a></li>
 	  	<li><a href="${path}/web/pojo!exportWebToDoc.action">导出word</a></li>
+	  	<li><a href="${path}/jsp/cssDemo.jsp">CSS测试</a></li>
 	</ul>
   
   <div id="aaa">
