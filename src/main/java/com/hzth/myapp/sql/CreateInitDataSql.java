@@ -15,46 +15,42 @@ import com.hzth.myapp.core.util.UUID;
 public class CreateInitDataSql {
 
 	public static void main(String[] args) {
-		String moduleId = "20131028111636303778896124664696";
+		String moduleId = "20131023091823171427047778164178";
 		Connection conn = null;
 		Connection conn2 = null;
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_bd_zd", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_wp", "sa", "hzth-801");
 			// 标准库连接
 			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_empty", "sa", "hzth-801");
-			// createModule(moduleId, conn);
-			// createOperation(moduleId, conn);
+			createModule(moduleId, conn);
+			createOperation(moduleId, conn);
 			// createConfiguration(conn, conn2);
 			// createDict(conn, conn2);
 			// createAttachmentconfig(conn, conn2);
 			// createOperate(conn, conn2);
+
 			// List<String> tables = new ArrayList<String>();
 			// tables.add("bd_studentregistration");
-			// tables.add("ca_performanceitem");
-			// tables.add("ca_classroomattendance");
-			// tables.add("ca_performancekind");
-			// tables.add("ca_attendancerecord");
-			// tables.add("ca_attendanceitem");
-			// tables.add("ca_leaverecord");
-			// tables.add("");
-			// tables.add("fw_attachmentsetting");
-			// tables.add("fw_attachmentconfig");
 			// createTable(tables, conn, conn2);
-			List<String> ids = new ArrayList<String>();
-			ids.add("20131011092508004519981177704043");
-			for (String id : ids) {
-				createOperationById(id, conn);
-			}
-			// List<String> ids2 = new ArrayList<String>();
-			// ids2.add("20130327142247553972798367337170");
-			// for (String id : ids2) {
-			// createDictById(id, conn);
+
+			// List<String> ids = new ArrayList<String>();
+			// ids.add("20131011092508004519981177704043");
+			// for (String id : ids) {
+			// createOperationById(id, conn);
 			// }
 
+			List<String> ids2 = new ArrayList<String>();
+			ids2.add("20131103140630562918815879887964");
+			ids2.add("20131023113412921855030432130383");
+			ids2.add("20131023094407328681392409251731");
+			for (String id : ids2) {
+				createDictById(id, conn);
+			}
+
 			List<String> ids3 = new ArrayList<String>();
-			ids3.add("");
+			ids3.add("20131024091557468051760055961393");
 			for (String id : ids3) {
 				createAttachmentconfig(id, conn);
 			}
@@ -71,7 +67,7 @@ public class CreateInitDataSql {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			String sql = "select * from bd_dictionary where id = '" + id + "' order by id";
+			String sql = "select * from fw_attachmentconfig where id = '" + id + "'";
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
 			ResultSetMetaData metaData = rs.getMetaData();
@@ -83,7 +79,7 @@ public class CreateInitDataSql {
 				typeMap.put(label, metaData.getColumnType(col));
 			}
 			while (rs.next()) {
-				String sql2 = "insert into bd_dictionary(";
+				String sql2 = "insert into fw_attachmentconfig(";
 				for (String label : labelList) {
 					sql2 += label + ",";
 				}
@@ -98,9 +94,6 @@ public class CreateInitDataSql {
 						sql2 += intResult + ",";
 					} else if (typeMap.get(label) - Types.CHAR == 0 || typeMap.get(label) - Types.VARCHAR == 0) {// char varchar
 						String str = rs.getString(label);
-						if (label.toLowerCase().equals("customtypedict")) {// 判断是否为操作的分类，分类设为空
-							str = null;
-						}
 						if (rs.wasNull()) {
 							str = null;
 						}
@@ -116,7 +109,6 @@ public class CreateInitDataSql {
 				sql2 = sql2.substring(0, sql2.length() - 1);
 				sql2 += ");";
 				System.out.println(sql2);
-				// FileUtil.append("C:/Users/tianyl/Desktop/aa.sql", sql2 + "\n");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

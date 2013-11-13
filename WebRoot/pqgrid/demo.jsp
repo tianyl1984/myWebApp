@@ -65,8 +65,8 @@
 // 				alert($("#tab3").width() + ":" + $("#tab3").height());
 				$("#grid_table3").width($("#tab3").width());
 				$("#grid_table3").height($("#tab3").height());
-				$("#grid_table3").width(500);
-				$("#grid_table3").height(200);
+				$("#grid_table3").width(800);
+				$("#grid_table3").height(400);
 				com.ue.pqgrid.changeTable("tab3","grid_table3");
 			}
 			
@@ -176,38 +176,66 @@
 		</tbody>
 	</table>
 	<div id="grid_table2"></div>
-	<table id="tab3">
+	<table id="tab3" freezeCols="2">
 		<thead>
 			<tr>
+				<th width="92px">Header0</th>
 				<th>Header1</th>
 				<th colspan="2">Header2</th>
 				<th>Header4</th>
+				<th>Header5</th>
+				<th>Header6</th>
+				<th>Header7</th>
+				<th>Header8</th>
+				<th>Header9</th>
+				<th>Header10</th>
 			</tr>
 			<tr>
+				<th>Header00</th>
 				<th>Header11</th>
 				<th>Header22</th>
 				<th>Header33</th>
 				<th>Header44</th>
+				<th>Header55</th>
+				<th>Header66</th>
+				<th>Header77</th>
+				<th>Header88</th>
+				<th>Header99</th>
+				<th>Header100</th>
 			</tr>
 		</thead>
 		<tbody>
+			<c:forEach begin="1" end="10" var="index">
 			<tr>
-				<td>1</td>
-				<td>2</td>
-				<td>3</td>
-				<td>4</td>
+				<c:if test="${index ne 5 }">
+				<td>0-${index }</td>
+				<td>1-${index }</td>
+				</c:if>
+				<c:if test="${index eq 5 }">
+				<td colspan="2">0-${index }-aaa</td>
+				</c:if>
+				<td>2-${index }</td>
+				<td>3-${index }</td>
+				<td>4-${index }</td>
+				<td>5-${index }</td>
+				<td>6-${index }</td>
+				<td>7-${index }</td>
+				<td>8-${index }</td>
+				<td>9-${index }</td>
+				<td>10-${index }</td>
 			</tr>
+			</c:forEach>
 			<tr>
-				<td>1</td>
-				<td>2</td>
-				<td>3</td>
-				<td>4</td>
-			</tr>
-			<tr>
-				<td>1</td>
-				<td>2</td>
-				<td>3</td>
-				<td>4</td>
+				<td colspan="2">0-11-bbb</td>
+				<td>2-11</td>
+				<td>3-11</td>
+				<td>4-11</td>
+				<td>5-11</td>
+				<td>6-11</td>
+				<td>7-11</td>
+				<td>8-11</td>
+				<td>9-11</td>
+				<td>10-11</td>
 			</tr>
 		</tbody>
 	</table>

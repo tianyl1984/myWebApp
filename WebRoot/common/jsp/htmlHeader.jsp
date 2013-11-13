@@ -1,6 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ include file="/common/jsp/taglibs.jsp"%>
-<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script type="text/javascript">
 var CONTEXTPATH = '${path}';
 </script>

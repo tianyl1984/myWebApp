@@ -2431,7 +2431,7 @@ fnSB._setOptions=function(){
 			}			  
 			this._editCell($td);
 			return $td;
-        } 		
+        }
     }
 	fn.getFirstEditableColIndx=function(){
 		if(!this.options.editable){
@@ -2447,7 +2447,7 @@ fnSB._setOptions=function(){
 		}
 		return -1;
 	}
-	fn._editFirstCellInRow=function(obj){		
+	fn._editFirstCellInRow=function(obj){
 		var colIndx=this.getFirstEditableColIndx();
 		if(colIndx!=-1){
 			var rowIndxPage=obj.rowIndxPage;
@@ -3087,7 +3087,7 @@ fnSB._setOptions=function(){
 			}			
 		}		
 		return {depth:new_depth,colModel:arr,colSpan:colSpan,width:width,childCount:childCount};
-	}	
+	}
 	fn.getHeadersCells=function(){
 		var optColModel=this.options.colModel,
 			thisColModelLength=this.colModel.length,
@@ -3136,7 +3136,7 @@ fnSB._setOptions=function(){
 		}
 		this.headerCells=arr;
 		return arr;
-	}	
+	}
 	fn.assignRowSpan=function(){
 		var optColModel=this.options.colModel,
 			thisColModelLength=this.colModel.length,
@@ -3387,6 +3387,22 @@ fnSB._setOptions=function(){
 //        var aa = "<thead style='display:none'><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></thead>";
 //        buffer.push(aa);
         
+        //生成占位的tr，方便对齐
+		var hiddenTrStr = "<tr>";
+        if (this.numberCell) {
+        	hiddenTrStr += "<td style='width:" + this.numberCellWidth + "px;visibility:hidden;' ></td>";
+        }			
+		for(var col=0;col<noColumns;col++){
+			var column=this.colModel[col];
+			if(column.hidden){
+				continue;
+			}
+			var wd=parseInt(column.width)-((this.columnBorders)?0:1);
+			hiddenTrStr+="<td style='width:"+ wd +"px;visibility:hidden;'></td>";
+		}
+		hiddenTrStr += "</tr>";
+		buffer.push(hiddenTrStr);
+        
 		var thisColModel=this.colModel;
         for (var row = init; row <= finall; row++) {
 			var rowData=this.data[row],
@@ -3395,7 +3411,7 @@ fnSB._setOptions=function(){
             if (row / 2 == parseInt(row / 2)) row_cls += " pq-grid-oddRow";
 			if(objPQData.pqData && objPQData.selectedRow){
 				row_cls += " pq-row-select";
-			}			
+			}
             var row_str = "<tr pq-row-indx='" + row + "' class='" + row_cls + "'>"
             buffer.push(row_str);
             if (this.numberCell) {
@@ -3404,28 +3420,38 @@ fnSB._setOptions=function(){
             }
 			var objRender={rowIndx:row+offset,rowIndxPage:row,rowData:rowData};
             var hidearrHS1 = [];
-            for (var col = 0; col < noColumns; col++) {
+            
+            var columns = rowData.length;
+            if(objPQData.pqData){
+            	columns--;
+            }
+            
+            for (var col = 0; col < columns; col++) {
 				var column=thisColModel[col],
 					dataIndx=column.dataIndx;
 				objRender.column=column;
 				objRender.colIndx=col;					
-				{		
+				{
 					var cellSelection=false;								
 					var selectedDataIndices = objPQData.selectedDataIndices;
-					if (selectedDataIndices) {						
+					if (selectedDataIndices) {					
 						cellSelection = selectedDataIndices[dataIndx];													
 					}
 				}
-                if (column.hidden) { 
+                if (column.hidden) {
                     continue;
                 } else if (this.hidearrHS[col]) {
                     hidearrHS1.push(col)
                     continue;
                 }
+                
+                var colSpan = (this.tdAttrs[row] &&  this.tdAttrs[row][col] && this.tdAttrs[row][col].colSpan);
+                
                 var strStyle = "";
-                if (row == init) { 
+                if (row == init) {
 					strStyle = "width:" + column.width + "px;";
                 }
+                
                 var cls = const_cls; 
                 if (column.align == "right") {
                     cls += ' pq-align-right';
@@ -3441,14 +3467,15 @@ fnSB._setOptions=function(){
 				if(cellSelection){
 					cls = cls+ " pq-cell-select";
 				}
+				
 //				console.log(row +":"+ col+":"+this._renderCell(objRender) + ":");
-				if(objRender.rowData.length > col){
-					var colSpan;
-					colSpan = (this.tdAttrs[row] &&  this.tdAttrs[row][col] && this.tdAttrs[row][col].colSpan); 
-					var str = "<td " + (colSpan?"colspan='" + colSpan + "'":"") + " class='" + cls + "' style='" + strStyle + "' pq-col-indx='" + col + "'>\
-					" + this._renderCell(objRender) + "</td>";
-					buffer.push(str)
-				}
+//				console.log("_generateTables" + );
+//				if(objRender.rowData.length > col){
+//				var colSpan = (this.tdAttrs[row] &&  this.tdAttrs[row][col] && this.tdAttrs[row][col].colSpan); 
+				var str = "<td " + (colSpan?"colspan='" + colSpan + "'":"") + " class='" + cls + "' style='" + strStyle + "' pq-col-indx='" + col + "'>\
+				" + this._renderCell(objRender) + "</td>";
+				buffer.push(str);
+//				}
             }
             for (var k = 0; k < hidearrHS1.length; k++) {
                 var col = hidearrHS1[k];
@@ -3493,7 +3520,7 @@ fnSB._setOptions=function(){
 	        });													
 		},0);
     }
-	fn._renderCell = function (objP) {	        
+	fn._renderCell = function (objP) {
 		var rowIndxPage=objP.rowIndxPage,
 			rowIndx=objP.rowIndx,
 			rowData=objP.rowData,
