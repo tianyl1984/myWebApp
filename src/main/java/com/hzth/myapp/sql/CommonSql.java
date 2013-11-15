@@ -74,6 +74,15 @@ public class CommonSql {
 			temp = temp.substring(temp.lastIndexOf(" "), temp.length());
 			table = temp.trim();
 		}
+		if (sql2.startsWith("delete from")) {
+			table = sql2.replaceFirst("delete from", "").replaceAll(" where .*", "").trim();
+		}
+		if (sql2.startsWith("alter table")) {
+			table = sql2.replaceFirst("alter table", "").replaceAll(" alter .*", "").trim();
+		}
+		if (sql2.startsWith("update ")) {
+			table = sql2.replaceFirst("update ", "").replaceAll(" set .*", "").trim();
+		}
 		if (StringUtils.isBlank(table)) {
 			throw new RuntimeException("无法解析table:" + sql);
 		}

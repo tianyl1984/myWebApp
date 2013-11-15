@@ -58,5 +58,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/wrapper.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/core-renderer.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/iTextAsian.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/websocket4j-1.3.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

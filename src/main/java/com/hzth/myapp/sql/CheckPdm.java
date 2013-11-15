@@ -124,7 +124,7 @@ public class CheckPdm {
 		mysqlInclued.add("fw");
 		mysqlInclued.add("bd");
 		mysqlInclued.add("ma");
-		mysqlInclued.add("wc");
+		// mysqlInclued.add("fa");
 	}
 
 	public static void main(String[] args) {

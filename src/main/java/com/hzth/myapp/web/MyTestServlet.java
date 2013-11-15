@@ -18,9 +18,9 @@ public class MyTestServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		System.out.println("doGet");
 		doBusiness(req, resp);
-		// WebUtil.printHeader(req);
-		// WebUtil.printParameter(req);
-		// WebUtil.printSession(req.getSession());
+		WebUtil.printHeader(req);
+		WebUtil.printParameter(req);
+		WebUtil.printSession(req.getSession());
 	}
 
 	@Override
@@ -32,9 +32,9 @@ public class MyTestServlet extends HttpServlet {
 
 	private void doBusiness(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		PrintWriter pw = resp.getWriter();
-		// String json = "[{'name':'datasource1','school':'学校1','driverClassName':'com.microsoft.sqlserver.jdbc.SQLServerDriver','url':'jdbc:sqlserver://192.168.1.122:1433;database=dc;sendStringParametersAsUnicode=false','username':'sa','password':'hzth-801'},{'name':'datasource2','school':'学校2','driverClassName':'com.microsoft.sqlserver.jdbc.SQLServerDriver','url':'jdbc:sqlserver://192.168.1.122:1433;database=dc;sendStringParametersAsUnicode=false','username':'sa','password':'hzth-801'},{'name':'datasource3','school':'学校3','driverClassName':'com.microsoft.sqlserver.jdbc.SQLServerDriver','url':'jdbc:sqlserver://192.168.1.122:1433;database=dc;sendStringParametersAsUnicode=false','username':'sa','password':'hzth-801'}]";
-		// pw.write(json);
-		pw.write("[\"carNum\",false,\"不可以使用\"]");
+		String json = "[{'name':'datasource1','school':'学校1','driverClassName':'com.microsoft.sqlserver.jdbc.SQLServerDriver','url':'jdbc:sqlserver://192.168.1.122:1433;database=dc;sendStringParametersAsUnicode=false','username':'sa','password':'hzth-801'},{'name':'datasource2','school':'学校2','driverClassName':'com.microsoft.sqlserver.jdbc.SQLServerDriver','url':'jdbc:sqlserver://192.168.1.122:1433;database=dc;sendStringParametersAsUnicode=false','username':'sa','password':'hzth-801'},{'name':'datasource3','school':'学校3','driverClassName':'com.microsoft.sqlserver.jdbc.SQLServerDriver','url':'jdbc:sqlserver://192.168.1.122:1433;database=dc;sendStringParametersAsUnicode=false','username':'sa','password':'hzth-801'}]";
+		pw.write(json);
+		// pw.write("[\"carNum\",false,\"不可以使用\"]");
 		pw.flush();
 	}
 }
