@@ -5,6 +5,9 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hzth.myapp.sql.model.ColumnInfo;
+import com.hzth.myapp.sql.model.CommonSql;
+
 /**
  * 检查pdm文件是否合格
  * 
@@ -89,7 +92,7 @@ public class CheckPdm {
 		supportColumnType.add("clob");
 		supportColumnType.add("integer");
 		supportColumnType.add("varchar");
-		supportColumnType.add("VARCHAR2");
+		supportColumnType.add("varchar2");
 	}
 
 	private static final List<String> forbiddenChars = new ArrayList<String>();

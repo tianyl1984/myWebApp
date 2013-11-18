@@ -18,10 +18,9 @@ import sun.misc.BASE64Encoder;
 
 import com.hzth.myapp.core.util.FileUtil;
 import com.hzth.myapp.core.util.UUID;
-import com.hzth.myapp.sql.ColumnInfo;
-import com.hzth.myapp.sql.CreateDBSchema;
 import com.hzth.myapp.sql.SqlHelper;
-import com.hzth.myapp.sql.TableInfo;
+import com.hzth.myapp.sql.model.ColumnInfo;
+import com.hzth.myapp.sql.model.TableInfo;
 import com.sun.jna.Library;
 
 public class Test {
@@ -50,7 +49,7 @@ public class Test {
 				studentIds.add(rs.getString("id"));
 			}
 
-			Map<String, TableInfo> tabMap = CreateDBSchema.getTableInfo(conn);
+			Map<String, TableInfo> tabMap = SqlHelper.getTableInfo(conn);
 			label1: for (String tab : tabMap.keySet()) {
 				if (tab.equals("bd_student")) {
 					continue;

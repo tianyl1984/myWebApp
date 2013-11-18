@@ -1,12 +1,15 @@
-package com.hzth.myapp.sql;
+package com.hzth.myapp.sql.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TableInfo {
 
 	private String name;
 	private Map<String, ColumnInfo> columnInfoMap = new HashMap<String, ColumnInfo>();
+	private List<ColumnInfo> columnInfoList = new ArrayList<ColumnInfo>();
 	private Map<String, PKInfo> pkInfoMap = new HashMap<String, PKInfo>();
 	private Map<String, FKInfo> fkInfoMap = new HashMap<String, FKInfo>();
 
@@ -26,13 +29,14 @@ public class TableInfo {
 		return columnInfoMap;
 	}
 
-	public void setColumnInfoMap(Map<String, ColumnInfo> columnInfoMap) {
-		this.columnInfoMap = columnInfoMap;
+	public List<ColumnInfo> getColumnInfoList() {
+		return columnInfoList;
 	}
 
 	public void addColumnInfo(ColumnInfo columnInfo) {
 		this.columnInfoMap.put(columnInfo.getName().toLowerCase(), columnInfo);
 		columnInfo.setTableInfo(this);
+		columnInfoList.add(columnInfo);
 	}
 
 	public Map<String, PKInfo> getPkInfoMap() {
@@ -48,11 +52,26 @@ public class TableInfo {
 		if (pkInfoMap.containsKey(pkName)) {
 			pkInfo = pkInfoMap.get(pkName);
 		} else {
-			pkInfo = new PKInfo();
+			pkInfo = new PKInfo(this);
 			pkInfo.setName(pkName);
 			pkInfoMap.put(pkName, pkInfo);
 		}
 		pkInfo.addColumnName(columnName);
+	}
+
+	public boolean hasPK() {
+		return !pkInfoMap.isEmpty();
+	}
+
+	public List<String> getPKSql() {
+		if (!hasPK()) {
+			return new ArrayList<String>();
+		}
+		List<String> result = new ArrayList<String>();
+		for (PKInfo pkInfo : pkInfoMap.values()) {
+			result.add(pkInfo.getAddSql());
+		}
+		return result;
 	}
 
 	public Map<String, FKInfo> getFkInfoMap() {
@@ -64,6 +83,22 @@ public class TableInfo {
 	}
 
 	public void addFKInfo(FKInfo fkInfo) {
-		this.fkInfoMap.put(fkInfo.getName(), fkInfo);
+		this.fkInfoMap.put(fkInfo.getName().toLowerCase(), fkInfo);
+		fkInfo.setTableInfo(this);
+	}
+
+	public String getCreateSql() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("create table " + this.getName() + " (");
+		for (ColumnInfo info : columnInfoList) {
+			sb.append(info.getName() + " ");
+			sb.append(info.getTypeString() + " ");
+			sb.append(("id".equals(info.getName()) ? "not " : "") + "null,");
+		}
+		if (columnInfoMap.size() > 0) {
+			sb.deleteCharAt(sb.length() - 1);
+		}
+		sb.append(")");
+		return sb.toString();
 	}
 }

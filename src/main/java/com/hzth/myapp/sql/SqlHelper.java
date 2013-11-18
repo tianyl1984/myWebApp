@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,9 +14,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import com.hzth.myapp.sql.model.ColumnInfo;
+import com.hzth.myapp.sql.model.FKInfo;
+import com.hzth.myapp.sql.model.TableInfo;
 
 public class SqlHelper {
 
@@ -26,7 +32,7 @@ public class SqlHelper {
 			// conn = getSqlServerConnection("192.168.1.122", "dc_empty", "sa", "hzth-801");
 			// conn = getMysqlConnection("192.168.1.122", "aaa", "root", "hzth-801");
 			conn = getOracleConnection("192.168.1.194", "orcl", "hzth", "hzth-801");
-			Map<String, TableInfo> tabMap = CreateDBSchema.getTableInfo(conn);
+			Map<String, TableInfo> tabMap = getTableInfo(conn);
 			for (String key : tabMap.keySet()) {
 				TableInfo tableInfo = tabMap.get(key);
 				System.out.println(tableInfo.getName());
@@ -186,13 +192,116 @@ public class SqlHelper {
 		return ids;
 	}
 
+	public static Map<String, TableInfo> getTableInfo(Connection conn) throws Exception {
+		Map<String, TableInfo> tableMap = new HashMap<String, TableInfo>();
+		DatabaseMetaData metaData = conn.getMetaData();
+		ResultSet tables = metaData.getTables(null, null, "%", new String[] { "TABLE" });
+		// ResultSetMetaData resultSetMetaData = tables.getMetaData();
+		// String column = "";
+		// for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
+		// column += resultSetMetaData.getColumnName(i) + "\t\t";
+		// }
+		// System.out.println(column);
+		while (tables.next()) {
+			TableInfo tableInfo = new TableInfo();
+			// for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
+			// System.out.print(tables.getString(i) + "\t\t");
+			// }
+			// System.out.println();
+			String tabName = tables.getString("TABLE_NAME");
+			// 列信息
+			ResultSet coluResultSet = metaData.getColumns(null, null, tabName, null);
+			tableInfo.setName(tabName);
+			// ResultSetMetaData coluMetaData = coluResultSet.getMetaData();
+			// String str = "";
+			// for (int i = 1; i <= coluMetaData.getColumnCount(); i++) {
+			// str += coluMetaData.getColumnName(i) + "\t\t";
+			// }
+			// System.out.println("----------" + tabName + "--------");
+			// System.out.println(str);
+			while (coluResultSet.next()) {
+				// for (int i = 1; i <= coluMetaData.getColumnCount(); i++) {
+				// System.out.print(coluResultSet.getString(i) + "\t\t");
+				// }
+				// System.out.println();
+				String coluName = coluResultSet.getString("COLUMN_NAME");
+				String type = coluResultSet.getString("TYPE_NAME").toLowerCase();
+				Integer length = coluResultSet.getInt("COLUMN_SIZE");
+				ColumnInfo columnInfo = new ColumnInfo();
+				columnInfo.setLength(length);
+				columnInfo.setName(coluName);
+				columnInfo.setType(type);
+				tableInfo.addColumnInfo(columnInfo);
+			}
+
+			// 主键信息
+			ResultSet pkResultSet = metaData.getPrimaryKeys(null, null, tabName);
+			// ResultSetMetaData pkMetaData = pkResultSet.getMetaData();
+			// String str = "";
+			// for (int i = 1; i <= pkMetaData.getColumnCount(); i++) {
+			// str += pkMetaData.getColumnName(i) + "\t\t";
+			// }
+			// System.out.println("----------" + tabName + "--------");
+			// System.out.println(str);
+
+			while (pkResultSet.next()) {
+				// for (int i = 1; i <= pkMetaData.getColumnCount(); i++) {
+				// System.out.print(pkResultSet.getString(i) + "\t\t");
+				// }
+				// System.out.println();
+				tableInfo.addPKInfo(pkResultSet.getString("PK_NAME"), pkResultSet.getString("COLUMN_NAME"));
+			}
+			// 外键信息
+			ResultSet fkResultSet = metaData.getImportedKeys(null, null, tabName);
+			// ResultSetMetaData fkMetaData = fkResultSet.getMetaData();
+			// String str = "";
+			// for (int i = 1; i <= fkMetaData.getColumnCount(); i++) {
+			// str += fkMetaData.getColumnName(i) + "\t\t";
+			// }
+			// System.out.println("----------" + tabName + "--------");
+			// System.out.println(str);
+
+			while (fkResultSet.next()) {
+				// for (int i = 1; i <= fkMetaData.getColumnCount(); i++) {
+				// System.out.print(fkResultSet.getString(i) + "\t\t");
+				// }
+				// System.out.println();
+				String pkTabName = fkResultSet.getString("PKTABLE_NAME");
+				String pkColumnName = fkResultSet.getString("PKCOLUMN_NAME");
+				String fkTabName = fkResultSet.getString("FKTABLE_NAME");
+				String fkColumnName = fkResultSet.getString("FKCOLUMN_NAME");
+				String fkName = fkResultSet.getString("FK_NAME");
+				String pkName = fkResultSet.getString("PK_NAME");
+				FKInfo fkInfo = new FKInfo();
+				fkInfo.setFkColumnName(fkColumnName);
+				fkInfo.setFkTabName(fkTabName);
+				fkInfo.setName(fkName);
+				fkInfo.setPkName(pkName);
+				fkInfo.setPkColumnName(pkColumnName);
+				fkInfo.setPkTabName(pkTabName);
+				tableInfo.addFKInfo(fkInfo);
+			}
+			tableMap.put(tabName.toLowerCase(), tableInfo);
+		}
+		return tableMap;
+	}
+
+	/**
+	 * 比较指定的table中的数据，以conn为标准
+	 * 
+	 * @param conn
+	 * @param conn2
+	 * @param tables
+	 * @return
+	 * @throws Exception
+	 */
 	public static List<InsertSql> createInsertSql(Connection conn, Connection conn2, List<String> tables) throws Exception {
 		List<InsertSql> sqls = new ArrayList<InsertSql>();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		ResultSet rs2 = null;
 		PreparedStatement ps2 = null;
-		Map<String, TableInfo> tabMap2 = CreateDBSchema.getTableInfo(conn2);
+		Map<String, TableInfo> tabMap2 = getTableInfo(conn2);
 		for (String tab : tables) {
 			List<String> allIds = new ArrayList<String>();
 			ps = conn.prepareStatement("select * from " + tab);

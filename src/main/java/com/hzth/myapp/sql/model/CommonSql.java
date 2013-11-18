@@ -1,4 +1,4 @@
-package com.hzth.myapp.sql;
+package com.hzth.myapp.sql.model;
 
 import java.util.ArrayList;
 import java.util.List;

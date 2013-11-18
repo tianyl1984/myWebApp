@@ -8,17 +8,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+
+import com.hzth.myapp.sql.model.ColumnInfo;
+import com.hzth.myapp.sql.model.PKInfo;
+import com.hzth.myapp.sql.model.TableInfo;
 
 /**
  * 对比数据库，并生成sql补丁
@@ -44,8 +46,8 @@ public class CreateDBSchema {
 			conn = SqlHelper.getSqlServerConnection("127.0.0.1", "aa", "sa", "hzth-801");
 			// 需对比的库
 			conn2 = SqlHelper.getSqlServerConnection("127.0.0.1", "dc_empty", "sa", "hzth-801");
-			Map<String, TableInfo> tableMap = getTableInfo(conn);
-			Map<String, TableInfo> tableMap2 = getTableInfo(conn2);
+			Map<String, TableInfo> tableMap = SqlHelper.getTableInfo(conn);
+			Map<String, TableInfo> tableMap2 = SqlHelper.getTableInfo(conn2);
 			showTableDiff(tableMap, tableMap2);
 			showColumnDiff(tableMap, tableMap2);
 			showData(conn, conn2);
@@ -59,7 +61,7 @@ public class CreateDBSchema {
 	}
 
 	private static void showData(Connection conn, Connection conn2) throws Exception {
-		Map<String, TableInfo> tab1Map = getTableInfo(conn);
+		Map<String, TableInfo> tab1Map = SqlHelper.getTableInfo(conn);
 		List<String> tables = new ArrayList<String>();
 		for (String tab : tab1Map.keySet()) {
 			// 不比对学期和学年
@@ -269,100 +271,6 @@ public class CreateDBSchema {
 				}
 			}
 		}
-	}
-
-	public static Map<String, TableInfo> getTableInfo(Connection conn) throws Exception {
-		Map<String, TableInfo> tableMap = new HashMap<String, TableInfo>();
-		DatabaseMetaData metaData = conn.getMetaData();
-		ResultSet tables = metaData.getTables(null, null, "%", new String[] { "TABLE" });
-		// ResultSetMetaData resultSetMetaData = tables.getMetaData();
-		// String column = "";
-		// for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
-		// column += resultSetMetaData.getColumnName(i) + "\t\t";
-		// }
-		// System.out.println(column);
-		while (tables.next()) {
-			TableInfo tableInfo = new TableInfo();
-			// for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
-			// System.out.print(tables.getString(i) + "\t\t");
-			// }
-			// System.out.println();
-			String tabName = tables.getString("TABLE_NAME");
-			// 列信息
-			ResultSet coluResultSet = metaData.getColumns(null, null, tabName, null);
-			tableInfo.setName(tabName);
-			// ResultSetMetaData coluMetaData = coluResultSet.getMetaData();
-			// String str = "";
-			// for (int i = 1; i <= coluMetaData.getColumnCount(); i++) {
-			// str += coluMetaData.getColumnName(i) + "\t\t";
-			// }
-			// System.out.println("----------" + tabName + "--------");
-			// System.out.println(str);
-			while (coluResultSet.next()) {
-				// for (int i = 1; i <= coluMetaData.getColumnCount(); i++) {
-				// System.out.print(coluResultSet.getString(i) + "\t\t");
-				// }
-				// System.out.println();
-				String coluName = coluResultSet.getString("COLUMN_NAME");
-				String type = coluResultSet.getString("TYPE_NAME").toLowerCase();
-				Integer length = coluResultSet.getInt("COLUMN_SIZE");
-				ColumnInfo columnInfo = new ColumnInfo();
-				columnInfo.setLength(length);
-				columnInfo.setName(coluName);
-				columnInfo.setType(type);
-				tableInfo.addColumnInfo(columnInfo);
-			}
-
-			// 主键信息
-			ResultSet pkResultSet = metaData.getPrimaryKeys(null, null, tabName);
-			// ResultSetMetaData pkMetaData = pkResultSet.getMetaData();
-			// String str = "";
-			// for (int i = 1; i <= pkMetaData.getColumnCount(); i++) {
-			// str += pkMetaData.getColumnName(i) + "\t\t";
-			// }
-			// System.out.println("----------" + tabName + "--------");
-			// System.out.println(str);
-
-			while (pkResultSet.next()) {
-				// for (int i = 1; i <= pkMetaData.getColumnCount(); i++) {
-				// System.out.print(pkResultSet.getString(i) + "\t\t");
-				// }
-				// System.out.println();
-				tableInfo.addPKInfo(pkResultSet.getString("PK_NAME"), pkResultSet.getString("COLUMN_NAME"));
-			}
-			// 外键信息
-			ResultSet fkResultSet = metaData.getImportedKeys(null, null, tabName);
-			// ResultSetMetaData fkMetaData = fkResultSet.getMetaData();
-			// String str = "";
-			// for (int i = 1; i <= fkMetaData.getColumnCount(); i++) {
-			// str += fkMetaData.getColumnName(i) + "\t\t";
-			// }
-			// System.out.println("----------" + tabName + "--------");
-			// System.out.println(str);
-
-			while (fkResultSet.next()) {
-				// for (int i = 1; i <= fkMetaData.getColumnCount(); i++) {
-				// System.out.print(fkResultSet.getString(i) + "\t\t");
-				// }
-				// System.out.println();
-				String pkTabName = fkResultSet.getString("PKTABLE_NAME");
-				String pkColumnName = fkResultSet.getString("PKCOLUMN_NAME");
-				String fkTabName = fkResultSet.getString("FKTABLE_NAME");
-				String fkColumnName = fkResultSet.getString("FKCOLUMN_NAME");
-				String fkName = fkResultSet.getString("FK_NAME");
-				String pkName = fkResultSet.getString("PK_NAME");
-				FKInfo fkInfo = new FKInfo();
-				fkInfo.setFkColumnName(fkColumnName);
-				fkInfo.setFkTabName(fkTabName);
-				fkInfo.setName(fkName);
-				fkInfo.setPkName(pkName);
-				fkInfo.setPkColumnName(pkColumnName);
-				fkInfo.setPkTabName(pkTabName);
-				tableInfo.addFKInfo(fkInfo);
-			}
-			tableMap.put(tabName.toLowerCase(), tableInfo);
-		}
-		return tableMap;
 	}
 
 	private static void executeSQL() {

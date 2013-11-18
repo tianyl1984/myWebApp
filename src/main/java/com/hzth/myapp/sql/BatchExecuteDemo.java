@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hzth.myapp.sql.model.CommonSql;
+
 public class BatchExecuteDemo {
 
 	public static void main(String[] args) {

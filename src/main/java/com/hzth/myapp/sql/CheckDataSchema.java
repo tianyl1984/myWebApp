@@ -22,6 +22,9 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.hzth.myapp.sql.model.ColumnInfo;
+import com.hzth.myapp.sql.model.TableInfo;
+
 /**
  * 检测hbm文件和数据库是否一致
  * 
@@ -264,7 +267,7 @@ public class CheckDataSchema {
 		Connection conn = null;
 		try {
 			conn = SqlHelper.getSqlServerConnection("192.168.1.122", "aaa", "sa", "hzth-801");
-			Map<String, TableInfo> tabMap2 = CreateDBSchema.getTableInfo(conn);
+			Map<String, TableInfo> tabMap2 = SqlHelper.getTableInfo(conn);
 			showTableDiff(tabMap, tabMap2);
 			System.out.println("----------------------");
 			showTableDiff(tabMap2, tabMap);

@@ -10,6 +10,8 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.hzth.myapp.sql.model.CommonSql;
+
 public class SqlParser {
 
 	public static List<CommonSql> parse(File file) {
