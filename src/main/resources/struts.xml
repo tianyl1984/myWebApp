@@ -12,17 +12,17 @@
 <!--	<include file="struts-default.xml" />-->
 	<constant name="struts.multipart.maxSize" value="-1" />
 	
-	<package name="myPkg" extends="json-default">
-		<result-types>
-			<result-type name="myCustomType" class="com.hzth.myapp.user.action.MyCustomResultType"></result-type>
-		</result-types>
-		<action name="*" class="com.hzth.myapp.web.action.ExampleAction">
-			<result>/{1}.jsp</result>
-	    </action>
-	</package>
 	<package name="crud-default" namespace="/" extends="struts-default">
 		<global-results>
 			<result name="index">/</result>
 		</global-results>
+	</package>
+	<package name="myPkg" extends="json-default">
+		<result-types>
+			<result-type name="myCustomType" class="com.hzth.myapp.user.action.MyCustomResultType"></result-type>
+		</result-types>
+<!-- 		<action name="*" class="com.hzth.myapp.web.action.ExampleAction"> -->
+<!-- 			<result>/{1}.jsp</result> -->
+<!-- 	    </action> -->
 	</package>
 </struts>

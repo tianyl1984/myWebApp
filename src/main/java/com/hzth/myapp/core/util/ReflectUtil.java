@@ -14,8 +14,6 @@ import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.springframework.util.Assert;
 
-import com.sun.org.apache.commons.beanutils.ConvertUtils;
-
 public class ReflectUtil {
 	/**
 	 * 调用Getter方法.
@@ -213,13 +211,13 @@ public class ReflectUtil {
 	 * @param toType
 	 *            转换目标类型
 	 */
-	public static Object convertStringToObject(String value, Class<?> toType) {
-		try {
-			return ConvertUtils.convert(value, toType);
-		} catch (Exception e) {
-			throw convertReflectionExceptionToUnchecked(e);
-		}
-	}
+	// public static Object convertStringToObject(String value, Class<?> toType) {
+	// try {
+	// return ConvertUtils.convert(value, toType);
+	// } catch (Exception e) {
+	// throw convertReflectionExceptionToUnchecked(e);
+	// }
+	// }
 
 	/**
 	 * 得到实际的类，obj可能是hibernate的代理类，如果是代理类获取实际类型

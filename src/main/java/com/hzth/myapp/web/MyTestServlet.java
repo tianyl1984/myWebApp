@@ -16,16 +16,19 @@ public class MyTestServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		System.out.println("doGet");
+		// System.out.println("doGet");
 		doBusiness(req, resp);
-		WebUtil.printHeader(req);
-		WebUtil.printParameter(req);
-		WebUtil.printSession(req.getSession());
+		// WebUtil.printHeader(req);
+		// WebUtil.printParameter(req);
+		// WebUtil.printSession(req.getSession());
+		System.out.println(Thread.currentThread().getName());
+		// ThreadLocalHolder.set("aaaa");
+		System.out.println(ThreadLocalHolder.get());
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		System.out.println("doPost");
+		// System.out.println("doPost");
 		doBusiness(req, resp);
 		WebUtil.printHeader(req);
 	}

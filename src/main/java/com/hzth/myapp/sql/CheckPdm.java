@@ -78,6 +78,7 @@ public class CheckPdm {
 		abbreviationList.add("mt");
 		abbreviationList.add("ho");
 		abbreviationList.add("ne");
+		abbreviationList.add("ip");
 
 		// abbreviationList.add("om");
 		// abbreviationList.add("da");
@@ -127,7 +128,7 @@ public class CheckPdm {
 		mysqlInclued.add("fw");
 		mysqlInclued.add("bd");
 		mysqlInclued.add("ma");
-		// mysqlInclued.add("fa");
+		mysqlInclued.add("ip");
 	}
 
 	public static void main(String[] args) {
