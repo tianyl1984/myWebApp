@@ -21,12 +21,12 @@ public class CreateInitDataSql {
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_mt_test", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_sr", "sa", "hzth-801");
 			// 标准库连接
-			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_empty", "sa", "hzth-801");
+			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_empty_all", "sa", "hzth-801");
 			// createModule(moduleId, conn);
 			// createOperation(moduleId, conn);
-			// createConfiguration(conn, conn2);
+			createConfiguration(conn, conn2);
 			// createDict(conn, conn2);
 			// createAttachmentconfig(conn, conn2);
 			// createOperate(conn, conn2);
@@ -41,17 +41,17 @@ public class CreateInitDataSql {
 			// createOperationById(id, conn);
 			// }
 
-			// List<String> ids2 = new ArrayList<String>();
-			// ids2.add("20131103140630562918815879887964");
-			// for (String id : ids2) {
-			// createDictById(id, conn);
-			// }
-
-			List<String> ids3 = new ArrayList<String>();
-			ids3.add("20131113100201838057744535370509");
-			for (String id : ids3) {
-				createAttachmentconfig(id, conn);
+			List<String> ids2 = new ArrayList<String>();
+			ids2.add("20130325191038222741788749418279");
+			for (String id : ids2) {
+				createDictById(id, conn);
 			}
+
+			// List<String> ids3 = new ArrayList<String>();
+			// ids3.add("20131113100201838057744535370509");
+			// for (String id : ids3) {
+			// createAttachmentconfig(id, conn);
+			// }
 			System.out.println("-----end-----");
 		} catch (Exception e) {
 			e.printStackTrace();

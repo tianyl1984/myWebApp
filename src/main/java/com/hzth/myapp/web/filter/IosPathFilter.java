@@ -1,4 +1,4 @@
-package com.hzth.myapp.web;
+package com.hzth.myapp.web.filter;
 
 import java.io.IOException;
 
@@ -10,6 +10,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+
+import com.hzth.myapp.web.MyRequestWrapper;
 
 public class IosPathFilter implements javax.servlet.Filter {
 

@@ -1,4 +1,4 @@
-package com.hzth.myapp.web;
+package com.hzth.myapp.web.filter;
 
 import java.io.IOException;
 

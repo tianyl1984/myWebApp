@@ -25,7 +25,8 @@ public class SwfUploadServlet extends HttpServlet {
 	private static final long serialVersionUID = 1490339965654435066L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doPost(request, response);
+		// doPost(request, response);
+		System.out.println("doGet in SwfUploadServlet");
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

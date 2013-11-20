@@ -111,7 +111,7 @@
 	<!-- MyFilter -->
 	<filter>
 		<filter-name>MyFilter</filter-name>
-		<filter-class>com.hzth.myapp.web.MyFilter</filter-class>
+		<filter-class>com.hzth.myapp.web.filter.MyFilter</filter-class>
 	</filter>
 	
 	<filter-mapping>
@@ -120,15 +120,15 @@
 	</filter-mapping>
 	
 	<!-- MyFilter2 -->
-<!-- 	<filter> -->
-<!-- 		<filter-name>MyFilter2</filter-name> -->
-<!-- 		<filter-class>com.hzth.myapp.web.MyFilter2</filter-class> -->
-<!-- 	</filter> -->
+	<filter>
+		<filter-name>CustomProxyFilter</filter-name>
+		<filter-class>com.hzth.myapp.web.filter.CustomProxyFilter</filter-class>
+	</filter>
 	
-<!-- 	<filter-mapping> -->
-<!-- 		<filter-name>MyFilter2</filter-name> -->
-<!-- 		<url-pattern>/*</url-pattern> -->
-<!-- 	</filter-mapping> -->
+	<filter-mapping>
+		<filter-name>CustomProxyFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 	
 	<!-- OpenSessionInViewFilter -->
 	<filter>

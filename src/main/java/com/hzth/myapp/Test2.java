@@ -8,7 +8,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 public class Test2 {
 
 	public static void main(String[] args) {
-		System.out.println("<a>saf></sa>asf<s.>".replaceAll("<.*?>", ""));
+		System.out.println("<a>saf></sa>asdsf<s.>".replaceAll("<.*?>", ""));
 		System.out.println(StringEscapeUtils.unescapeHtml("a&nbsp;b"));
 	}
 

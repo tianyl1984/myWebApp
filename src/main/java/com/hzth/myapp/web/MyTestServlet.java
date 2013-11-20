@@ -21,9 +21,9 @@ public class MyTestServlet extends HttpServlet {
 		// WebUtil.printHeader(req);
 		// WebUtil.printParameter(req);
 		// WebUtil.printSession(req.getSession());
-		System.out.println(Thread.currentThread().getName());
+		// System.out.println(Thread.currentThread().getName());
 		// ThreadLocalHolder.set("aaaa");
-		System.out.println(ThreadLocalHolder.get());
+		// System.out.println(ThreadLocalHolder.get());
 	}
 
 	@Override
