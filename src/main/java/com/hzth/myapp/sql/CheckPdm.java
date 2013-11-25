@@ -128,12 +128,12 @@ public class CheckPdm {
 		mysqlInclued.add("fw");
 		mysqlInclued.add("bd");
 		mysqlInclued.add("ma");
-		mysqlInclued.add("ip");
+		mysqlInclued.add("il");
 	}
 
 	public static void main(String[] args) {
 		String dbType = "sqlserver";
-		dbType = "mysql";
+		// dbType = "mysql";
 		// dbType = "oracle";
 		File file = new File("C:/Users/tianyl/Desktop/sql/dc-" + dbType + ".sql");
 		List<String> errorMsgs = checkGrammar(file);

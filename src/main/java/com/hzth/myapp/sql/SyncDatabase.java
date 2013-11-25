@@ -15,9 +15,9 @@ import com.hzth.myapp.sql.model.TableInfo;
 //同步数据库，使两个库结构内容完全一致
 public class SyncDatabase {
 
-	private static final boolean opt_exe = true;// 执行
+	private static final boolean opt_exe = false;// 执行
 	private static final boolean opt_print = true;// 打印
-	private static final boolean opt_save = true;// 保存到文件
+	private static final boolean opt_save = false;// 保存到文件
 
 	private static final boolean isDebug = false;
 
@@ -29,9 +29,15 @@ public class SyncDatabase {
 		Connection toConn = null;
 		try {
 			// 标准
-			fromConn = SqlHelper.getSqlServerConnection("127.0.0.1", "dc_empty_all", "sa", "hzth-801");
+			// fromConn = SqlHelper.getSqlServerConnection("127.0.0.1", "dc_empty_all", "sa", "hzth-801");
 			// 错误库
-			toConn = SqlHelper.getSqlServerConnection("127.0.0.1", "dc_ex3", "sa", "hzth-801");
+			// toConn = SqlHelper.getSqlServerConnection("127.0.0.1", "dc_ex3", "sa", "hzth-801");
+			// fromConn = SqlHelper.getMysqlConnection("192.168.1.8", "cydc", "", "hzth-801");
+
+			String driver = "com.mysql.jdbc.Driver";
+			fromConn = SqlHelper.getConnection(driver, "jdbc:mysql://" + "192.168.1.8" + ":3306/" + "cydc" + "?useUnicode=true&characterEncoding=utf-8", "hzth", "hzth-801");
+			toConn = SqlHelper.getConnection(driver, "jdbc:mysql://" + "192.168.1.8" + ":3308/" + "cydc" + "?useUnicode=true&characterEncoding=utf-8", "hzth", "hzth-801");
+
 			Map<String, TableInfo> fromTableInfos = SqlHelper.getTableInfo(fromConn);
 			Map<String, TableInfo> toTableInfos = SqlHelper.getTableInfo(toConn);
 			// 对比table

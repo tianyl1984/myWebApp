@@ -11,7 +11,12 @@ import javax.servlet.ServletResponse;
 import org.springframework.stereotype.Component;
 
 @Component
+// @WebFilter(filterName = "aaa", urlPatterns = "/*")
 public class MyFilter4 extends CustomFilter {
+
+	public MyFilter4() {
+		System.out.println("MyFilter4 Init");
+	}
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {

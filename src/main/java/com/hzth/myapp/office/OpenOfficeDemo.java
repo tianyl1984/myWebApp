@@ -14,8 +14,8 @@ public class OpenOfficeDemo {
 
 	public static void main(String[] args) {
 		init();
-		File file1 = new File("E:/测试文件/员工信息表.doc");
-		File file2 = new File("E:/测试文件/员工信息表.pdf");
+		File file1 = new File("E:/aa.rtf");
+		File file2 = new File("E:/aa.pdf");
 		converter.convert(file1, file2);
 		stop();
 	}
