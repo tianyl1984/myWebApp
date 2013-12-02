@@ -83,4 +83,8 @@ public class PojoAction extends MyBaseAction {
 			}
 		}
 	}
+
+	public void ajaxDemo() {
+		this.print(this.getRequest().getParameter("aaa"));
+	}
 }

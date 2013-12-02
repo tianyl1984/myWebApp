@@ -53,6 +53,8 @@
 	  	<li><a href="javascript:void(0)" onclick="a3()">弹出test.jsp</a></li>
 	  	<li><a href="${path}/web/pojo!exportWebToDoc.action">导出word</a></li>
 	  	<li><a href="${path}/jsp/cssDemo.jsp">CSS测试</a></li>
+	  	<li><a href="${path}/jsp/ajaxDemo.jsp">ajax参数个数测试</a></li>
+	  	<li><a href="${path}/jsp/jqUIDemo.jsp">jquery UI demo</a></li>
 	</ul>
   
   <div id="aaa">

@@ -3,13 +3,12 @@ package com.hzth.myapp;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
@@ -18,9 +17,6 @@ import sun.misc.BASE64Encoder;
 
 import com.hzth.myapp.core.util.FileUtil;
 import com.hzth.myapp.core.util.UUID;
-import com.hzth.myapp.sql.SqlHelper;
-import com.hzth.myapp.sql.model.ColumnInfo;
-import com.hzth.myapp.sql.model.TableInfo;
 import com.sun.jna.Library;
 
 public class Test {
@@ -37,55 +33,22 @@ public class Test {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Connection conn = null;
+		FileOutputStream fos = null;
+		FileReader fr = null;
 		try {
-			System.out.println("-----start-----");
-			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("127.0.0.1", "dc_bak", "sa", "hzth-801");
-
-			ResultSet rs = conn.prepareStatement("select id from bd_student").executeQuery();
-			List<String> studentIds = new ArrayList<String>();
-			while (rs.next()) {
-				studentIds.add(rs.getString("id"));
-			}
-
-			Map<String, TableInfo> tabMap = SqlHelper.getTableInfo(conn);
-			label1: for (String tab : tabMap.keySet()) {
-				if (tab.equals("bd_student")) {
-					continue;
-				}
-				List<String> cols = new ArrayList<String>();
-				for (String col : tabMap.get(tab).getColumnInfoMap().keySet()) {
-					ColumnInfo colInfo = tabMap.get(tab).getColumnInfoMap().get(col);
-					if (colInfo.getLength() - 32 == 0) {
-						cols.add(col);
-					}
-				}
-				cols.remove("fu");
-				cols.remove("lu");
-				if (cols.size() > 0) {
-					ResultSet rs2 = conn.prepareStatement("select * from " + tab).executeQuery();
-					while (rs2.next()) {
-						boolean flag = false;
-						for (String col : cols) {
-							String str = rs2.getString(col);
-							if (studentIds.contains(str)) {
-								// System.out.println(tab + ":" + col);
-								System.out.println("update " + tab + " set " + col + " = (select id from bd_student s where s.oldId = " + tab + "." + col + ") where " + col + " in (select oldId from bd_student);");
-								flag = true;
-							}
-						}
-						if (flag) {
-							continue label1;
-						}
-					}
-				}
-			}
-
+			fr = new FileReader("e:/cred");
+			char[] buff = new char[10000];
+			fr.read(buff);
+			System.out.println(new String(buff));
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			SqlHelper.close(conn);
+			if (fr != null) {
+				fr.close();
+			}
+			if (fos != null) {
+				fos.close();
+			}
 		}
 	}
 

@@ -25,7 +25,7 @@ public class MyFilter4 extends CustomFilter {
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		System.out.println("MyFilter4");
+		// System.out.println("MyFilter4");
 		chain.doFilter(request, response);
 	}
 

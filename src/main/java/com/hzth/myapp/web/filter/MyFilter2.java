@@ -20,7 +20,7 @@ public class MyFilter2 extends CustomFilter {
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-		System.out.println("MyFilter2");
+		// System.out.println("MyFilter2");
 		// HttpServletRequest request = (HttpServletRequest) req;
 		// String userTpye = request.getParameter("userType");
 		// if (StringUtils.isNotBlank(userTpye)) {

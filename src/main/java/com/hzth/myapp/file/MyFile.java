@@ -8,7 +8,7 @@ public class MyFile {
 
 	public static void main(String[] args) throws Exception {
 		createFile();
-		//		randomAccessFileTest();
+		// randomAccessFileTest();
 		System.out.println("完成");
 	}
 
@@ -24,7 +24,7 @@ public class MyFile {
 		for (Integer i = 0; i < b.length; i++) {
 			b[i] = i.byteValue();
 		}
-		for (int i = 0; i < 1024 * 1024 * 2; i++) {
+		for (int i = 0; i < 1024 * 1024 * 2 - 1; i++) {
 			fos.write(b);
 			if (i % 100 == 0) {
 				fos.flush();

@@ -20,7 +20,7 @@ public class MyFilter3 extends CustomFilter {
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		System.out.println("MyFilter3");
+		// System.out.println("MyFilter3");
 		chain.doFilter(request, response);
 		// HttpServletRequest req = (HttpServletRequest) request;
 		// req.getRequestDispatcher("/swfUploadServlet").forward(request, response);

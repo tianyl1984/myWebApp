@@ -13,5 +13,6 @@ public class ClassLoaderTest {
 		System.out.println("extension classloader:" + extensionClassloader);
 		System.out.println(System.getProperty("java.ext.dirs"));
 		System.out.println(System.getProperty("java.class.path"));
+		System.out.println(String.class.getClassLoader());
 	}
 }
