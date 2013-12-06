@@ -59,6 +59,10 @@ public class UserAction extends MyBaseAction {
 		return "success";
 	}
 
+	public void validateList() {
+		// System.out.println("validateList");
+	}
+
 	public String input() {
 		if (StringUtils.isNotBlank(id)) {
 			user = userService.get(id);

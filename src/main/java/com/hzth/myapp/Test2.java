@@ -1,5 +1,10 @@
 package com.hzth.myapp;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.regex.Pattern;
@@ -7,15 +12,27 @@ import java.util.regex.Pattern;
 public class Test2 {
 
 	public static void main(String[] args) {
-		// System.out.println("<a>saf></sa>asdsf<s.>".replaceAll("<.*?>", ""));
-		// System.out.println(StringEscapeUtils.unescapeHtml("a&nbsp;b"));
-		m1(5725d);
-		m1(5715d);
-		m1(5714d);
-		m1(5716d);
-		m1(5715.3d);
-		m1(5715.9d);
-		m1(5715.0d);
+		String filePath = "E:/workspace3.7/dc-exam/src/main/java/com/unitever/dc/ex/module/score/dao/ScoreCountDAO.java";
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(filePath))));
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				if (line.trim().startsWith("public") && !line.contains(" throws ")) {
+					System.out.println(line.trim());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	private static void m1(double dou) {

@@ -79,6 +79,8 @@ public class CheckPdm {
 		abbreviationList.add("ho");
 		abbreviationList.add("ne");
 		abbreviationList.add("ip");
+		abbreviationList.add("be");
+		abbreviationList.add("ru");
 
 		// abbreviationList.add("om");
 		// abbreviationList.add("da");
@@ -128,7 +130,7 @@ public class CheckPdm {
 		mysqlInclued.add("fw");
 		mysqlInclued.add("bd");
 		mysqlInclued.add("ma");
-		mysqlInclued.add("cm");
+		mysqlInclued.add("ru");
 	}
 
 	public static void main(String[] args) {
@@ -175,14 +177,16 @@ public class CheckPdm {
 
 					flag = true;
 					// 包含的
-					for (String temp : mysqlInclued) {
-						if (sql.getTable().startsWith(temp)) {
-							flag = false;
-							break;
+					if (mysqlInclued.size() > 0) {
+						for (String temp : mysqlInclued) {
+							if (sql.getTable().startsWith(temp)) {
+								flag = false;
+								break;
+							}
 						}
-					}
-					if (flag) {
-						continue;
+						if (flag) {
+							continue;
+						}
 					}
 				}
 				curSql = sql.getSql();

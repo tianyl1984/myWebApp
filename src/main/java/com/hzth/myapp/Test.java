@@ -3,8 +3,6 @@ package com.hzth.myapp;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -33,23 +31,25 @@ public class Test {
 	}
 
 	public static void main(String[] args) throws Exception {
-		FileOutputStream fos = null;
-		FileReader fr = null;
-		try {
-			fr = new FileReader("e:/cred");
-			char[] buff = new char[10000];
-			fr.read(buff);
-			System.out.println(new String(buff));
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (fr != null) {
-				fr.close();
-			}
-			if (fos != null) {
-				fos.close();
-			}
-		}
+		double a = 2.1 - 0.0;
+		System.out.println(a);
+		// FileOutputStream fos = null;
+		// FileReader fr = null;
+		// try {
+		// fr = new FileReader("e:/cred");
+		// char[] buff = new char[10000];
+		// fr.read(buff);
+		// System.out.println(new String(buff));
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// } finally {
+		// if (fr != null) {
+		// fr.close();
+		// }
+		// if (fos != null) {
+		// fos.close();
+		// }
+		// }
 	}
 
 	public interface DLibrary extends Library {
