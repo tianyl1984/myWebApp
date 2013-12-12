@@ -5,16 +5,23 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.apache.xmlbeans.impl.util.Base64;
 
 import com.hzth.myapp.html.HtmlDemoUtil;
 import com.lowagie.text.Cell;
+import com.lowagie.text.DocListener;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
+import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Table;
+import com.lowagie.text.html.simpleparser.ChainedProperties;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
+import com.lowagie.text.html.simpleparser.ImageProvider;
 import com.lowagie.text.html.simpleparser.StyleSheet;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.rtf.RtfWriter2;
@@ -26,15 +33,32 @@ public class Html2Rtf {
 		m2();
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static void m2() throws Exception {
-		File file = new File("e:/aa.rtf");
+		File file = new File("e:/测试文件/aa.rtf");
 		// 设置纸张大小
 		Document document = new Document(PageSize.A4);
 		// 建立一个书写器，与document对象关联
 		RtfWriter2.getInstance(document, new FileOutputStream(file));
 		document.open();
 		StyleSheet ss = new StyleSheet();
-		ArrayList<Element> list = HTMLWorker.parseToList(new FileReader(HtmlDemoUtil.getHtmlFile()), ss);
+		HashMap interfaceProps = new HashMap();
+		interfaceProps.put("img_provider", new ImageProvider() {
+			@Override
+			public Image getImage(String uri, HashMap h, ChainedProperties cprops, DocListener doc) {
+				if (uri != null && uri.startsWith("data:image/")) {
+					byte[] temp = Base64.decode(uri.substring(uri.indexOf(",") + 1).getBytes());
+					try {
+						Image image = Image.getInstance(temp);
+						return image;
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				return null;
+			}
+		});
+		ArrayList<Element> list = HTMLWorker.parseToList(new FileReader(HtmlDemoUtil.getHtmlFile()), ss, interfaceProps);
 		for (Element ele : list) {
 			document.add(ele);
 		}

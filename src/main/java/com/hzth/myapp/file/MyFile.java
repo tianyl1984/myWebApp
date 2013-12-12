@@ -7,9 +7,13 @@ import java.io.RandomAccessFile;
 public class MyFile {
 
 	public static void main(String[] args) throws Exception {
-		createFile();
+		// createFile();
 		// randomAccessFileTest();
 		System.out.println("完成");
+		File file = new File("C:\\Windows\\Fonts");
+		for (File f : file.listFiles()) {
+			System.out.println(f.getAbsolutePath());
+		}
 	}
 
 	private static void randomAccessFileTest() throws Exception {

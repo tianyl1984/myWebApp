@@ -15,13 +15,13 @@ import com.hzth.myapp.core.util.UUID;
 public class CreateInitDataSql {
 
 	public static void main(String[] args) {
-		String moduleId = "20131119131645854139011249327691";
+		String moduleId = "20131203134333964478751441884196";
 		Connection conn = null;
 		Connection conn2 = null;
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_bd_zd_test", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_bd", "sa", "hzth-801");
 			// 标准库连接
 			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_empty_all", "sa", "hzth-801");
 			// createModule(moduleId, conn);
@@ -32,34 +32,153 @@ public class CreateInitDataSql {
 			// createOperate(conn, conn2);
 
 			// List<String> tables = new ArrayList<String>();
-			// tables.add("bd_studentregistration");
+			// tables.add("mt_fileKind");
 			// createTable(tables, conn, conn2);
 
 			// List<String> ids = new ArrayList<String>();
-			// ids.add("20131125090310525861393746961751");
-			// ids.add("20131125091111338203679333206750");
-			// ids.add("20131125091335928603750181693896");
+			// ids.add("20131204173404032220300691628499");
 			// for (String id : ids) {
 			// createOperationById(id, conn);
 			// }
 
-			List<String> ids2 = new ArrayList<String>();
-			ids2.add("20131011151702875527314998696335");
-			for (String id : ids2) {
-				createDictById(id, conn);
-			}
-
+			// List<String> ids2 = new ArrayList<String>();
+			// ids2.add("20131203170952562961793670680573");
+			// for (String id : ids2) {
+			// createDictById(id, conn);
+			// }
+			//
 			// List<String> ids3 = new ArrayList<String>();
-			// ids3.add("20131126162135797579254233274301");
+			// ids3.add("20131204091840840153158883679430");
 			// for (String id : ids3) {
 			// createAttachmentconfig(id, conn);
 			// }
+
+			List<String> ids4 = new ArrayList<String>();
+			ids4.add("20131209184052797090428698311866");
+			for (String id : ids4) {
+				createConfiguration(id, conn);
+			}
 			System.out.println("-----end-----");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			SqlHelper.close(conn);
 			SqlHelper.close(conn2);
+		}
+	}
+
+	private static void createConfiguration(String id, Connection conn) {
+		createSqlWithTableAndId("bd_configuration", id, conn);
+		createSqlWithTableAndForeignKey("bd_configurationitem", "id_configuration", id, conn);
+	}
+
+	private static void createSqlWithTableAndForeignKey(String table, String foreignKey, String value, Connection conn) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			String sql = "select * from " + table + " where " + foreignKey + " = '" + value + "'";
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			ResultSetMetaData metaData = rs.getMetaData();
+			List<String> labelList = new ArrayList<String>();
+			Map<String, Integer> typeMap = new HashMap<String, Integer>();
+			for (int col = 1; col <= metaData.getColumnCount(); col++) {
+				String label = metaData.getColumnLabel(col);
+				labelList.add(label);
+				typeMap.put(label, metaData.getColumnType(col));
+			}
+			while (rs.next()) {
+				String sql2 = "insert into " + table + "(";
+				for (String label : labelList) {
+					sql2 += label + ",";
+				}
+				sql2 = sql2.substring(0, sql2.length() - 1);
+				sql2 += ") values(";
+				for (String label : labelList) {
+					if (typeMap.get(label) - Types.INTEGER == 0) {// int型
+						Integer intResult = rs.getInt(label);
+						if (rs.wasNull()) {
+							intResult = null;
+						}
+						sql2 += intResult + ",";
+					} else if (typeMap.get(label) - Types.CHAR == 0 || typeMap.get(label) - Types.VARCHAR == 0) {// char varchar
+						String str = rs.getString(label);
+						if (rs.wasNull()) {
+							str = null;
+						}
+						if (str == null) {
+							sql2 += str + ",";
+						} else {
+							sql2 += "'" + str + "',";
+						}
+					} else {
+						throw new RuntimeException("不支持的数据类型：" + typeMap.get(label));
+					}
+				}
+				sql2 = sql2.substring(0, sql2.length() - 1);
+				sql2 += ");";
+				System.out.println(sql2);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			SqlHelper.close(rs);
+			SqlHelper.close(ps);
+		}
+	}
+
+	private static void createSqlWithTableAndId(String table, String id, Connection conn) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			String sql = "select * from " + table + " where id = '" + id + "'";
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			ResultSetMetaData metaData = rs.getMetaData();
+			List<String> labelList = new ArrayList<String>();
+			Map<String, Integer> typeMap = new HashMap<String, Integer>();
+			for (int col = 1; col <= metaData.getColumnCount(); col++) {
+				String label = metaData.getColumnLabel(col);
+				labelList.add(label);
+				typeMap.put(label, metaData.getColumnType(col));
+			}
+			while (rs.next()) {
+				String sql2 = "insert into " + table + "(";
+				for (String label : labelList) {
+					sql2 += label + ",";
+				}
+				sql2 = sql2.substring(0, sql2.length() - 1);
+				sql2 += ") values(";
+				for (String label : labelList) {
+					if (typeMap.get(label) - Types.INTEGER == 0) {// int型
+						Integer intResult = rs.getInt(label);
+						if (rs.wasNull()) {
+							intResult = null;
+						}
+						sql2 += intResult + ",";
+					} else if (typeMap.get(label) - Types.CHAR == 0 || typeMap.get(label) - Types.VARCHAR == 0) {// char varchar
+						String str = rs.getString(label);
+						if (rs.wasNull()) {
+							str = null;
+						}
+						if (str == null) {
+							sql2 += str + ",";
+						} else {
+							sql2 += "'" + str + "',";
+						}
+					} else {
+						throw new RuntimeException("不支持的数据类型：" + typeMap.get(label));
+					}
+				}
+				sql2 = sql2.substring(0, sql2.length() - 1);
+				sql2 += ");";
+				System.out.println(sql2);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			SqlHelper.close(rs);
+			SqlHelper.close(ps);
 		}
 	}
 

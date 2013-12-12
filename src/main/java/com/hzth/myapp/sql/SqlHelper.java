@@ -360,6 +360,7 @@ public class SqlHelper {
 							} else {
 								throw new RuntimeException("不支持类型:" + type);
 							}
+							i++;
 						}
 						sqls.add(insertSql);
 						flag = true;

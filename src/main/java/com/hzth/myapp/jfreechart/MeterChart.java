@@ -66,8 +66,16 @@ public class MeterChart extends ApplicationFrame {
 
 	// 把图片输出到本地目录
 	public static void outputJPG(JFreeChart chart) {
+		// ByteArrayOutputStream out = new ByteArrayOutputStream();
 		// try {
-		// File fp = new File("c:\test.jpg");
+		// ChartUtilities.writeChartAsPNG(out, chart, 300, 300);
+		// String str = new String(Base64.encodeBase64(out.toByteArray()));
+		// System.out.println(str);
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// }
+		// try {
+		// File fp = new File("e:/test.jpg");
 		// ChartUtilities.saveChartAsJPEG(fp, chart, 300, 300);
 		// } catch (Exception e) {
 		// e.printStackTrace();
