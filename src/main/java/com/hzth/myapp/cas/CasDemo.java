@@ -9,7 +9,7 @@ import com.hzth.myapp.web.NetUtil;
  * 
  */
 
-// 登录
+// 登录(访问http://127.0.0.1:8090/casClient/index)
 // 1.cas client给浏览器设置302跳转到http://127.0.0.1:8094/cas/login?service=http%3A%2F%2F127.0.0.1%3A8090%2FcasClient%2Findex
 // 2.浏览器跳转到cas的login，用户登录
 // 3.cas server设置浏览器302跳转到http://127.0.0.1:8090/casClient/index?ticket=ST-21-fNLJGiiSgfoocxybro2p-cas01.example.org

@@ -26,10 +26,21 @@ public class MongoDBDemo {
 		// insertData();
 		showAllData();
 		System.out.println("-----------------");
-		searchData();
+		// searchData();
 		// deleteData();
+		pageList();
 
 		close();
+	}
+
+	private static void pageList() {
+		DBCollection collection = db.getCollection("sms_send_log");
+		long count = collection.count();
+		System.out.println("共有：" + count);
+		DBCursor cursor = collection.find().skip(3).limit(2);
+		while (cursor.hasNext()) {
+			System.out.println(cursor.next());
+		}
 	}
 
 	private static void searchData() {
@@ -46,7 +57,7 @@ public class MongoDBDemo {
 	}
 
 	private static void showAllData() {
-		DBCollection collection = db.getCollection("user");
+		DBCollection collection = db.getCollection("sms_send_log");
 		DBCursor cursor = collection.find();
 		while (cursor.hasNext()) {
 			System.out.println(cursor.next());
@@ -111,6 +122,13 @@ public class MongoDBDemo {
 
 	private static void init() throws Exception {
 		mongo = new Mongo("127.0.0.1", 27017);
-		db = mongo.getDB("MongodbDemo");
+
+		DB adminDb = mongo.getDB("admin");
+		boolean flag = adminDb.authenticate("hzth", "hzth-801".toCharArray());
+		System.out.println(flag);
+
+		// db = mongo.getDB("MongodbDemo");
+		db = mongo.getDB("sms");
+		db.collectionExists("aaa");
 	}
 }

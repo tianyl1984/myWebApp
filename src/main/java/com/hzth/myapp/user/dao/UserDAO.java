@@ -18,6 +18,10 @@ public class UserDAO extends HibernateDAO<User> {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
+	public void empty() {
+
+	}
+
 	public List<User> findAllBySql() {
 		// jdbcTemplate.execute("select *,(2) from tb_user");
 		return jdbcTemplate.query("select *,(1) from tb_user", new RowMapper<User>() {

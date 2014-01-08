@@ -7,5 +7,6 @@ public class JavaParameterDemo {
 		System.out.println(System.getProperty("aaa"));
 		// -verbose:class 打印类装入的跟踪记录
 		// -Djava.awt.headless=true 没有图形设备比如显示器等时使用，模拟显示功能
+		// -XX:ErrorFile=d:/java_error%p.log,jvm崩溃日志
 	}
 }

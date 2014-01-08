@@ -14,8 +14,10 @@ import org.apache.struts2.convention.annotation.Results;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hzth.myapp.core.util.JsonUtil;
+import com.hzth.myapp.core.util.SpringContextHolder;
 import com.hzth.myapp.core.util.WebUtil;
 import com.hzth.myapp.core.web.MyBaseAction;
+import com.hzth.myapp.user.dao.UserDAO;
 import com.hzth.myapp.user.model.User;
 import com.hzth.myapp.user.service.UserService;
 import com.hzth.myapp.user.util.UserUtil;
@@ -57,6 +59,16 @@ public class UserAction extends MyBaseAction {
 		List<User> users = userService.findAll();
 		ServletActionContext.getRequest().setAttribute("users", users);
 		return "success";
+	}
+
+	public void aaa() {
+		UserDAO userDAO = SpringContextHolder.getBeanOneOfType(UserDAO.class);
+		long t1 = System.currentTimeMillis();
+		for (int i = 0; i < 1000; i++) {
+			// userDAO.empty();
+		}
+		userService.empty();
+		this.print("用时：" + (System.currentTimeMillis() - t1));
 	}
 
 	public void validateList() {

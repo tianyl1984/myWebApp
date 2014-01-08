@@ -151,7 +151,7 @@
   <bean id="identityService" factory-bean="processEngine" factory-method="getIdentityService" />
   
 	<!-- 使用annotation定义事务 -->
-  <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+  <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="false" />
 <!--	<bean id="springContextHolder" class="com.hzth.core.spring.SpringContextHolder" lazy-init="false" />-->
 
   <bean id="performanceMonitor" class="org.springframework.aop.interceptor.PerformanceMonitorInterceptor" />

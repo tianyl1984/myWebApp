@@ -31,25 +31,8 @@ public class Test {
 	}
 
 	public static void main(String[] args) throws Exception {
-		double a = 2.1 - 0.0;
-		System.out.println(a);
-		// FileOutputStream fos = null;
-		// FileReader fr = null;
-		// try {
-		// fr = new FileReader("e:/cred");
-		// char[] buff = new char[10000];
-		// fr.read(buff);
-		// System.out.println(new String(buff));
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// } finally {
-		// if (fr != null) {
-		// fr.close();
-		// }
-		// if (fos != null) {
-		// fos.close();
-		// }
-		// }
+		String str = "aaa<p>adfsdf<img src=\"http://aaa.com\"/><img src=\"/dc/aa.jpg\"/><p>";
+		// Pattern pa = new P
 	}
 
 	public interface DLibrary extends Library {

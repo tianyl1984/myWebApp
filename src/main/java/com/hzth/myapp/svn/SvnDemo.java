@@ -69,6 +69,7 @@ public class SvnDemo {
 		ignNames.add("dc-sp-example");
 		ignNames.add("dc-materials");
 		ignNames.add("dc-cifagent");
+		ignNames.add("product-v3");
 		for (SVNDirEntry entry : all) {
 			// System.out.println(entry.getURL().toDecodedString());
 			if (!ignNames.contains(entry.getName())) {
@@ -81,7 +82,7 @@ public class SvnDemo {
 		for (SVNDirEntry entry : svnDirEntries) {
 			SVNURL aaa = entry.getURL();
 			System.out.println("下载：" + aaa.toDecodedString());
-			checkout(manager, aaa.appendPath("/trunk", true), SVNRevision.HEAD, new File("E:/dcall/" + entry.getName()));
+			checkout(manager, aaa.appendPath("/trunk", true), SVNRevision.HEAD, new File("E:/dcall2/" + entry.getName()));
 		}
 		System.out.println("下载完成!" + svnDirEntries.size());
 	}

@@ -77,4 +77,14 @@ public class UserService {
 		}
 	}
 
+	@Autowired
+	private GroupService groupService;
+
+	// @Transactional(propagation = Propagation.SUPPORTS)
+	public void empty() {
+		for (int i = 0; i < 1000; i++) {
+			groupService.empty();
+		}
+	}
+
 }

@@ -15,7 +15,8 @@ public class HtmlReplace {
 
 	public static void main(String[] args) {
 		// replaceImg();
-		filterHTML();
+		// filterHTML();
+		findImgSrc();
 	}
 
 	private static void filterHTML() {
@@ -39,5 +40,21 @@ public class HtmlReplace {
 			matcher.appendReplacement(buffer, img);
 		}
 		matcher.appendTail(buffer);
+	}
+
+	private static void findImgSrc() {
+		Pattern pattern = Pattern.compile("<img.*?/>");
+		Matcher matcher = pattern.matcher(str);
+		while (matcher.find()) {
+			String img = matcher.group();
+			Pattern p1 = Pattern.compile("src=\".*?\"");
+			Matcher m1 = p1.matcher(img);
+			if (m1.find()) {// 有src
+				String src = m1.group();
+				src = src.replaceFirst("src=\"", "");
+				src = src.substring(0, src.length() - 1);
+				System.out.println(src);
+			}
+		}
 	}
 }

@@ -78,4 +78,8 @@ public class GroupService {
 		}
 		groupDAO.delete(id);
 	}
+
+	public void empty() {
+
+	}
 }
