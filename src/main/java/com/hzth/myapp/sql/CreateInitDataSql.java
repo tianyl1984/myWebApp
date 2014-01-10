@@ -15,17 +15,17 @@ import com.hzth.myapp.core.util.UUID;
 public class CreateInitDataSql {
 
 	public static void main(String[] args) {
-		String moduleId = "20131206091403711344491323962623";
+		String moduleId = "20131219094802797374937086896500";
 		Connection conn = null;
 		Connection conn2 = null;
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_no_test", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_pc", "sa", "hzth-801");
 			// 标准库连接
 			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_all", "sa", "hzth-801");
-			// createModule(moduleId, conn);
-			// createOperation(moduleId, conn);
+			createModule(moduleId, conn);
+			createOperation(moduleId, conn);
 			// createConfiguration(conn, conn2);
 			// createDict(conn, conn2);
 			// createAttachmentconfig(conn, conn2);
@@ -41,11 +41,11 @@ public class CreateInitDataSql {
 			// createOperationById(id, conn);
 			// }
 
-			List<String> ids2 = new ArrayList<String>();
-			ids2.add("20140108101253769362221229000016");
-			for (String id : ids2) {
-				createDictById(id, conn2);
-			}
+			// List<String> ids2 = new ArrayList<String>();
+			// ids2.add("20140108101253769362221229000016");
+			// for (String id : ids2) {
+			// createDictById(id, conn2);
+			// }
 			//
 			// List<String> ids3 = new ArrayList<String>();
 			// ids3.add("20131217090816843545583259510336");
