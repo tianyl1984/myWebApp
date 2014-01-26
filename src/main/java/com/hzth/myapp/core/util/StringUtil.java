@@ -1,8 +1,23 @@
 package com.hzth.myapp.core.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
 public class StringUtil {
 	public static final String getRandomStr() {
 		return getRandomStr(5);
+	}
+
+	public static final List<String> getListInStr(String str) {
+		List<String> result = new ArrayList<>();
+		for (String s : str.split(",")) {
+			if (StringUtils.isNotBlank(s)) {
+				result.add(s);
+			}
+		}
+		return result;
 	}
 
 	public static String getRandomStr(int count) {

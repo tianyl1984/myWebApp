@@ -7,12 +7,14 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class ExecutorServiceDemo {
 
 	public static void main(String[] args) throws Exception {
 		// oneTask();
-		groupTaks();
+		// groupTaks();
+		threadTask();
 	}
 
 	private static void groupTaks() throws Exception {
@@ -50,6 +52,27 @@ public class ExecutorServiceDemo {
 		m1();
 		System.out.println(future.get());
 		threadPool.shutdown();
+	}
+
+	private static void threadTask() {
+		long t1 = System.currentTimeMillis();
+		ExecutorService threadPool = Executors.newFixedThreadPool(9);
+		for (int i = 0; i < 100; i++) {
+			final String aa = i + "";
+			threadPool.submit(new Runnable() {
+				@Override
+				public void run() {
+					System.out.println(Thread.currentThread().getName() + ":" + aa);
+				}
+			});
+		}
+		threadPool.shutdown();
+		try {
+			threadPool.awaitTermination(1000, TimeUnit.DAYS);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println("结束:" + (System.currentTimeMillis() - t1));
 	}
 
 	private static void m1() throws Exception {

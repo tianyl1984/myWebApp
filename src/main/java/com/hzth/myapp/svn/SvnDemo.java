@@ -25,7 +25,7 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
 public class SvnDemo {
 
 	public static void main(String[] args) throws Exception {
-		// svnCheckoutAll();
+		svnCheckoutAll();
 		copyToTarget();
 	}
 
@@ -82,7 +82,7 @@ public class SvnDemo {
 		for (SVNDirEntry entry : svnDirEntries) {
 			SVNURL aaa = entry.getURL();
 			System.out.println("下载：" + aaa.toDecodedString());
-			checkout(manager, aaa.appendPath("/trunk", true), SVNRevision.HEAD, new File("E:/dcall2/" + entry.getName()));
+			checkout(manager, aaa.appendPath("/trunk", true), SVNRevision.HEAD, new File("E:/dcall/" + entry.getName()));
 		}
 		System.out.println("下载完成!" + svnDirEntries.size());
 	}

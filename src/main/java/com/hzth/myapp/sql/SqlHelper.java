@@ -81,6 +81,10 @@ public class SqlHelper {
 		br.close();
 	}
 
+	public static Connection getSqlServerSaConnection(String ip, String database) throws ClassNotFoundException, SQLException {
+		return getSqlServerConnection(ip, database, "sa", "hzth-801");
+	}
+
 	public static Connection getSqlServerConnection(String ip, String database, String userName, String password) throws ClassNotFoundException, SQLException {
 		String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 		String url = "jdbc:sqlserver://" + ip + ";database=" + database + ";sendStringParametersAsUnicode=false";
