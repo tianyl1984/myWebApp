@@ -13,17 +13,19 @@ import com.hzth.myapp.web.NetUtil;
 
 public class ExamPaperScoreTest {
 
+	private static final String app_url = "http://127.0.0.1:8090/dc-exam";
+	private static final String app_url2 = "http://127.0.0.1:8090/dc-exam";
 	private static final String examDetailId = "20140123103705244839054627219921";
 	private static final String param_validate = "&sys_auto_authenticate=true&dataSourceName=dataSource1&sys_username=baimei&sys_password=000000";
-	private static final String url_eclass = "http://127.0.0.1:8090/dc-exam/ex/subjectScore!ajaxGetEclass.action?examDetailId=" + examDetailId + param_validate;
-	private static final String url_examStudent = "http://127.0.0.1:8090/dc-exam/ex/subjectScore!ajaxGetExamStudentId.action?examDetailId=" + examDetailId + param_validate + "&eclassId=";
-	private static final String url_examSubject = "http://127.0.0.1:8090/dc-exam/ex/subjectScore!ajaxGetExamSubjectId.action?examDetailId=" + examDetailId + param_validate;
-	private static final String url_examStudentScoreInfo = "http://127.0.0.1:8090/dc-exam/ex/subjectScore!loadExamStudent.action?examDetailId=" + examDetailId + param_validate + "&locationId=";
-	private static final String url_saveLostScore = "http://127.0.0.1:8090/dc-exam/ex/subjectScore!saveSubjectScore.action?enterType=0" + param_validate;
-	private static final String url_test = "http://127.0.0.1:8090/dc-exam/ex/subjectScore!ajaxTest.action?enterType=0" + param_validate;
-	private static final String url_testJsp = "http://127.0.0.1:8090/dc-exam/ex/subjectScore!testJsp.action?enterType=0" + param_validate;
-	private static final String url_checkStatus = "http://127.0.0.1:8090/dc-exam/ex/subjectScore!toSelectInputLocation.action?examDetailId=" + examDetailId + param_validate;
-	private static final String url_toEnterHaveScore = "http://127.0.0.1:8090/dc-exam/ex/subjectScore!toEnterHaveScore.action?examDetailId=" + examDetailId + "&enterType=0&status=0" + param_validate + "&examStudentId=";
+	private static final String url_eclass = app_url2 + "/ex/subjectScore!ajaxGetEclass.action?examDetailId=" + examDetailId + param_validate;
+	private static final String url_examStudent = app_url2 + "/ex/subjectScore!ajaxGetExamStudentId.action?examDetailId=" + examDetailId + param_validate + "&eclassId=";
+	private static final String url_examSubject = app_url2 + "/ex/subjectScore!ajaxGetExamSubjectId.action?examDetailId=" + examDetailId + param_validate;
+	private static final String url_examStudentScoreInfo = app_url + "/ex/subjectScore!loadExamStudent.action?examDetailId=" + examDetailId + param_validate + "&locationId=";
+	private static final String url_saveLostScore = app_url + "/ex/subjectScore!saveSubjectScore.action?enterType=0" + param_validate;
+	private static final String url_test = app_url + "/ex/subjectScore!ajaxTest.action?enterType=0" + param_validate;
+	private static final String url_testJsp = app_url + "/ex/subjectScore!testJsp.action?enterType=0" + param_validate;
+	private static final String url_checkStatus = app_url + "/ex/subjectScore!toSelectInputLocation.action?examDetailId=" + examDetailId + param_validate;
+	private static final String url_toEnterHaveScore = app_url + "/ex/subjectScore!toEnterHaveScore.action?examDetailId=" + examDetailId + "&enterType=0&status=0" + param_validate + "&examStudentId=";
 
 	public static void main(String[] args) throws Exception {
 		// m1();
@@ -40,8 +42,8 @@ public class ExamPaperScoreTest {
 		}
 		final String examSubjectIds = NetUtil.getUrlResponse(url_examSubject, null, null, true);
 
-		int threadCount = 100;
-		search(examStuIdMap, examSubjectIds, threadCount);
+		int threadCount = 80;
+		// search(examStuIdMap, examSubjectIds, threadCount);
 		save(examStuIdMap, examSubjectIds, threadCount);
 	}
 
@@ -81,6 +83,8 @@ public class ExamPaperScoreTest {
 	}
 
 	private static void save(final Map<String, String> examStuIdMap, final String examSubjectIds, final int threadCount) {
+		// 几个人录同一人分数
+		final int personCount = 10;
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -88,20 +92,24 @@ public class ExamPaperScoreTest {
 				ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
 				for (final String eclassId : examStuIdMap.keySet()) {
 					for (final String examStuId : StringUtil.getListInStr(examStuIdMap.get(eclassId))) {
-						threadPool.submit(new Runnable() {
-							@Override
-							public void run() {
-								try {
-									long t1 = System.currentTimeMillis();
-									System.out.println("保存<<<<--------------------");
-									NetUtil.getUrlResponse(url_toEnterHaveScore + examStuId);
-									saveLostScore(examStuId, examSubjectIds);
-									System.out.println("完成保存>>>>--------------------" + (System.currentTimeMillis() - t1));
-								} catch (Exception e) {
-									e.printStackTrace();
+						for (int i = 0; i < personCount; i++) {
+							threadPool.submit(new Runnable() {
+								@Override
+								public void run() {
+									try {
+										long t1 = System.currentTimeMillis();
+										System.out.println("保存<<<<--------------------");
+										NetUtil.getUrlResponse(url_toEnterHaveScore + examStuId);
+										// if (new Random().nextBoolean()) {
+										saveLostScore(examStuId, examSubjectIds);
+										// }
+										System.out.println("完成保存>>>>--------------------" + (System.currentTimeMillis() - t1));
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
 								}
-							}
-						});
+							});
+						}
 					}
 				}
 				threadPool.shutdown();

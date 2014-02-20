@@ -85,6 +85,11 @@ public class CheckPdm {
 		abbreviationList.add("sp");
 		abbreviationList.add("mr");
 		abbreviationList.add("ee");
+		abbreviationList.add("mb");
+		abbreviationList.add("tp");
+		abbreviationList.add("vd");
+		abbreviationList.add("sf");
+		abbreviationList.add("ms");
 
 		// abbreviationList.add("om");
 		// abbreviationList.add("da");
@@ -134,7 +139,7 @@ public class CheckPdm {
 		mysqlInclued.add("fw");
 		mysqlInclued.add("bd");
 		mysqlInclued.add("ma");
-		mysqlInclued.add("ee");
+		mysqlInclued.add("ms");
 	}
 
 	public static void main(String[] args) {

@@ -3,7 +3,9 @@ package com.hzth.myapp.sql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
+import com.hzth.myapp.core.util.ThreadUtil;
 import com.hzth.myapp.core.util.UUID;
 
 public class TransSqlDemo4 {
@@ -25,17 +27,21 @@ public class TransSqlDemo4 {
 			ResultSet rs = null;
 			try {
 				conn = SqlHelper.getSqlServerConnection("192.168.30.123", "dc_all", "sa", "hzth-801");
-				// conn.setAutoCommit(false);
-				conn.setReadOnly(true);
-				// conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-				// conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+				conn.setAutoCommit(false);
+				conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 				ps = conn.prepareStatement(sql3);
 				ps.setString(1, UUID.getUUID());
 				ps.execute();
-				// conn.commit();
+				System.out.println("。。。。。。");
+				ThreadUtil.sleep(100000);
+				conn.commit();
 			} catch (Exception e) {
 				e.printStackTrace();
-				// conn.rollback();
+				try {
+					conn.rollback();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			} finally {
 				// if (conn != null) {
 				// try {

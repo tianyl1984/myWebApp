@@ -15,17 +15,17 @@ import com.hzth.myapp.core.util.UUID;
 public class CreateInitDataSql {
 
 	public static void main(String[] args) {
-		String moduleId = "20140114111419051754879237803708";
+		String moduleId = "20140121141750900204933241806918";
 		Connection conn = null;
 		Connection conn2 = null;
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_mr", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_so", "sa", "hzth-801");
 			// 标准库连接
 			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_all", "sa", "hzth-801");
 			// createModule(moduleId, conn);
-			createOperation(moduleId, conn);
+			// createOperation(moduleId, conn);
 			// createConfiguration(conn, conn2);
 			// createDict(conn, conn2);
 			// createAttachmentconfig(conn, conn2);
@@ -35,11 +35,11 @@ public class CreateInitDataSql {
 			// tables.add("mt_fileKind");
 			// createTable(tables, conn, conn2);
 
-			// List<String> ids = new ArrayList<String>();
-			// ids.add("20140122100545013909322811899506");
-			// for (String id : ids) {
-			// createOperationById(id, conn);
-			// }
+			List<String> ids = new ArrayList<String>();
+			ids.add("20140214105011081606853174757004");
+			for (String id : ids) {
+				createOperationById(id, conn);
+			}
 
 			// List<String> ids2 = new ArrayList<String>();
 			// ids2.add("20140109103959008853869605941320");
@@ -48,21 +48,19 @@ public class CreateInitDataSql {
 			// }
 			//
 			// List<String> ids3 = new ArrayList<String>();
-			// ids3.add("20131217090816843545583259510336");
+			// ids3.add("20140120104955251902757396136682");
 			// for (String id : ids3) {
 			// createAttachmentconfig(id, conn);
 			// }
 
 			// List<String> ids4 = new ArrayList<String>();
-			// ids4.add("20131209184052797090428698311866");
+			// ids4.add("20140126144418767077961166690635");
 			// for (String id : ids4) {
 			// createConfiguration(id, conn);
 			// }
 
 			// List<String> ids5 = new ArrayList<String>();
-			// ids5.add("20130418150331399984772805225577");
-			// ids5.add("20130418150608189456080366691323");
-			// ids5.add("20130515110804325126642729426738");
+			// ids5.add("20131023095143068938383947685133");
 			// for (String id : ids5) {
 			// updateSqlWithTableAndId("bd_operation", id, conn);
 			// }

@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.hzth.myapp.core.util.UUID;
+
 public class TransSqlDemo3 {
 
 	public static void main(String[] args) {
@@ -27,25 +29,31 @@ public class TransSqlDemo3 {
 				conn.setAutoCommit(false);
 				conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 				// conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-				// ps = conn.prepareStatement(sql3);
-				// ps.setString(1, UUID.getUUID());
-				// ps.execute();
-				ps = conn.prepareStatement(sql4);
-				rs = ps.executeQuery();
+				System.out.println("0");
+				ps = conn.prepareStatement(sql3);
+				System.out.println("1");
+				ps.setString(1, UUID.getUUID());
+				System.out.println("2");
+				ps.execute();
+				System.out.println("3");
+
+				rs = conn.prepareStatement(sql2).executeQuery();
+				System.out.println("4");
 				while (rs.next()) {
-					System.out.println("Thread3:" + rs.getInt("a1"));
+					System.out.println("5");
+					System.out.println(rs.getString("b5"));
 				}
+
+				System.out.println("6");
 				conn.commit();
 			} catch (Exception e) {
 				e.printStackTrace();
-			} finally {
-				if (conn != null) {
-					try {
-						conn.rollback();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
+				try {
+					conn.rollback();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
 				}
+			} finally {
 				SqlHelper.close(conn);
 			}
 		}

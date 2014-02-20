@@ -281,6 +281,42 @@ public class NetUtil {
 		out.close();
 	}
 
+	public static String getUrlResponse(String url, String param, boolean isGet) throws IOException {
+		HttpURLConnection conn = (HttpURLConnection) (new URL(checkUrl(url)).openConnection());
+		conn.setDoInput(true);
+		conn.setDoOutput(true);
+		// POST必须大写
+		conn.setRequestMethod(isGet ? "GET" : "POST");
+		conn.setUseCaches(false);
+		// 仅对当前请求自动重定向
+		conn.setInstanceFollowRedirects(true);
+		// header 设置编码
+		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+		// 连接
+		conn.connect();
+		writeParameters(conn, param);
+		if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+			// printHeader(conn);
+			throw new IOException("response code:" + conn.getResponseCode());
+		}
+		BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		String result = "";
+		String temp = null;
+		while ((temp = reader.readLine()) != null) {
+			result += temp + "\n";
+		}
+		reader.close();
+		conn.disconnect();
+		return result.trim();
+	}
+
+	private static void writeParameters(HttpURLConnection conn, String param) throws IOException {
+		DataOutputStream out = new DataOutputStream(conn.getOutputStream());
+		out.writeBytes(param);
+		out.flush();
+		out.close();
+	}
+
 	public static void main(String[] args) throws Exception {
 		InetAddress ia = InetAddress.getLocalHost();// 获取本地IP对象
 		// 获得网络接口对象（即网卡），并得到mac地址，mac地址存在于一个byte数组中。
