@@ -8,6 +8,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +21,9 @@ import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
 
+import com.hzth.myapp.core.util.DateUtil;
+import com.hzth.myapp.core.util.JsonUtil;
+import com.hzth.myapp.core.util.StringUtil;
 import com.hzth.myapp.core.web.MyBaseAction;
 
 @ParentPackage(value = "struts-default")
@@ -86,5 +93,21 @@ public class PojoAction extends MyBaseAction {
 
 	public void ajaxDemo() {
 		this.print(this.getRequest().getParameter("aaa"));
+	}
+
+	public void ajaxGetW2UIDemoData() {
+		List<Map<String, String>> data = new ArrayList<>();
+		int maxData = 100;
+		for (int i = 0; i < maxData; i++) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("recid", "" + (i + 1));
+			map.put("fname", StringUtil.getRandomStr(4));
+			map.put("lname", StringUtil.getRandomStr(5));
+			map.put("email", StringUtil.getRandomStr(3) + "@123.com");
+			map.put("sdate", DateUtil.getCurrentDate());
+			data.add(map);
+		}
+		String jsonData = JsonUtil.collection2Json(data);
+		this.print(jsonData);
 	}
 }

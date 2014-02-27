@@ -55,6 +55,7 @@
 	  	<li><a href="${path}/jsp/cssDemo.jsp">CSS测试</a></li>
 	  	<li><a href="${path}/jsp/ajaxDemo.jsp">ajax参数个数测试</a></li>
 	  	<li><a href="${path}/jsp/jqUIDemo.jsp">jquery UI demo</a></li>
+	  	<li><a href="${path}/w2ui/demo.jsp">w2ui demo</a></li>
 	</ul>
   
   <div id="aaa">

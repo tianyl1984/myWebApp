@@ -13,10 +13,19 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -318,23 +327,74 @@ public class NetUtil {
 	}
 
 	public static void main(String[] args) throws Exception {
-		InetAddress ia = InetAddress.getLocalHost();// 获取本地IP对象
-		// 获得网络接口对象（即网卡），并得到mac地址，mac地址存在于一个byte数组中。
-		byte[] mac = NetworkInterface.getByInetAddress(ia).getHardwareAddress();
-		// 下面代码是把mac地址拼装成String
-		StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < mac.length; i++) {
-			if (i != 0) {
-				sb.append("-");
-			}
-			// mac[i] & 0xFF 是为了把byte转化为正整数
-			String s = Integer.toHexString(mac[i] & 0xFF);
-			sb.append(s.length() == 1 ? 0 + s : s);
-		}
-		// 把字符串所有小写字母改为大写成为正规的mac地址并返回
-		String str = sb.toString().toUpperCase();
-		System.out.println(str);
+		// String url = "https://git.oschina.net/login";
+		String url = "https://mail.lanxum.com/";
+		String result = getHttpsResponse(url);
+		System.out.println(result);
+	}
 
-		System.out.println(getMACAddress());
+	private static String getHttpsResponse(String url) throws Exception {
+		HostnameVerifier hv = new HostnameVerifier() {
+			@Override
+			public boolean verify(String arg0, SSLSession arg1) {
+				System.out.println("arg0:" + arg0);
+				return true;
+			}
+		};
+		HttpsURLConnection.setDefaultHostnameVerifier(hv);
+		trustAllHttpsCertificates();
+		HttpsURLConnection conn = (HttpsURLConnection) (new URL(checkUrl(url)).openConnection());
+		conn.setDoInput(true);
+		conn.setDoOutput(true);
+		// POST必须大写
+		conn.setRequestMethod("GET");
+		conn.setUseCaches(false);
+		// 仅对当前请求自动重定向
+		conn.setInstanceFollowRedirects(true);
+		// header 设置编码
+		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+		// 连接
+		conn.connect();
+		if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+			// printHeader(conn);
+			throw new IOException("response code:" + conn.getResponseCode());
+		}
+		BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		String result = "";
+		String temp = null;
+		while ((temp = reader.readLine()) != null) {
+			result += temp + "\n";
+		}
+		reader.close();
+		conn.disconnect();
+		return result.trim();
+	}
+
+	private static void trustAllHttpsCertificates() throws Exception {
+		TrustManager[] trustAllCerts = new TrustManager[1];
+		TrustManager tm = new CustomTrustManager();
+		trustAllCerts[0] = tm;
+		SSLContext sc = SSLContext.getInstance("SSL");
+		sc.init(null, trustAllCerts, null);
+		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+	}
+
+	static class CustomTrustManager implements TrustManager, X509TrustManager {
+
+		@Override
+		public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+
+		}
+
+		@Override
+		public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+
+		}
+
+		@Override
+		public X509Certificate[] getAcceptedIssuers() {
+			return null;
+		}
+
 	}
 }

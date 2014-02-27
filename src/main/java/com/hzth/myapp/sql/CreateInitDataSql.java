@@ -15,13 +15,13 @@ import com.hzth.myapp.core.util.UUID;
 public class CreateInitDataSql {
 
 	public static void main(String[] args) {
-		String moduleId = "20140121141750900204933241806918";
+		String moduleId = "20140220102124273381933280363931";
 		Connection conn = null;
 		Connection conn2 = null;
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_so", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_bd_zd", "sa", "hzth-801");
 			// 标准库连接
 			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_all", "sa", "hzth-801");
 			// createModule(moduleId, conn);
@@ -32,11 +32,12 @@ public class CreateInitDataSql {
 			// createOperate(conn, conn2);
 
 			// List<String> tables = new ArrayList<String>();
-			// tables.add("mt_fileKind");
+			// tables.add("sf_displaynumberset");
+			// tables.add("sf_filecontent");
 			// createTable(tables, conn, conn2);
 
 			List<String> ids = new ArrayList<String>();
-			ids.add("20140214105011081606853174757004");
+			ids.add("20140218140419470839898560584512");
 			for (String id : ids) {
 				createOperationById(id, conn);
 			}

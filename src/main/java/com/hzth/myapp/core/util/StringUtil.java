@@ -38,4 +38,8 @@ public class StringUtil {
 		System.out.println(getRandomStr());
 		System.out.println(getRandomStr());
 	}
+
+	public static String[] strToStrArray(String str) {
+		return str.split(",");
+	}
 }

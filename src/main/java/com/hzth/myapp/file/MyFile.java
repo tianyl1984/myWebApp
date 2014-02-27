@@ -9,11 +9,11 @@ public class MyFile {
 	public static void main(String[] args) throws Exception {
 		// createFile();
 		// randomAccessFileTest();
-		System.out.println("完成");
-		File file = new File("C:\\Windows\\Fonts");
-		for (File f : file.listFiles()) {
-			System.out.println(f.getAbsolutePath());
-		}
+		// System.out.println("完成");
+		// File file = new File("C:\\Windows\\Fonts");
+		// for (File f : file.listFiles()) {
+		// System.out.println(f.getAbsolutePath());
+		// }
 	}
 
 	private static void randomAccessFileTest() throws Exception {
@@ -28,7 +28,7 @@ public class MyFile {
 		for (Integer i = 0; i < b.length; i++) {
 			b[i] = i.byteValue();
 		}
-		for (int i = 0; i < 1024 * 1024 * 2 - 1; i++) {
+		for (int i = 0; i < 1024 * 10 * 1 - 1; i++) {
 			fos.write(b);
 			if (i % 100 == 0) {
 				fos.flush();

@@ -1,15 +1,23 @@
 package com.hzth.myapp.nosql;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import com.hzth.myapp.core.util.FileUtil;
+import com.hzth.myapp.user.model.User;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.WriteResult;
 
@@ -24,13 +32,59 @@ public class MongoDBDemo {
 		// showDbNames();
 		// showCollections();
 		// insertData();
-		showAllData();
-		System.out.println("-----------------");
+		// showAllData();
+		// System.out.println("-----------------");
 		// searchData();
 		// deleteData();
-		pageList();
+		// pageList();
+
+		binaryTest();
 
 		close();
+	}
+
+	private static void binaryTest() throws Exception {
+		// insertBinary();
+		// insertBinary2();
+		// findBinary();
+		findBinary2();
+	}
+
+	private static void findBinary2() {
+		DBObject obj = db.getCollection("test").findOne();
+		System.out.println(obj.get("testKey"));
+		FileUtil.saveToFile((byte[]) obj.get("value"), new File("e:/bbb"));
+	}
+
+	private static void insertBinary2() throws Exception {
+		BasicDBObject doc = new BasicDBObject();
+		doc.append("testKey", "12345");
+		doc.append("value", FileUtil.readBinary(new File("e:/aaa")));
+		db.getCollection("test").insert(doc);
+	}
+
+	private static void findBinary() throws Exception {
+		DBObject obj = db.getCollection("test").findOne();
+		System.out.println(obj.get("testKey"));
+		ObjectInputStream bis = new ObjectInputStream(new ByteArrayInputStream((byte[]) obj.get("value")));
+		User user = (User) bis.readObject();
+		bis.close();
+		System.out.println(user);
+	}
+
+	private static void insertBinary() throws Exception {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(baos);
+		User user = new User();
+		user.setId("id1");
+		user.setEmail("aaa@aa.com");
+		oos.writeObject(user);
+		oos.flush();
+		oos.close();
+		BasicDBObject doc = new BasicDBObject();
+		doc.append("testKey", user.getId());
+		doc.append("value", baos.toByteArray());
+		db.getCollection("test").insert(doc);
 	}
 
 	private static void pageList() {
@@ -125,10 +179,10 @@ public class MongoDBDemo {
 
 		DB adminDb = mongo.getDB("admin");
 		boolean flag = adminDb.authenticate("hzth", "hzth-801".toCharArray());
-		System.out.println(flag);
+		System.out.println("用户登录验证结果：" + flag);
 
 		// db = mongo.getDB("MongodbDemo");
-		db = mongo.getDB("sms");
+		db = mongo.getDB("cache");
 		db.collectionExists("aaa");
 	}
 }
