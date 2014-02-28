@@ -112,7 +112,7 @@ public class FileUtil {
 	public static void createFile(int length) {
 		RandomAccessFile raf = null;
 		try {
-			raf = new RandomAccessFile(new File("e:/aaa"), "rw");
+			raf = new RandomAccessFile(new File("e:/测试文件/1g.gif"), "rw");
 			raf.setLength(1024 * 1024 * length);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -147,6 +147,6 @@ public class FileUtil {
 	}
 
 	public static void main(String[] args) {
-		createFile(10);
+		createFile(1024);
 	}
 }

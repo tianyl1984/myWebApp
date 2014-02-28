@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
                       http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
   version="3.0"
-  metadata-complete="true">
+  metadata-complete="false">
 	<welcome-file-list>
 	  <welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
@@ -28,6 +28,7 @@
 	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<async-supported>true</async-supported>
 		<init-param>
 			<param-name>encoding</param-name>
 			<param-value>UTF-8</param-value>
@@ -112,6 +113,7 @@
 	<filter>
 		<filter-name>MyFilter</filter-name>
 		<filter-class>com.hzth.myapp.web.filter.MyFilter</filter-class>
+		<async-supported>true</async-supported>
 	</filter>
 	
 	<filter-mapping>
@@ -123,6 +125,7 @@
 	<filter>
 		<filter-name>CustomProxyFilter</filter-name>
 		<filter-class>com.hzth.myapp.web.filter.CustomProxyFilter</filter-class>
+		<async-supported>true</async-supported>
 	</filter>
 	
 	<filter-mapping>
@@ -134,6 +137,7 @@
 	<filter>
 		<filter-name>OpenSessionInViewFilter</filter-name>
 		<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
+		<async-supported>true</async-supported>
 		<init-param>
 			<param-name>singleSession</param-name>
 			<param-value>true</param-value>
@@ -147,6 +151,7 @@
 	<filter>
 		<filter-name>struts-cleanup</filter-name>
 		<filter-class>org.apache.struts2.dispatcher.ActionContextCleanUp</filter-class>
+		<async-supported>true</async-supported>
 	</filter>
 	<filter-mapping>
 		<filter-name>struts-cleanup</filter-name>
@@ -156,6 +161,7 @@
 	<filter>
 		<filter-name>struts2</filter-name>
 		<filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class>
+		<async-supported>true</async-supported>
 	</filter>
 	<filter-mapping>
 		<filter-name>struts2</filter-name>
@@ -165,6 +171,7 @@
 	<filter>
 	    <filter-name>requestAndResponseHolder</filter-name>
 	    <filter-class>com.hzth.myapp.springmvc.filter.RequestAndResponseHolderFilter</filter-class>
+	    <async-supported>true</async-supported>
 	</filter>
 	<filter-mapping>
 		<filter-name>requestAndResponseHolder</filter-name>
