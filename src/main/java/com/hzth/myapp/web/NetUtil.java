@@ -141,6 +141,7 @@ public class NetUtil {
 			}
 			result = "http://" + url;
 		}
+		result = result.replaceAll("：", ":").replaceAll(" ", "");
 		return result;
 	}
 
@@ -328,16 +329,21 @@ public class NetUtil {
 
 	public static void main(String[] args) throws Exception {
 		// String url = "https://git.oschina.net/login";
-		String url = "https://mail.lanxum.com/";
+		String url = "https：//mail. lanxum.com/";
 		String result = getHttpsResponse(url);
 		System.out.println(result);
+		// System.out.println(checkUrl(url));
 	}
 
-	private static String getHttpsResponse(String url) throws Exception {
+	public static String getHttpsResponse(String url) throws Exception {
+		return getHttpsResponse(url, "");
+	}
+
+	public static String getHttpsResponse(String url, String authorization) throws Exception {
 		HostnameVerifier hv = new HostnameVerifier() {
 			@Override
 			public boolean verify(String arg0, SSLSession arg1) {
-				System.out.println("arg0:" + arg0);
+				// System.out.println("arg0:" + arg0);
 				return true;
 			}
 		};
@@ -353,6 +359,9 @@ public class NetUtil {
 		conn.setInstanceFollowRedirects(true);
 		// header 设置编码
 		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+		if (StringUtils.isNotBlank(authorization)) {
+			conn.setRequestProperty("Authorization", authorization);
+		}
 		// 连接
 		conn.connect();
 		if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -370,7 +379,7 @@ public class NetUtil {
 		return result.trim();
 	}
 
-	private static void trustAllHttpsCertificates() throws Exception {
+	public static void trustAllHttpsCertificates() throws Exception {
 		TrustManager[] trustAllCerts = new TrustManager[1];
 		TrustManager tm = new CustomTrustManager();
 		trustAllCerts[0] = tm;

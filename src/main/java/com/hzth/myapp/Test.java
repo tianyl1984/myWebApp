@@ -1,24 +1,25 @@
 package com.hzth.myapp;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-
-import com.hzth.myapp.encode.Base64Util;
-import com.hzth.myapp.sql.SqlHelper;
+import java.io.File;
 
 public class Test {
 
 	public static void main(String[] args) throws Exception {
-		Connection conn2 = SqlHelper.getSqlServerSaConnection("127.0.0.1", "dc_all");
-		PreparedStatement ps = conn2.prepareStatement("update aaa set a6=? where a5 = '20140113150402814239422238999955'");
+		String filePath = "E:/workspace3.7/ws2/src";
+		File file = new File(filePath);
+		del(file);
+	}
 
-		byte[] b = new byte[1024 * 1024 * 50];
-		for (Integer i = 0; i < b.length; i++) {
-			b[i] = i.byteValue();
+	private static void del(File file) {
+		if (file.isDirectory()) {
+			for (File f : file.listFiles()) {
+				del(f);
+			}
+		} else {
+			if (file.getName().endsWith("class")) {
+				file.delete();
+			}
 		}
-
-		ps.setString(1, Base64Util.encryptBASE64(b));
-		ps.execute();
 	}
 
 }

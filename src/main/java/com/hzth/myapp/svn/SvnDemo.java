@@ -25,22 +25,31 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
 public class SvnDemo {
 
 	public static void main(String[] args) throws Exception {
-		svnCheckoutAll();
-		copyToTarget();
+		// svnCheckoutAll();
+		// copyToTarget();
+		String projectName = "dc-addresslist";
+		svnCheckout(projectName);
+		copyToTarget(projectName);
+		// findFile();
 	}
 
 	private static void copyToTarget() throws Exception {
 		File rootFile = new File("E:/dcall");
 		for (File file : rootFile.listFiles()) {
-			System.out.println("复制：" + file.getAbsolutePath());
-			List<File> files = new ArrayList<File>();
-			getFiles(files, new File(file.getAbsoluteFile() + "/doc"));
-			getFiles(files, new File(file.getAbsoluteFile() + "/src"));
-			getFiles(files, new File(file.getAbsoluteFile() + "/webapp"));
-			for (File srcFile : files) {
-				File targetFile = new File(srcFile.getAbsolutePath().replace(file.getAbsolutePath(), "E:\\workspaceall\\dc"));
-				FileUtils.copyFile(srcFile, targetFile);
-			}
+			copyToTarget(file.getName());
+		}
+	}
+
+	private static void copyToTarget(String projectName) throws Exception {
+		File file = new File("E:/dcall/" + projectName);
+		System.out.println("复制：" + file.getAbsolutePath());
+		List<File> files = new ArrayList<File>();
+		getFiles(files, new File(file.getAbsoluteFile() + "/doc"));
+		getFiles(files, new File(file.getAbsoluteFile() + "/src"));
+		getFiles(files, new File(file.getAbsoluteFile() + "/webapp"));
+		for (File srcFile : files) {
+			File targetFile = new File(srcFile.getAbsolutePath().replace(file.getAbsolutePath(), "E:\\workspaceall\\dc"));
+			FileUtils.copyFile(srcFile, targetFile);
 		}
 	}
 
@@ -68,7 +77,7 @@ public class SvnDemo {
 		ignNames.add("dc-all");
 		ignNames.add("dc-sp-example");
 		ignNames.add("dc-materials");
-		ignNames.add("dc-cifagent");
+		// ignNames.add("dc-cifagent");
 		ignNames.add("product-v3");
 		for (SVNDirEntry entry : all) {
 			// System.out.println(entry.getURL().toDecodedString());
@@ -85,6 +94,25 @@ public class SvnDemo {
 			checkout(manager, aaa.appendPath("/trunk", true), SVNRevision.HEAD, new File("E:/dcall/" + entry.getName()));
 		}
 		System.out.println("下载完成!" + svnDirEntries.size());
+	}
+
+	@SuppressWarnings("unchecked")
+	private static void svnCheckout(String projectName) throws Exception {
+		String url = "https://192.168.1.8/svn/dc-v3/";
+		String name = "tianyale";
+		String password = "tianyale";
+		SVNRepository repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(url));
+		ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(name, password);
+		repository.setAuthenticationManager(authManager);
+		Collection<SVNDirEntry> all = repository.getDir("/java", -1, null, (Collection<SVNDirEntry>) null);
+		SVNClientManager manager = authSvn(url, name, password);
+		for (SVNDirEntry entry : all) {
+			if (entry.getName().equals(projectName)) {
+				SVNURL aaa = entry.getURL();
+				System.out.println("下载：" + aaa.toDecodedString());
+				checkout(manager, aaa.appendPath("/trunk", true), SVNRevision.HEAD, new File("E:/dcall/" + entry.getName()));
+			}
+		}
 	}
 
 	public static void setupLibrary() {
@@ -144,5 +172,20 @@ public class SvnDemo {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+
+	private static void findFile() throws Exception {
+		String url = "https://192.168.1.8/svn/dc-v3/";
+		String name = "tianyale";
+		String password = "tianyale";
+		SVNRepository repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(url));
+		ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(name, password);
+		repository.setAuthenticationManager(authManager);
+		Collection<SVNDirEntry> all = repository.getDir("/java", -1, null, (Collection<SVNDirEntry>) null);
+		SVNClientManager manager = authSvn(url, name, password);
+
+		for (SVNDirEntry entry : all) {
+
+		}
 	}
 }

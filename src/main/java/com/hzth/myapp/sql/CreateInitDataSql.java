@@ -15,15 +15,15 @@ import com.hzth.myapp.core.util.UUID;
 public class CreateInitDataSql {
 
 	public static void main(String[] args) {
-		String moduleId = "20140220102124273381933280363931";
+		String moduleId = "20140315083548755827937462559577";
 		Connection conn = null;
 		Connection conn2 = null;
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_wc", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.30.242", "dc-yanshi", "sa", "hzth-801");
 			// 标准库连接
-			conn2 = SqlHelper.getSqlServerConnection("localhost", "dc_all", "sa", "hzth-801");
+			conn2 = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_af", "sa", "hzth-801");
 			// createModule(moduleId, conn);
 			// createOperation(moduleId, conn);
 			// createConfiguration(conn, conn2);
@@ -37,28 +37,30 @@ public class CreateInitDataSql {
 			// createTable(tables, conn, conn2);
 
 			// List<String> ids = new ArrayList<String>();
-			// ids.add("20140218140419470839898560584512");
+			// ids.add("20140317153703095657229558742555");
 			// for (String id : ids) {
 			// createOperationById(id, conn);
 			// }
 
 			// List<String> ids2 = new ArrayList<String>();
-			// ids2.add("20140109103959008853869605941320");
+			// ids2.add("20140315101716007175500287174546");
+			// ids2.add("20140315101746199380966261741626");
+			// ids2.add("20140315125454523738801833544035");
 			// for (String id : ids2) {
 			// createDictById(id, conn);
 			// }
-			//
-			// List<String> ids3 = new ArrayList<String>();
-			// ids3.add("20140120104955251902757396136682");
-			// for (String id : ids3) {
-			// createAttachmentconfig(id, conn);
-			// }
 
-			List<String> ids4 = new ArrayList<String>();
-			ids4.add("20140227111800553327978852428124");
-			for (String id : ids4) {
-				createConfiguration(id, conn);
+			List<String> ids3 = new ArrayList<String>();
+			ids3.add("20140319183324484830323567121564");
+			for (String id : ids3) {
+				createAttachmentconfig(id, conn);
 			}
+
+			// List<String> ids4 = new ArrayList<String>();
+			// ids4.add("20140307142639485764544686663288");
+			// for (String id : ids4) {
+			// createConfiguration(id, conn);
+			// }
 
 			// List<String> ids5 = new ArrayList<String>();
 			// ids5.add("20131023095143068938383947685133");

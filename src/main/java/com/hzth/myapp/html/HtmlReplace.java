@@ -15,8 +15,8 @@ public class HtmlReplace {
 
 	public static void main(String[] args) {
 		// replaceImg();
-		// filterHTML();
-		findImgSrc();
+		filterHTML();
+		// findImgSrc();
 	}
 
 	private static void filterHTML() {

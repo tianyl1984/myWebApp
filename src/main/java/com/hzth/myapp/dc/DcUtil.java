@@ -1,15 +1,19 @@
 package com.hzth.myapp.dc;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -450,8 +454,11 @@ public class DcUtil {
 		return getUrlResponse(checkUrl(baseUrl) + "/bd/welcome!ajaxGetSchoolNames.action").trim();
 	}
 
-	public static String uploadFileToServer(String baseUrl, File file) throws IOException {
-		HttpURLConnection conn = (HttpURLConnection) (new URL(checkUrl(baseUrl) + "/component/attachment!saveUploadFile.action").openConnection());
+	public static String commitWithFiles(String url, List<File> files, Map<String, ParameterValue> map) throws IOException {
+		if (map == null) {
+			map = new HashMap<String, ParameterValue>();
+		}
+		HttpURLConnection conn = (HttpURLConnection) (new URL(checkUrl(url)).openConnection());
 		conn.setReadTimeout(1000000);
 		conn.setConnectTimeout(1000000);
 		conn.setDoInput(true);
@@ -459,6 +466,7 @@ public class DcUtil {
 		conn.setUseCaches(false);
 		conn.setRequestMethod("POST");
 		conn.setInstanceFollowRedirects(true);
+		conn.setChunkedStreamingMode(10240);
 		String cookies = getCookies();
 		if (StringUtils.isNotBlank(cookies)) {// 设置cookie
 			conn.setRequestProperty("Cookie", cookies);
@@ -470,38 +478,62 @@ public class DcUtil {
 		// 连接
 		conn.connect();
 		FileInputStream in = null;
-		DataOutputStream out = null;
-		StringBuffer strBuffer = new StringBuffer();
-		strBuffer.append("--" + boundary + "\r\n");
-		strBuffer.append("Content-Disposition: form-data; name=\"Filename\"\r\n\r\n");
-		strBuffer.append(file.getName() + "\r\n");
-		strBuffer.append("--" + boundary + "\r\n");
-		strBuffer.append("Content-Disposition: form-data; name=filedata; filename=" + file.getName() + "\r\n");
-		strBuffer.append("Content-Type: application/octet-stream\r\n");
-		strBuffer.append("\r\n");
-		try {
-			in = new FileInputStream(file);
-			out = new DataOutputStream(conn.getOutputStream());
-			out.write(strBuffer.toString().getBytes());
-			byte[] buffer = new byte[1024];
-			int hasRead = -1;
-			while ((hasRead = in.read(buffer)) != -1) {
-				out.write(buffer, 0, hasRead);
-			}
-			out.write("\r\n".getBytes());
-			out.write(("--" + boundary + "--\r\n").getBytes());
-			out.flush();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} finally {
-			if (in != null) {
-				in.close();
-			}
-			if (out != null) {
-				// out.close();
+		DataOutputStream out = new DataOutputStream(conn.getOutputStream());
+
+		// 普通参数
+		StringBuffer sb = new StringBuffer();
+		// 文件名称
+		for (File file : files) {
+			sb.append("--" + boundary + "\r\n");
+			sb.append("Content-Disposition: form-data; name=\"uploadFileNames\"\r\n\r\n");
+			sb.append(file.getName() + "\r\n");
+			sb.append("--" + boundary + "\r\n");
+		}
+		// 其他参数
+		Set<String> keySet = map.keySet();
+		for (String key : keySet) {
+			for (String val : map.get(key).getValues()) {
+				String name = key;
+				sb.append("--" + boundary + "\r\n");
+				sb.append("Content-Disposition: form-data; name=\"" + name + "\"\r\n\r\n");
+				sb.append(val + "\r\n");
+				sb.append("--" + boundary + "\r\n");
 			}
 		}
+
+		out.write(sb.toString().getBytes("utf-8"));
+		// 文件
+		for (File file : files) {
+			StringBuffer strBuffer = new StringBuffer();
+			strBuffer.append("--" + boundary + "\r\n");
+			strBuffer.append("Content-Disposition: form-data; name=uploadFiles; filename=" + file.getName() + "\r\n");
+			strBuffer.append("Content-Type: application/octet-stream\r\n");
+			strBuffer.append("\r\n");
+			try {
+				in = new FileInputStream(file);
+				out.write(strBuffer.toString().getBytes());
+				byte[] buffer = new byte[1024];
+				int hasRead = -1;
+				while ((hasRead = in.read(buffer)) != -1) {
+					out.write(buffer, 0, hasRead);
+				}
+				out.write("\r\n".getBytes());
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				throw new IOException();
+			} finally {
+				if (in != null) {
+					in.close();
+				}
+				if (out != null) {
+					// out.close();
+				}
+			}
+		}
+		out.write(("--" + boundary + "--\r\n").getBytes());
+		out.flush();
 		if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+			System.out.println(conn.getResponseCode());
 			throw new IOException();
 		}
 		BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -515,6 +547,37 @@ public class DcUtil {
 		return result;
 	}
 
+	public static String commitWithFiles(String url, File file, Map<String, ParameterValue> map) throws IOException {
+		List<File> files = new ArrayList<File>();
+		files.add(file);
+		return commitWithFiles(url, files, map);
+	}
+
+	public static void downloadFileSimple(String url, File file) throws IOException {
+		HttpURLConnection con = (HttpURLConnection) new URL(checkUrl(url)).openConnection();
+		con.setUseCaches(false);
+		// if (StringUtils.isNotBlank(cookies)) {// 设置cookie
+		// con.setRequestProperty("Cookie", cookies);
+		// }
+		if (con.getResponseCode() != HttpURLConnection.HTTP_OK && con.getResponseCode() != HttpURLConnection.HTTP_PARTIAL) {
+			throw new IOException();
+		}
+		long fileSize = con.getHeaderFieldLong("Content-Length", -1L);
+		InputStream is = con.getInputStream();
+		BufferedInputStream bis = new BufferedInputStream(is);
+		if (!file.getParentFile().exists()) {
+			file.getParentFile().mkdirs();
+		}
+		FileOutputStream fos = new FileOutputStream(file);
+		byte[] b = new byte[1024];
+		int length = 0;
+		while ((length = bis.read(b)) != -1) {
+			fos.write(b, 0, length);
+		}
+		fos.close();
+		bis.close();
+	}
+
 	public static void main(String[] args) throws IOException {
 		// boolean aa = login("http://192.168.1.20:8080/dc/", "administrator", "000000", "datasource1");
 		// System.out.println(aa);
@@ -524,7 +587,38 @@ public class DcUtil {
 		// System.out.println(aa);
 		// System.out.println(getCookies());
 		// System.out.println(getUrlResponse("http://192.168.1.20:8080/dc/bd/mobile/calendarWeekData!getSchoolAllJson.action"));
-		System.out.println(getUrlResponse("http://127.0.0.1:8085/dc-base/bd/teachingMaterial!ajaxLoadData.action?sys_username=jiaoshi94&sys_password=000000&sys_auto_authenticate=true&dataSourceName=dataSource1"));
+		// System.out.println(getUrlResponse("http://127.0.0.1:8085/dc-base/bd/teachingMaterial!ajaxLoadData.action?sys_username=jiaoshi94&sys_password=000000&sys_auto_authenticate=true&dataSourceName=dataSource1"));
+		// File file = new File("E:\\workspace3.7\\ScoreExport\\src\\com\\unitever\\cydc\\sql.txt");
+		// File file2 = new File("E:\\workspace3.7\\ScoreExport\\src\\com\\unitever\\cydc\\Main.java");
+		// File file3 = new File("E:\\workspace3.7\\ScoreExport\\成绩.xls");
+		// String url = "http://127.0.0.1:8082/dc-framework/component/attachment!saveFileTest.action";
+		// List<File> files = new ArrayList<File>();
+		// files.add(file);
+		// files.add(file2);
+		// files.add(file3);
+		// Map<String, ParameterValue> map = new HashMap<String, ParameterValue>();
+		// map.put("sys_auto_authenticate", new ParameterValue("true"));
+		// map.put("dataSourceName", new ParameterValue("dataSource1"));
+		// map.put("sys_username", new ParameterValue("administrator"));
+		// map.put("sys_password", new ParameterValue("000000"));
+		// map.put("parm2", new ParameterValue("parm2value"));
+		// ParameterValue pv = new ParameterValue("parm3value(0)");
+		// pv.addValue("parm3value(1)");
+		// map.put("parm3", pv);
+		// System.out.println(commitWithFiles(url, files, map));
+
+		// String url = "http://192.168.30.242:9998/dc//component/attachment!download.action?checkUser=false&period=year&downloadToken=20131216133708416271826477990113baa74dabf3dda852a826ed6bc9ec7747";
+		// url += "&sys_auto_authenticate=true&sys_username=administrator&sys_password=000000&dataSourceName=dataSource1";
+		// downloadFileSimple(url, new File("e:/aaaaa"));
+		System.setProperty("http.proxySet", "true");
+		System.setProperty("http.proxyHost", "127.0.0.1");
+		System.setProperty("http.proxyPort", "8888");
+
+		String url = "http://192.168.30.123:8082/dc-framework/component/attachment!test.action";
+		System.out.println("响应:" + getUrlResponse(url + "?aaa=中"));
+		// Map<String, ParameterValue> map = new HashMap<>();
+		// map.put("aaa", new ParameterValue("中"));
+		// System.out.println("响应：" + getUrlResponse(url, map));
 	}
 
 	static {

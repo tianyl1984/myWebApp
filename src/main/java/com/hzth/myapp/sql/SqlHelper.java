@@ -26,26 +26,7 @@ import com.hzth.myapp.sql.model.TableInfo;
 public class SqlHelper {
 
 	public static void main(String[] args) throws Exception {
-		// printSql();
-		Connection conn = null;
-		try {
-			// conn = getSqlServerConnection("192.168.1.122", "dc_empty", "sa", "hzth-801");
-			// conn = getMysqlConnection("192.168.1.122", "aaa", "root", "hzth-801");
-			conn = getOracleConnection("192.168.1.194", "orcl", "hzth", "hzth-801");
-			Map<String, TableInfo> tabMap = getTableInfo(conn);
-			for (String key : tabMap.keySet()) {
-				TableInfo tableInfo = tabMap.get(key);
-				System.out.println(tableInfo.getName());
-				for (String colkey : tableInfo.getColumnInfoMap().keySet()) {
-					ColumnInfo info = tableInfo.getColumnInfoMap().get(colkey);
-					System.out.println(info.getName() + ":" + info.getType());
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			close(conn);
-		}
+		printSql();
 	}
 
 	public static String getSqlValue(String val) {
@@ -72,7 +53,7 @@ public class SqlHelper {
 	}
 
 	private static void printSql() throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("C:\\Users\\tianyl\\Desktop\\sql\\按班级统计两率均分.sql")), "utf-8"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("E:\\workspace3.7\\ScoreExport\\src\\com\\unitever\\cydc\\sql.txt")), "utf-8"));
 		String temp = null;
 		System.out.println("StringBuffer sqlBuffer = new StringBuffer();");
 		while ((temp = br.readLine()) != null) {

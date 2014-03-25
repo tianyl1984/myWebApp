@@ -15,7 +15,7 @@ import com.hzth.myapp.sql.model.TableInfo;
 //同步数据库，使两个库结构内容完全一致
 public class SyncDatabase {
 
-	private static final boolean opt_exe = true;// 执行
+	private static final boolean opt_exe = false;// 执行
 	private static final boolean opt_print = true;// 打印
 	private static final boolean opt_save = false;// 保存到文件
 
@@ -29,9 +29,9 @@ public class SyncDatabase {
 		Connection toConn = null;
 		try {
 			// 标准
-			fromConn = SqlHelper.getSqlServerConnection("127.0.0.1", "dc_develop", "sa", "hzth-801");
+			fromConn = SqlHelper.getSqlServerConnection("127.0.0.1", "a1", "sa", "hzth-801");
 			// 错误库
-			toConn = SqlHelper.getSqlServerConnection("127.0.0.1", "dc_all", "sa", "hzth-801");
+			toConn = SqlHelper.getSqlServerConnection("127.0.0.1", "a2", "sa", "hzth-801");
 			// fromConn = SqlHelper.getMysqlConnection("192.168.1.8", "cydc", "", "hzth-801");
 
 			// String driver = "com.mysql.jdbc.Driver";
@@ -42,16 +42,22 @@ public class SyncDatabase {
 			Map<String, TableInfo> toTableInfos = SqlHelper.getTableInfo(toConn);
 			// 对比table
 			processTable(fromTableInfos, toTableInfos);
+			System.out.println("table");
 			// 对比列
 			processColumns(fromTableInfos, toTableInfos);
+			System.out.println("column");
 			// 主键、外键
 			processPKFK(fromTableInfos, toTableInfos);
+			System.out.println("PKFK");
 			// 新增表的外键
 			processNotExistTabFK(fromTableInfos, toTableInfos);
+			System.out.println("TabFK");
 			// 数据
 			processData(fromConn, toConn, fromTableInfos);
+			System.out.println("Data");
 			// 处理sql
 			processSql(toConn);
+			System.out.println("sql");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

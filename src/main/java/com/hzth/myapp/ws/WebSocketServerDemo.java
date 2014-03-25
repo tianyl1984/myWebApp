@@ -14,8 +14,9 @@ public class WebSocketServerDemo {
 	final static List<WebSocket> webSockets = new ArrayList<WebSocket>();
 
 	public static void main(String[] args) throws Exception {
-		final WebServerSocket ws = new WebServerSocket(9999);
-		System.out.println("开启服务：9999");
+		int port = 8088;
+		final WebServerSocket ws = new WebServerSocket(port);
+		System.out.println("开启服务：" + port);
 		new Thread(new Runnable() {
 			@Override
 			public void run() {

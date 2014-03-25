@@ -33,6 +33,6 @@ public class MyCustomUtil {
 
 	public static void main(String[] args) {
 		// System.out.println(decode(encode("http://www.baidu.com/aa/bb.do?aa=bb&dd=cc")));
-		System.out.println(encode("http://www.yeahvox.com/m_changepwd.php"));
+		// System.out.println(encode("http://www.yeahvox.com/m_changepwd.php"));
 	}
 }
