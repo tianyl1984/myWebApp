@@ -15,7 +15,7 @@ import com.hzth.myapp.core.util.UUID;
 public class CreateInitDataSql {
 
 	public static void main(String[] args) {
-		String moduleId = "20140315083548755827937462559577";
+		String moduleId = "20140217184230230821270432110933";
 		Connection conn = null;
 		Connection conn2 = null;
 		try {
@@ -23,7 +23,7 @@ public class CreateInitDataSql {
 			// 有数据的连接
 			conn = SqlHelper.getSqlServerConnection("192.168.30.242", "dc-yanshi", "sa", "hzth-801");
 			// 标准库连接
-			conn2 = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_af", "sa", "hzth-801");
+			conn2 = SqlHelper.getSqlServerConnection("192.168.30.123", "dc_develop", "sa", "hzth-801");
 			// createModule(moduleId, conn);
 			// createOperation(moduleId, conn);
 			// createConfiguration(conn, conn2);
@@ -31,10 +31,9 @@ public class CreateInitDataSql {
 			// createAttachmentconfig(conn, conn2);
 			// createOperate(conn, conn2);
 
-			// List<String> tables = new ArrayList<String>();
-			// tables.add("sf_displaynumberset");
-			// tables.add("sf_filecontent");
-			// createTable(tables, conn, conn2);
+			List<String> tables = new ArrayList<String>();
+			tables.add("bd_portalcard");
+			createTable(tables, conn, conn2);
 
 			// List<String> ids = new ArrayList<String>();
 			// ids.add("20140317153703095657229558742555");
@@ -50,11 +49,11 @@ public class CreateInitDataSql {
 			// createDictById(id, conn);
 			// }
 
-			List<String> ids3 = new ArrayList<String>();
-			ids3.add("20140319183324484830323567121564");
-			for (String id : ids3) {
-				createAttachmentconfig(id, conn);
-			}
+			// List<String> ids3 = new ArrayList<String>();
+			// ids3.add("20140319183324484830323567121564");
+			// for (String id : ids3) {
+			// createAttachmentconfig(id, conn);
+			// }
 
 			// List<String> ids4 = new ArrayList<String>();
 			// ids4.add("20140307142639485764544686663288");

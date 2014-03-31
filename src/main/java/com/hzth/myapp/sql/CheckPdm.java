@@ -91,6 +91,7 @@ public class CheckPdm {
 		abbreviationList.add("ms");
 		abbreviationList.add("ai");
 		abbreviationList.add("tm");
+		abbreviationList.add("qa");
 
 		// abbreviationList.add("om");
 		// abbreviationList.add("da");
@@ -140,7 +141,7 @@ public class CheckPdm {
 		mysqlInclued.add("fw");
 		mysqlInclued.add("bd");
 		mysqlInclued.add("ma");
-		mysqlInclued.add("tm");
+		mysqlInclued.add("qa");
 
 		// mysqlInclued.clear();
 	}
