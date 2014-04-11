@@ -15,36 +15,37 @@ import com.hzth.myapp.core.util.UUID;
 public class CreateInitDataSql {
 
 	public static void main(String[] args) {
-		String moduleId = "20140217184230230821270432110933";
+		String moduleId = "20140311180153390003085470864414";
 		Connection conn = null;
 		Connection conn2 = null;
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.30.242", "dc-yanshi", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_af", "sa", "hzth-801");
 			// 标准库连接
 			conn2 = SqlHelper.getSqlServerConnection("192.168.30.123", "dc_develop", "sa", "hzth-801");
-			// createModule(moduleId, conn);
-			// createOperation(moduleId, conn);
+			createModule(moduleId, conn);
+			createOperation(moduleId, conn);
 			// createConfiguration(conn, conn2);
 			// createDict(conn, conn2);
 			// createAttachmentconfig(conn, conn2);
 			// createOperate(conn, conn2);
 
-			List<String> tables = new ArrayList<String>();
-			tables.add("bd_portalcard");
-			createTable(tables, conn, conn2);
+			// List<String> tables = new ArrayList<String>();
+			// tables.add("dataobject");
+			// createTable(tables, conn, conn2);
 
 			// List<String> ids = new ArrayList<String>();
-			// ids.add("20140317153703095657229558742555");
+			// ids.add("20140328150213430609745191308850");
+			// ids.add("20140328150358378690799008072834");
+			// ids.add("20140331153249491704254366422255");
+			// ids.add("20140331153339504079892865199951");
 			// for (String id : ids) {
 			// createOperationById(id, conn);
 			// }
 
 			// List<String> ids2 = new ArrayList<String>();
-			// ids2.add("20140315101716007175500287174546");
-			// ids2.add("20140315101746199380966261741626");
-			// ids2.add("20140315125454523738801833544035");
+			// ids2.add("20140109103959008853869605941320");
 			// for (String id : ids2) {
 			// createDictById(id, conn);
 			// }
@@ -56,7 +57,7 @@ public class CreateInitDataSql {
 			// }
 
 			// List<String> ids4 = new ArrayList<String>();
-			// ids4.add("20140307142639485764544686663288");
+			// ids4.add("20140328163434859727653541670692");
 			// for (String id : ids4) {
 			// createConfiguration(id, conn);
 			// }

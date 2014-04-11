@@ -58,6 +58,7 @@
 	  	<li><a href="${path}/w2ui/demo.jsp">w2ui demo</a></li>
 	  	<li><a href="${path}/servletDemo">测试异步servlet</a></li>
 	  	<li><a href="${path}/ws/ws_demo.jsp">WebSocket测试</a></li>
+	  	<li><a href="${path}/highcharts/demo.jsp">Highcharts测试</a></li>
 	</ul>
   
   <div id="aaa">

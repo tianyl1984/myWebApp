@@ -32,11 +32,27 @@ public class StringUtil {
 		return result;
 	}
 
+	public static String getRandomChineseStr(int count) {
+		char start = 19968;
+		char end = (char) 171941;
+		String result = "";
+		for (int i = 0; i < count; i++) {
+			Double d = Math.random() * (0x4e00 + 500 - 0x4e00) + 0x4e00;
+			char aa = (char) d.intValue();
+			result += String.valueOf(aa);
+		}
+		return result;
+	}
+
+	public static String getRandomChineseStr() {
+		return getRandomChineseStr(5);
+	}
+
 	public static void main(String[] args) {
 		System.out.println(getRandomStr());
 		System.out.println(getRandomStr());
 		System.out.println(getRandomStr());
-		System.out.println(getRandomStr());
+		System.out.println(getRandomChineseStr());
 	}
 
 	public static String[] strToStrArray(String str) {
