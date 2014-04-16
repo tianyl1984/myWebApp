@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ include file="/common/jsp/taglibs.jsp"%>
-<c:set var="row" value="1000"/>
-<c:set var="cell" value="100"/>
+<c:set var="row" value="10"/>
+<c:set var="cell" value="10"/>
 <div>
 	<table>
 		<thead>
@@ -23,3 +23,10 @@
 		</tbody>
 	</table>
 </div>
+<script>
+	function aaaa(){
+// 		if( == '1'){
+			alert(123);
+// 		}
+	}
+</script>

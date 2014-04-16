@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class Md5Util {
 
-	private static String md5Encode(String str) {
+	public static String md5Encode(String str) {
 		MessageDigest messageDigest = null;
 		try {
 			messageDigest = MessageDigest.getInstance("MD5");
@@ -22,10 +22,35 @@ public class Md5Util {
 
 		StringBuffer md5StrBuff = new StringBuffer();
 		for (int i = 0; i < byteArray.length; i++) {
-			if (Integer.toHexString(0xFF & byteArray[i]).length() == 1)
+			if (Integer.toHexString(0xFF & byteArray[i]).length() == 1) {
 				md5StrBuff.append("0").append(Integer.toHexString(0xFF & byteArray[i]));
-			else
+			} else {
 				md5StrBuff.append(Integer.toHexString(0xFF & byteArray[i]));
+			}
+		}
+
+		return md5StrBuff.toString();
+	}
+
+	public static String md5Encode(byte[] bts) {
+		MessageDigest messageDigest = null;
+		try {
+			messageDigest = MessageDigest.getInstance("MD5");
+			messageDigest.reset();
+			messageDigest.update(bts);
+		} catch (NoSuchAlgorithmException e) {
+			System.out.println("NoSuchAlgorithmException caught!");
+			System.exit(-1);
+		}
+		byte[] byteArray = messageDigest.digest();
+
+		StringBuffer md5StrBuff = new StringBuffer();
+		for (int i = 0; i < byteArray.length; i++) {
+			if (Integer.toHexString(0xFF & byteArray[i]).length() == 1) {
+				md5StrBuff.append("0").append(Integer.toHexString(0xFF & byteArray[i]));
+			} else {
+				md5StrBuff.append(Integer.toHexString(0xFF & byteArray[i]));
+			}
 		}
 
 		return md5StrBuff.toString();

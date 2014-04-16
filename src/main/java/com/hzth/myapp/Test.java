@@ -57,8 +57,9 @@ public class Test {
 	public static void main(String[] args) throws Exception {
 		// m1();
 		// m2();
-		m3();
+		// m3();
 		// m4();
+		System.out.println("aaa.a".contains("."));
 	}
 
 	private static void m4() throws Exception {

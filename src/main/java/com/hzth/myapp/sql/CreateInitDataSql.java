@@ -21,11 +21,11 @@ public class CreateInitDataSql {
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_af", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.30.108", "dc_tm", "sa", "hzth-801");
 			// 标准库连接
 			conn2 = SqlHelper.getSqlServerConnection("192.168.30.123", "dc_develop", "sa", "hzth-801");
-			createModule(moduleId, conn);
-			createOperation(moduleId, conn);
+			// createModule(moduleId, conn);
+			// createOperation(moduleId, conn);
 			// createConfiguration(conn, conn2);
 			// createDict(conn, conn2);
 			// createAttachmentconfig(conn, conn2);
@@ -35,19 +35,22 @@ public class CreateInitDataSql {
 			// tables.add("dataobject");
 			// createTable(tables, conn, conn2);
 
-			// List<String> ids = new ArrayList<String>();
-			// ids.add("20140328150213430609745191308850");
-			// ids.add("20140328150358378690799008072834");
-			// ids.add("20140331153249491704254366422255");
-			// ids.add("20140331153339504079892865199951");
-			// for (String id : ids) {
-			// createOperationById(id, conn);
-			// }
+			List<String> ids = new ArrayList<String>();
+			ids.add("20120918105110335114722069192961");
+			for (String id : ids) {
+				createOperationById(id, conn);
+			}
 
 			// List<String> ids2 = new ArrayList<String>();
-			// ids2.add("20140109103959008853869605941320");
+			// ids2.add("20130325191038222741788749418279");
 			// for (String id : ids2) {
 			// createDictById(id, conn);
+			// }
+
+			// List<String> ids21 = new ArrayList<String>();
+			// ids21.add("20140415102549055794165695170050");
+			// for (String id : ids21) {
+			// createDictValueById(id, conn);
 			// }
 
 			// List<String> ids3 = new ArrayList<String>();
@@ -74,6 +77,10 @@ public class CreateInitDataSql {
 			SqlHelper.close(conn);
 			SqlHelper.close(conn2);
 		}
+	}
+
+	private static void createDictValueById(String id, Connection conn) {
+		createSqlWithTableAndId("bd_dictionaryvalue", id, conn);
 	}
 
 	private static void updateSqlWithTableAndId(String table, String id, Connection conn) {

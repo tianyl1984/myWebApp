@@ -26,4 +26,8 @@ public class ParameterValue {
 	public void setValues(List<String> values) {
 		this.values = values;
 	}
+
+	public String getFirstValue() {
+		return values.size() > 0 ? values.get(0) : "";
+	}
 }

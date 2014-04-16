@@ -454,7 +454,7 @@ public class DcUtil {
 		return getUrlResponse(checkUrl(baseUrl) + "/bd/welcome!ajaxGetSchoolNames.action").trim();
 	}
 
-	public static String commitWithFiles(String url, List<File> files, Map<String, ParameterValue> map) throws IOException {
+	public static String commitWithFiles(String url, List<File> files, Map<String, ParameterValue> map, boolean isInHeader) throws IOException {
 		if (map == null) {
 			map = new HashMap<String, ParameterValue>();
 		}
@@ -473,6 +473,13 @@ public class DcUtil {
 		}
 		conn.setRequestProperty("Charset", "utf-8");
 		conn.setRequestProperty("connection", "keep-alive");
+		if (isInHeader) {
+			conn.setRequestProperty("sys_auto_authenticate", map.get("sys_auto_authenticate").getFirstValue());
+			conn.setRequestProperty("sys_username", map.get("sys_username").getFirstValue());
+			conn.setRequestProperty("sys_password", map.get("sys_password").getFirstValue());
+			conn.setRequestProperty("dataSourceName", map.get("dataSourceName").getFirstValue());
+		}
+
 		String boundary = UUID.randomUUID().toString();
 		conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
 		// 连接
@@ -482,7 +489,7 @@ public class DcUtil {
 
 		// 普通参数
 		StringBuffer sb = new StringBuffer();
-		// 文件名称
+		// 文件名称0
 		for (File file : files) {
 			sb.append("--" + boundary + "\r\n");
 			sb.append("Content-Disposition: form-data; name=\"uploadFileNames\"\r\n\r\n");
@@ -492,6 +499,9 @@ public class DcUtil {
 		// 其他参数
 		Set<String> keySet = map.keySet();
 		for (String key : keySet) {
+			if (key.equals("sys_auto_authenticate") || key.equals("sys_username") || key.equals("sys_password") || key.equals("dataSourceName")) {
+				continue;
+			}
 			for (String val : map.get(key).getValues()) {
 				String name = key;
 				sb.append("--" + boundary + "\r\n");
@@ -550,7 +560,7 @@ public class DcUtil {
 	public static String commitWithFiles(String url, File file, Map<String, ParameterValue> map) throws IOException {
 		List<File> files = new ArrayList<File>();
 		files.add(file);
-		return commitWithFiles(url, files, map);
+		return commitWithFiles(url, files, map, false);
 	}
 
 	public static void downloadFileSimple(String url, File file) throws IOException {
@@ -579,46 +589,28 @@ public class DcUtil {
 	}
 
 	public static void main(String[] args) throws IOException {
-		// boolean aa = login("http://192.168.1.20:8080/dc/", "administrator", "000000", "datasource1");
-		// System.out.println(aa);
-		// // System.out.println(getUrlResponse("http://192.168.1.20:8080/dc/bd/mobile/calendarWeekData!getSchoolAllJson.action"));
-		// System.out.println(getUrlResponse("http://192.168.1.20:8080/dc/bd/teachingMaterial!list.action"));
-		// boolean aa = login("http://192.168.30.38:8093/dc-exam", "administrator", "000000", "dataSource1");
-		// System.out.println(aa);
-		// System.out.println(getCookies());
-		// System.out.println(getUrlResponse("http://192.168.1.20:8080/dc/bd/mobile/calendarWeekData!getSchoolAllJson.action"));
-		// System.out.println(getUrlResponse("http://127.0.0.1:8085/dc-base/bd/teachingMaterial!ajaxLoadData.action?sys_username=jiaoshi94&sys_password=000000&sys_auto_authenticate=true&dataSourceName=dataSource1"));
-		// File file = new File("E:\\workspace3.7\\ScoreExport\\src\\com\\unitever\\cydc\\sql.txt");
-		// File file2 = new File("E:\\workspace3.7\\ScoreExport\\src\\com\\unitever\\cydc\\Main.java");
-		// File file3 = new File("E:\\workspace3.7\\ScoreExport\\成绩.xls");
-		// String url = "http://127.0.0.1:8082/dc-framework/component/attachment!saveFileTest.action";
-		// List<File> files = new ArrayList<File>();
-		// files.add(file);
-		// files.add(file2);
-		// files.add(file3);
-		// Map<String, ParameterValue> map = new HashMap<String, ParameterValue>();
-		// map.put("sys_auto_authenticate", new ParameterValue("true"));
-		// map.put("dataSourceName", new ParameterValue("dataSource1"));
-		// map.put("sys_username", new ParameterValue("administrator"));
-		// map.put("sys_password", new ParameterValue("000000"));
-		// map.put("parm2", new ParameterValue("parm2value"));
-		// ParameterValue pv = new ParameterValue("parm3value(0)");
-		// pv.addValue("parm3value(1)");
-		// map.put("parm3", pv);
-		// System.out.println(commitWithFiles(url, files, map));
+		testUploadFile();
+	}
 
-		// String url = "http://192.168.30.242:9998/dc//component/attachment!download.action?checkUser=false&period=year&downloadToken=20131216133708416271826477990113baa74dabf3dda852a826ed6bc9ec7747";
-		// url += "&sys_auto_authenticate=true&sys_username=administrator&sys_password=000000&dataSourceName=dataSource1";
-		// downloadFileSimple(url, new File("e:/aaaaa"));
-		System.setProperty("http.proxySet", "true");
-		System.setProperty("http.proxyHost", "127.0.0.1");
-		System.setProperty("http.proxyPort", "8888");
-
-		String url = "http://192.168.30.123:8082/dc-framework/component/attachment!test.action";
-		System.out.println("响应:" + getUrlResponse(url + "?aaa=中"));
-		// Map<String, ParameterValue> map = new HashMap<>();
-		// map.put("aaa", new ParameterValue("中"));
-		// System.out.println("响应：" + getUrlResponse(url, map));
+	private static void testUploadFile() throws IOException {
+		File file = new File("E:\\测试文件\\chart.js");
+		File file2 = new File("E:\\测试文件\\page.png");
+		File file3 = new File("E:\\测试文件\\QQ截图20131023100042.png");
+		String url = "http://127.0.0.1:8085/dc-base/bd/publisher!upload.action";
+		List<File> files = new ArrayList<File>();
+		files.add(file);
+		files.add(file2);
+		files.add(file3);
+		Map<String, ParameterValue> map = new HashMap<String, ParameterValue>();
+		map.put("sys_auto_authenticate", new ParameterValue("true"));
+		map.put("dataSourceName", new ParameterValue("dataSource1"));
+		map.put("sys_username", new ParameterValue("administrator"));
+		map.put("sys_password", new ParameterValue("000000"));
+		map.put("parm2", new ParameterValue("parm2value"));
+		ParameterValue pv = new ParameterValue("parm3value(0)");
+		pv.addValue("parm3value(1)");
+		map.put("parm3", pv);
+		System.out.println(commitWithFiles(url, files, map, true));
 	}
 
 	static {

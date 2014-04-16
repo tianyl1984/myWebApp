@@ -18,7 +18,7 @@
 	</select>
 	<input type="button" value="test1" onclick="test(0)">
 	<input type="button" value="test2" onclick="test(1)">
-	<ul style="height: 500px;overflow: auto">
+	<ul style="">
 	  	<li><a href="${path}/um/user!login.action">用户登录</a></li>
 	  	<li><a href="${path}/um/user!list.action">用户管理</a></li>
 	  	<li><a href="${path}/um/group!list.action">分组管理</a></li>
@@ -61,29 +61,8 @@
 	  	<li><a href="${path}/highcharts/demo.jsp">Highcharts测试</a></li>
 	</ul>
   
-  <div id="aaa">
-<c:set var="row" value="0"/>
-<c:set var="cell" value="0"/>
-<div>
-	<table>
-		<thead>
-			<tr>
-			<c:forEach begin="0" end="${cell }" var="index">
-				<td nowrap="nowrap">头部${index }</td>
-			</c:forEach>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach begin="0" end="${row }" var="index1">
-			<tr>
-			<c:forEach begin="0" end="${cell }" var="index">
-				<td nowrap="nowrap">row${index1}:内容${index }</td>
-			</c:forEach>
-			</tr>
-			</c:forEach>
-		</tbody>
-	</table>
-</div>
+  <div>
+	<em/内容内容内容内容内容内容/
   </div>
   
 	</body>

@@ -10,5 +10,9 @@ public class SystemPropertyDemo {
 		for (Object obj : prop.keySet()) {
 			System.out.println(obj.toString() + ":" + prop.getProperty(obj.toString()));
 		}
+		// 设置代理
+		System.setProperty("http.proxySet", "true");
+		System.setProperty("http.proxyHost", "127.0.0.1");
+		System.setProperty("http.proxyPort", "8888");
 	}
 }
