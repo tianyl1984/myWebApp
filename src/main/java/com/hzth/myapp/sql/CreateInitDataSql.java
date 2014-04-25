@@ -15,17 +15,17 @@ import com.hzth.myapp.core.util.UUID;
 public class CreateInitDataSql {
 
 	public static void main(String[] args) {
-		String moduleId = "20140311180153390003085470864414";
+		String moduleId = "20131023091823171427047778164178";
 		Connection conn = null;
 		Connection conn2 = null;
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.30.108", "dc_tm", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_wp_test", "sa", "hzth-801");
 			// 标准库连接
 			conn2 = SqlHelper.getSqlServerConnection("192.168.30.123", "dc_develop", "sa", "hzth-801");
-			// createModule(moduleId, conn);
-			// createOperation(moduleId, conn);
+			createModule(moduleId, conn);
+			createOperation(moduleId, conn);
 			// createConfiguration(conn, conn2);
 			// createDict(conn, conn2);
 			// createAttachmentconfig(conn, conn2);
@@ -35,17 +35,19 @@ public class CreateInitDataSql {
 			// tables.add("dataobject");
 			// createTable(tables, conn, conn2);
 
-			List<String> ids = new ArrayList<String>();
-			ids.add("20120918105110335114722069192961");
-			for (String id : ids) {
-				createOperationById(id, conn);
-			}
-
-			// List<String> ids2 = new ArrayList<String>();
-			// ids2.add("20130325191038222741788749418279");
-			// for (String id : ids2) {
-			// createDictById(id, conn);
+			// List<String> ids = new ArrayList<String>();
+			// ids.add("20140416145851683792237501789825");
+			// for (String id : ids) {
+			// createOperationById(id, conn);
 			// }
+
+			List<String> ids2 = new ArrayList<String>();
+			ids2.add("20131103140630562918815879887964");
+			ids2.add("20131023113412921855030432130383");
+			ids2.add("20131023094407328681392409251731");
+			for (String id : ids2) {
+				createDictById(id, conn);
+			}
 
 			// List<String> ids21 = new ArrayList<String>();
 			// ids21.add("20140415102549055794165695170050");
@@ -53,11 +55,11 @@ public class CreateInitDataSql {
 			// createDictValueById(id, conn);
 			// }
 
-			// List<String> ids3 = new ArrayList<String>();
-			// ids3.add("20140319183324484830323567121564");
-			// for (String id : ids3) {
-			// createAttachmentconfig(id, conn);
-			// }
+			List<String> ids3 = new ArrayList<String>();
+			ids3.add("20131024091557468051760055961393");
+			for (String id : ids3) {
+				createAttachmentconfig(id, conn);
+			}
 
 			// List<String> ids4 = new ArrayList<String>();
 			// ids4.add("20140328163434859727653541670692");

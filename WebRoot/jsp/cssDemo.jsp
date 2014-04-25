@@ -4,6 +4,7 @@
 <html>
 	<head>
     <title>Title</title>
+    <script type="text/javascript" src="${path }/common/js/jquery-1.6.2.js"></script>
 	<script type="text/javascript">
 
 	</script>
@@ -38,5 +39,11 @@
 		<div class="app-icon"></div><hr>
 		<div class="app-icon2"></div><hr>
 		<div class="app-icon3"></div><hr>
+		<div>
+			<div id="div1">div1</div>
+			<div id="div2">div2</div>
+			<div id="div3">div3</div>
+			<div id="div4">div4</div>
+		</div>
 	</body>
 </html>

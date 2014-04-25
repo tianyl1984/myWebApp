@@ -25,11 +25,11 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
 public class SvnDemo {
 
 	public static void main(String[] args) throws Exception {
-		// svnCheckoutAll();
-		// copyToTarget();
-		String projectName = "dc-addresslist";
-		svnCheckout(projectName);
-		copyToTarget(projectName);
+		svnCheckoutAll();
+		copyToTarget();
+		// String projectName = "dc-addresslist";
+		// svnCheckout(projectName);
+		// copyToTarget(projectName);
 		// findFile();
 	}
 

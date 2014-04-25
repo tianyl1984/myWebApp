@@ -27,7 +27,6 @@ public class UserService {
 	private IdentityService identityService;
 
 	public List<User> findAll() {
-		// return userDAO.findAllBySql();
 		return userDAO.findAll();
 	}
 
