@@ -589,7 +589,15 @@ public class DcUtil {
 	}
 
 	public static void main(String[] args) throws IOException {
-		testUploadFile();
+		// testUploadFile();
+		simpleTest();
+	}
+
+	private static void simpleTest() throws IOException {
+		String url = "http://127.0.0.1:8082/dc-framework/dm/demo!ueditorToCms.action";
+		Map<String, ParameterValue> map = new HashMap<>();
+		map.put("uuuu", new ParameterValue("aaaa"));
+		getUrlResponse(url, map);
 	}
 
 	private static void testUploadFile() throws IOException {
