@@ -33,4 +33,10 @@ public class UserDAO extends HibernateDAO<User> {
 		});
 	}
 
+	public User getUserByName(String name) {
+		String hql = "from User where name = ?";
+		List<User> userList = this.findByHql(hql, name);
+		return userList.size() > 0 ? userList.get(0) : null;
+	}
+
 }

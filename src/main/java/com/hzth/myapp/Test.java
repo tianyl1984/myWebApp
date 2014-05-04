@@ -1,16 +1,14 @@
 package com.hzth.myapp;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,10 +16,11 @@ import java.util.Map;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import com.hzth.myapp.core.util.StringUtil;
 import com.hzth.myapp.core.util.UUID;
+import com.hzth.myapp.sql.SqlHelper;
+import com.hzth.myapp.sql.model.TableInfo;
 
 public class Test {
 
@@ -59,28 +58,16 @@ public class Test {
 	}
 
 	public static void main(String[] args) throws Exception {
-		// m1();
-		// m2();
-		// m3();
-		// m4();
-		// System.out.println("aaa.a".contains("."));
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("e:\\a.txt"))));
-		List<String> list = new ArrayList<>();
-		String temp = null;
-		while ((temp = br.readLine()) != null) {
-			if (StringUtils.isNotBlank(temp)) {
-				for (String num : temp.split(",")) {
-					if (!list.contains(num.trim())) {
-						list.add(num.trim());
-					}
-				}
+		Connection conn = SqlHelper.getSqlServerSaConnection("127.0.0.1", "nls");
+		Map<String, TableInfo> map = SqlHelper.getTableInfo(conn);
+		for (String key : map.keySet()) {
+			if (key.startsWith("ex_")) {
+				System.out.println("DBCC DBREINDEX(" + key + ",'',80)");
 			}
 		}
-		Collections.sort(list);
-		for (String str : list) {
-			System.out.println(str);
-		}
 	}
+
+	private String aa = "aa";
 
 	private static void m4() throws Exception {
 		List<String> command = new ArrayList<String>();

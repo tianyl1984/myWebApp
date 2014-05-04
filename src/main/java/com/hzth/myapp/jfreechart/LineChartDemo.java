@@ -51,13 +51,22 @@ public class LineChartDemo extends ApplicationFrame {
 
 	private static JFreeChart createChart(CategoryDataset categorydataset) {
 		DefaultCategoryDataset data = new DefaultCategoryDataset();
-		data.addValue(1, "名次", "考试1");
-		data.addValue(5, "名次", "考试2");
-		data.addValue(10, "名次", "考试3");
-		data.addValue(6, "名次", "考试4");
+		data.addValue(0, "名次", "考试1");
+		data.addValue(0, "名次", "考试2");
+		data.addValue(0, "名次", "考试3");
+		data.addValue(0, "名次", "考试4");
+		// data.addValue(1, "名次", "考试1");
+		// data.addValue(5, "名次", "考试2");
+		// data.addValue(10, "名次", "考试3");
+		// data.addValue(6, "名次", "考试4");
 		JFreeChart chart = ChartFactory.createLineChart("班级排名趋势", "考试", "排名", data, PlotOrientation.VERTICAL, false, false, false);
-		chart.getCategoryPlot().getRangeAxis().setLowerMargin(0.3);
-		chart.getCategoryPlot().getRangeAxis().setUpperMargin(0.3);
+		// chart.getCategoryPlot().getRangeAxis().setLowerMargin(0.3);
+		// chart.getCategoryPlot().getRangeAxis().setUpperMargin(0.3);
+		ValueAxis valueAxis = chart.getCategoryPlot().getRangeAxis();
+		if (valueAxis instanceof NumberAxis) {
+			NumberAxis numAxis = (NumberAxis) valueAxis;
+			numAxis.setNumberFormatOverride(new DecimalFormat("0.00"));
+		}
 		CategoryPlot categoryPlot = (CategoryPlot) chart.getPlot();
 		NumberAxis numberAxis = (NumberAxis) categoryPlot.getRangeAxis();
 		numberAxis.setInverted(true);

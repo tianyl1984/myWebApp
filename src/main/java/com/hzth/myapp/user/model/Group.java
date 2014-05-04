@@ -1,6 +1,7 @@
 package com.hzth.myapp.user.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -30,7 +31,7 @@ public class Group implements Serializable {
 
 	@ManyToMany(targetEntity = com.hzth.myapp.user.model.User.class)
 	@JoinTable(name = "tb_group_user", joinColumns = { @JoinColumn(referencedColumnName = "id", name = "id_group") }, inverseJoinColumns = { @JoinColumn(referencedColumnName = "id", name = "id_user") })
-	private Set<User> users;
+	private Set<User> users = new HashSet<>();
 
 	public Group() {
 
@@ -66,6 +67,10 @@ public class Group implements Serializable {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public void addUser(User user) {
+		this.users.add(user);
 	}
 
 }

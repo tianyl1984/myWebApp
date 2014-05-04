@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
+  <process id="myProcess" isExecutable="true">
+    <startEvent id="sid-933C2A40-B974-4062-907C-031C9B52BFF0"/>
+    <userTask id="check1" name="部门经理审核" activiti:candidateGroups="g2"/>
+    <sequenceFlow id="sid-0A54209E-DB37-428D-B26F-B267ED1A2CA4" sourceRef="sid-933C2A40-B974-4062-907C-031C9B52BFF0" targetRef="check1"/>
+    <userTask id="check2" name="HR审核" activiti:candidateGroups="g3"/>
+    <sequenceFlow id="sid-19DA4F9E-906C-4060-8153-9BB43B699D35" sourceRef="check1" targetRef="check2"/>
+    <userTask id="sid-A1CE63A4-73FB-4F4C-B8B4-2AE3B8108AD8" name="第三次审核"/>
+    <sequenceFlow id="sid-F6E94E16-9851-4D0F-B3C3-48B08F0A33BB" sourceRef="check2" targetRef="sid-A1CE63A4-73FB-4F4C-B8B4-2AE3B8108AD8"/>
+    <endEvent id="sid-4A032A26-C8C3-448B-A360-75DF705468BD"/>
+    <sequenceFlow id="sid-94751FC8-E82E-4BFF-B118-4F90B31C4F78" sourceRef="sid-A1CE63A4-73FB-4F4C-B8B4-2AE3B8108AD8" targetRef="sid-4A032A26-C8C3-448B-A360-75DF705468BD"/>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_myProcess">
+    <bpmndi:BPMNPlane bpmnElement="myProcess" id="BPMNPlane_myProcess">
+      <bpmndi:BPMNShape bpmnElement="sid-933C2A40-B974-4062-907C-031C9B52BFF0" id="BPMNShape_sid-933C2A40-B974-4062-907C-031C9B52BFF0">
+        <omgdc:Bounds height="30.0" width="30.0" x="167.8142986549209" y="223.78474474748498"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="check1" id="BPMNShape_check1">
+        <omgdc:Bounds height="80.0" width="100.0" x="242.8142986549209" y="198.78474474748498"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="check2" id="BPMNShape_check2">
+        <omgdc:Bounds height="80.0" width="100.0" x="387.8142986549209" y="198.78474474748498"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-A1CE63A4-73FB-4F4C-B8B4-2AE3B8108AD8" id="BPMNShape_sid-A1CE63A4-73FB-4F4C-B8B4-2AE3B8108AD8">
+        <omgdc:Bounds height="80.0" width="100.0" x="521.4226497698585" y="347.61509984657226"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-4A032A26-C8C3-448B-A360-75DF705468BD" id="BPMNShape_sid-4A032A26-C8C3-448B-A360-75DF705468BD">
+        <omgdc:Bounds height="28.0" width="28.0" x="666.4226497698585" y="373.61509984657226"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-0A54209E-DB37-428D-B26F-B267ED1A2CA4" id="BPMNEdge_sid-0A54209E-DB37-428D-B26F-B267ED1A2CA4">
+        <omgdi:waypoint x="197.8142986549209" y="238.78474474748498"/>
+        <omgdi:waypoint x="242.8142986549209" y="238.78474474748498"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-94751FC8-E82E-4BFF-B118-4F90B31C4F78" id="BPMNEdge_sid-94751FC8-E82E-4BFF-B118-4F90B31C4F78">
+        <omgdi:waypoint x="621.4226497698585" y="387.61509984657226"/>
+        <omgdi:waypoint x="666.4226497698585" y="387.61509984657226"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-F6E94E16-9851-4D0F-B3C3-48B08F0A33BB" id="BPMNEdge_sid-F6E94E16-9851-4D0F-B3C3-48B08F0A33BB">
+        <omgdi:waypoint x="487.8142986549209" y="238.4901392682332"/>
+        <omgdi:waypoint x="571.0" y="238.0"/>
+        <omgdi:waypoint x="571.3096532152883" y="347.61509984657226"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-19DA4F9E-906C-4060-8153-9BB43B699D35" id="BPMNEdge_sid-19DA4F9E-906C-4060-8153-9BB43B699D35">
+        <omgdi:waypoint x="342.8142986549209" y="238.78474474748498"/>
+        <omgdi:waypoint x="387.8142986549209" y="238.78474474748498"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -24,6 +24,7 @@ import org.apache.struts2.convention.annotation.ParentPackage;
 import com.hzth.myapp.core.util.DateUtil;
 import com.hzth.myapp.core.util.JsonUtil;
 import com.hzth.myapp.core.util.StringUtil;
+import com.hzth.myapp.core.util.WebUtil;
 import com.hzth.myapp.core.web.MyBaseAction;
 
 @ParentPackage(value = "struts-default")
@@ -109,5 +110,14 @@ public class PojoAction extends MyBaseAction {
 		}
 		String jsonData = JsonUtil.collection2Json(data);
 		this.print(jsonData);
+	}
+
+	public void corDemo() {
+		WebUtil.printHeader(getRequest());
+		String data = this.getRequest().getParameter("data");
+		System.out.println(data);
+
+		this.getResponse().setHeader("Access-Control-Allow-Origin", "*");
+		this.print("OK!!!");
 	}
 }

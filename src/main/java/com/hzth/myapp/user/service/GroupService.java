@@ -64,6 +64,9 @@ public class GroupService {
 				activitiGroup.setName(group.getName());
 				activitiGroup.setType(group.getCode());
 				identityService.saveGroup(activitiGroup);
+				for (User user : group.getUsers()) {
+					identityService.createMembership(user.getId(), groupId);
+				}
 			}
 		}
 	}

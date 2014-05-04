@@ -127,15 +127,17 @@
     <property name="jobExecutorActivate" value="false" />
     <property name="databaseType" value="mssql" />
     <property name="history" value="full" />
+    <property name="activityFontName" value="宋体"/>
+    <property name="labelFontName" value="宋体"/>
     <property name="idGenerator">
 <!--     	<bean class="org.activiti.engine.impl.persistence.StrongUuidGenerator"></bean> -->
     	<bean class="com.hzth.myapp.leave.util.MyIdGenerator"></bean>
     </property>
-    <property name="customFormTypes">
-    	<list>
-		    <bean class="com.hzth.myapp.leave.formType.FileFormType"></bean>
-    	</list>
-    </property>
+<!--     <property name="customFormTypes"> -->
+<!--     	<list> -->
+<!-- 		    <bean class="com.hzth.myapp.leave.formType.FileFormType"></bean> -->
+<!--     	</list> -->
+<!--     </property> -->
   </bean>
   
   <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">

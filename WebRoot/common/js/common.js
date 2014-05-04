@@ -18,4 +18,19 @@ function replace(str){
 
 $(document).ready(function(){
 	$("body").prepend("<input type='button' value='首页' onclick='window.location.href=\"" + CONTEXTPATH + "\"' ><br>");
-})
+});
+
+(function($){
+	
+	$.fn.outerHTML = function() {
+		return (!this.length) ? this : (this[0].outerHTML ||
+		(function(el) {
+			var div = document.createElement('div');
+			div.appendChild(el.cloneNode(true));
+			var contents = div.innerHTML;
+			div = null;
+			return contents;
+		})(this[0]));
+	};
+	
+})(jQuery);

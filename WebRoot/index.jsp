@@ -48,6 +48,7 @@
 	  	<li><a href="${path}/struts2/demo.jsp">测试struts2自动组装提交值</a></li>
 	  	<li><a href="${path}/pqgrid/demo.jsp">pqgrid测试</a></li>
 	  	<li><a href="${path}/print/demo.jsp">打印测试</a></li>
+	  	<li><a href="${path}/jsp/corDemo.jsp">跨域请求测试</a></li>
 	  	<li><a href="${path}/jqplot/demo.jsp">jqplot测试</a></li>
 	  	<li><a href="${path}/validate/demo.jsp">js验证框架</a></li>
 	  	<li><a href="javascript:void(0)" onclick="a3()">弹出test.jsp</a></li>

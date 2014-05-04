@@ -291,12 +291,12 @@
 	<dependency>
       <groupId>org.activiti</groupId>
       <artifactId>activiti-engine</artifactId>
-      <version>5.9</version>
+      <version>5.15.1</version>
     </dependency>
 	<dependency>
       <groupId>org.activiti</groupId>
       <artifactId>activiti-spring</artifactId>
-      <version>5.9</version>
+      <version>5.15.1</version>
     </dependency>
 <!-- 	<dependency> -->
 <!-- 	  <groupId>com.fasterxml.uuid</groupId> -->
@@ -433,16 +433,16 @@
 	</dependency>
 
 	<!-- itext -->
-<!-- 	<dependency> -->
-<!-- 	  <groupId>com.lowagie</groupId> -->
-<!-- 	  <artifactId>itext</artifactId> -->
-<!-- 	  <version>2.1.7</version> -->
-<!-- 	</dependency> -->
-<!-- 	<dependency> -->
-<!-- 	  <groupId>com.lowagie</groupId> -->
-<!-- 	  <artifactId>itext-rtf</artifactId> -->
-<!-- 	  <version>2.1.7</version> -->
-<!-- 	</dependency> -->
+	<dependency>
+	  <groupId>com.lowagie</groupId>
+	  <artifactId>itext</artifactId>
+	  <version>2.1.7</version>
+	</dependency>
+	<dependency>
+	  <groupId>com.lowagie</groupId>
+	  <artifactId>itext-rtf</artifactId>
+	  <version>2.1.7</version>
+	</dependency>
   <!-- javaee -->
 <!--     <dependency> -->
 <!--       <groupId>org.apache.openejb</groupId> -->

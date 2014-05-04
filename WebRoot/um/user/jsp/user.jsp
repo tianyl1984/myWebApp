@@ -6,8 +6,20 @@
     <title>user.jsp</title>
     <%@ include file="/common/jsp/htmlHeader.jsp"%>
 	<script type="text/javascript">
+	
 		function goUrl(url){
 			location.href = url;
+		}
+		
+		function initData(){
+			$.ajax({
+				type:"POST",
+				url:"${path}/um/user!initData.action",
+				dataType:"text",
+				success:function(data){
+					alert(data);
+				}
+			});
 		}
 	</script>
   </head>
@@ -18,6 +30,7 @@
   			<option value="user2" <c:if test="${userType eq 'user2'}">selected="selected"</c:if>>用户2</option>
   			<option value="user3" <c:if test="${userType eq 'user3'}">selected="selected"</c:if>>用户3</option>
   		</select>
+  		<input type="button" value="初始化数据" onclick="initData()">
   	</form>
 	<table>
 		<thead>

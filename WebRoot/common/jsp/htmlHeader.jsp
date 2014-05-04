@@ -19,6 +19,7 @@ var CONTEXTPATH = '${path}';
 <script type="text/javascript" src="${path }/common/js/artdialog/artDialog.drag.js"></script>
 <script type="text/javascript" src="${path }/common/js/artdialog/artDialog.iframeTools.js"></script>
 <script type="text/javascript" src="${path }/common/js/artdialog/artDialog.JQuery.js"></script>
+<script type="text/javascript" src="${path }/common/js/qtip/jquery.qtip.js"></script>
 
 <!-- artdialog5.0 -->
 <%-- <link href="${path }/common/js/artdialog5.0/skins/default.css" rel="stylesheet" /> --%>
@@ -30,6 +31,7 @@ var CONTEXTPATH = '${path}';
 <link rel="stylesheet" href="${path }/common/css/box.css" />
 <link rel="stylesheet" href="${path }/common/css/table.css" />
 <link rel="stylesheet" href="${path }/common/css/popupLayer/css/default.css" />
+<link rel="stylesheet" href="${path }/common/js/qtip/jquery.qtip.css" />
 <script>
 jQuery.ajaxSetup({
 	cache : false,

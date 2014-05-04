@@ -86,4 +86,43 @@ public class UserService {
 		}
 	}
 
+	public User getUserByName(String name) {
+		return userDAO.getUserByName(name);
+	}
+
+	public void initData() {
+		User u1 = new User();
+		u1.setName("u1");
+		saveOrUpdate(u1);
+
+		User u2 = new User();
+		u2.setName("u2");
+		saveOrUpdate(u2);
+
+		User u3 = new User();
+		u3.setName("u3");
+		saveOrUpdate(u3);
+
+		Group g1 = new Group();
+		g1.setName("普通职员");
+		g1.setCode("g1");
+		g1.addUser(u1);
+		g1.addUser(u2);
+		g1.addUser(u3);
+		groupService.saveOrUpdate(g1);
+
+		Group g2 = new Group();
+		g2.setName("部门经理");
+		g2.setCode("g2");
+		g2.addUser(u2);
+		groupService.saveOrUpdate(g2);
+
+		Group g3 = new Group();
+		g3.setName("HR经理");
+		g3.setCode("g3");
+		g3.addUser(u3);
+		groupService.saveOrUpdate(g3);
+
+	}
+
 }

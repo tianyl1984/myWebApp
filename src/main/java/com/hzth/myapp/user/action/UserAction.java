@@ -106,6 +106,11 @@ public class UserAction extends MyBaseAction {
 		pw.close();
 	}
 
+	public void initData() {
+		userService.initData();
+		this.print("OK");
+	}
+
 	private String id;
 
 	private User user;
