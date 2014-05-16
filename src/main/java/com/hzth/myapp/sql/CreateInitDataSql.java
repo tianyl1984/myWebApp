@@ -21,7 +21,7 @@ public class CreateInitDataSql {
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_vd_test", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_vd", "sa", "hzth-801");
 			// 标准库连接
 			conn2 = SqlHelper.getSqlServerConnection("192.168.30.123", "dc_develop", "sa", "hzth-801");
 			// createModule(moduleId, conn);
@@ -35,11 +35,11 @@ public class CreateInitDataSql {
 			// tables.add("dataobject");
 			// createTable(tables, conn, conn2);
 
-			List<String> ids = new ArrayList<String>();
-			ids.add("20140429112917923429077093220254");
-			for (String id : ids) {
-				createOperationById(id, conn);
-			}
+			// List<String> ids = new ArrayList<String>();
+			// ids.add("20140514133842028075408497156245");
+			// for (String id : ids) {
+			// createOperationById(id, conn);
+			// }
 
 			// List<String> ids2 = new ArrayList<String>();
 			// ids2.add("20140402150838009203527665644808");
@@ -60,7 +60,8 @@ public class CreateInitDataSql {
 			// }
 
 			// List<String> ids4 = new ArrayList<String>();
-			// ids4.add("20140328163434859727653541670692");
+			// ids4.add("20140423104006253220207883480305");
+			// ids4.add("20140423163915415291853576272885");
 			// for (String id : ids4) {
 			// createConfiguration(id, conn);
 			// }

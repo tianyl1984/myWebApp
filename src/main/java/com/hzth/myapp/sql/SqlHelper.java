@@ -369,4 +369,15 @@ public class SqlHelper {
 			}
 		}
 	}
+
+	public static List<String> executeSimpleSqlAndCloseConn(Connection conn, String sql) throws Exception {
+		PreparedStatement ps = conn.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		List<String> result = new ArrayList<>();
+		while (rs.next()) {
+			result.add(rs.getString(1));
+		}
+		close(conn);
+		return result;
+	}
 }

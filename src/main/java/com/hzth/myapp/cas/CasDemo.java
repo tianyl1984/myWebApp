@@ -14,7 +14,7 @@ import com.hzth.myapp.web.NetUtil;
 // 2.浏览器跳转到cas的login，用户登录
 // 3.cas server设置浏览器302跳转到http://127.0.0.1:8090/casClient/index?ticket=ST-21-fNLJGiiSgfoocxybro2p-cas01.example.org
 // 4.浏览器跳转到cas client服务。有了ticket
-// 5.cas client请求地址http://127.0.0.1:8094/cas/serviceValidate?ticket=" + ticket + "&service=http%3A%2F%2F127.0.0.1%3A8090%2FcasClient%2F，获取到content
+// 5.cas client请求地址http://127.0.0.1:8094/cas/serviceValidate?pgtUrl=&ticket=" + ticket + "&service=http%3A%2F%2F127.0.0.1%3A8090%2FcasClient%2F，获取到content
 // 6.从content中解析出用户登录信息
 // 7.保存session，以后再访问走session
 

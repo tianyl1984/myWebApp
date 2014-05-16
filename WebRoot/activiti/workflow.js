@@ -33,11 +33,20 @@ function graphTrace(pid) {
                 height: (v.height - 3),
             });
 
+            //当前
             if (v.currentActiviti) {
                 $border.addClass('ui-corner-all-12').css({
                     border: '3px solid red'
                 });
             }
+            
+            //历史
+            if (v.inHistory && !v.currentActiviti) {
+                $border.addClass('ui-corner-all-12').css({
+                    border: '3px solid green'
+                });
+            }
+            
             positionHtml += $positionDiv.outerHTML() + $border.outerHTML();
             varsArray[varsArray.length] = v.vars;
         });

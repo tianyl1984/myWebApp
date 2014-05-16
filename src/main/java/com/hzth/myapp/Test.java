@@ -7,7 +7,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +18,6 @@ import org.apache.commons.io.IOUtils;
 
 import com.hzth.myapp.core.util.StringUtil;
 import com.hzth.myapp.core.util.UUID;
-import com.hzth.myapp.sql.SqlHelper;
-import com.hzth.myapp.sql.model.TableInfo;
 
 public class Test {
 
@@ -58,13 +55,55 @@ public class Test {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Connection conn = SqlHelper.getSqlServerSaConnection("127.0.0.1", "nls");
-		Map<String, TableInfo> map = SqlHelper.getTableInfo(conn);
-		for (String key : map.keySet()) {
-			if (key.startsWith("ex_")) {
-				System.out.println("DBCC DBREINDEX(" + key + ",'',80)");
+		// m3();
+		// Socket socket = new Socket("192.168.191.2", 9999);
+		// PrintWriter pw = new PrintWriter(socket.getOutputStream());
+		// pw.println("ls");
+		// pw.flush();
+		// InputStream in = socket.getInputStream();
+		// BufferedReader br = new BufferedReader(new InputStreamReader(in, "utf-8"));
+		// System.out.println(br.readLine());
+		// socket.close();
+
+		Process process = Runtime.getRuntime().exec("cmd");
+		OutputStream os = process.getOutputStream();
+		os.write("ls\n".getBytes());
+		os.flush();
+
+		InputStream in = process.getInputStream();
+		InputStream in2 = process.getErrorStream();
+		toString(in, "gbk");
+		toString(in2, "gbk");
+
+		os.write("exit".getBytes());
+		os.flush();
+
+		// process.waitFor();
+		// process.destroy();
+	}
+
+	public static void toString(final InputStream in, final String charset) throws Exception {
+
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					BufferedReader br = new BufferedReader(new InputStreamReader(in, charset));
+					String result = "";
+					String temp = null;
+					while ((temp = br.readLine()) != null) {
+						System.out.println(temp);
+						result += temp;
+					}
+					System.out.println(result);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
 			}
-		}
+		}).start();
+
 	}
 
 	private String aa = "aa";
@@ -137,7 +176,7 @@ public class Test {
 
 		String params = JSONObject.fromObject(map).toString();
 
-		URLConnection connection = new URL("http://127.0.0.1:7777").openConnection();
+		URLConnection connection = new URL("http://localhost:90").openConnection();
 		connection.setDoOutput(true);
 
 		OutputStream out = connection.getOutputStream();

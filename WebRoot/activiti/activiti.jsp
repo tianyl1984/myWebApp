@@ -80,6 +80,18 @@
 			 });
 		}
 		
+		//回退任务
+		function rollback(taskId){
+			$.ajax({
+			 	type: "POST",
+			 	dataType : "text",
+			  	url: '${path}/fr/financialReport!rollbackTask.action?taskId=' + taskId,
+			  	success: function(data){
+			  		alert(data)
+			  	}
+			 });
+		}
+		
 		function searchTaskAssignee(){
 			$("#assignee").empty();
 			$.ajax({
@@ -91,6 +103,7 @@
 			  			var str1 = "<tr><td><input type='button' value='查看流程图' onclick=graphTrace('" + this.processInstanceId + "')>";
 			  			str1 += "<input type='button' value='查看流程图2' onclick=graphTrace2('" + this.processInstanceId + "')>";
 			  			str1 += "<input type='button' value='完成' onclick=complate('" + this.id + "')>";
+			  			str1 += "<input type='button' value='回退任务' onclick=rollback('" + this.id + "')>";
 			  			str1 += "</td>";
 			  			str1 += "<td>" + this.id + "</td><td>"+ this.name +"</td><td>" + this.owner + "</td><td>" + this.assignee + "</td>";
 			  			str1 += "<td>" + this.parentTaskId+ "</td><td>" + this.processDefinitionId + "</td>";

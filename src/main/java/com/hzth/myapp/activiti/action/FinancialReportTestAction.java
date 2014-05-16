@@ -13,17 +13,21 @@ import net.sf.json.JSONObject;
 
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.FormService;
+import org.activiti.engine.HistoryService;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.delegate.Expression;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
 import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramGenerator;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.delegate.ActivityBehavior;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.impl.pvm.process.TransitionImpl;
 import org.activiti.engine.impl.task.TaskDefinition;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -73,6 +77,9 @@ public class FinancialReportTestAction extends MyBaseAction {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private HistoryService historyService;
 
 	public void deploy() {
 		Deployment deployment = repositoryService.createDeployment().addClasspathResource("process/myProcess.bpmn20.xml")
@@ -159,6 +166,48 @@ public class FinancialReportTestAction extends MyBaseAction {
 		this.print("OK");
 	}
 
+	public void rollbackTask() {
+		String taskId = this.getRequest().getParameter("taskId");
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+		String taskDefinKey = task.getTaskDefinitionKey();
+		ProcessDefinitionEntity processDefinition = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService).getDeployedProcessDefinition(task.getProcessDefinitionId());
+		List<ActivityImpl> activitiList = processDefinition.getActivities();// 获得当前任务的所有节点
+		ActivityImpl currActiviti = null;// 当前活动节点
+		ActivityImpl destActiviti = null;// 驳回目标节点
+		for (ActivityImpl activity : activitiList) {
+			if (activity.getId().equals(taskDefinKey)) {
+				currActiviti = activity;
+			}
+			if (activity.getId().equals("check2")) {
+				destActiviti = activity;
+			}
+			if (currActiviti != null && destActiviti != null) {
+				break;
+			}
+		}
+		// 保存当前活动节点的流程参数
+		List<PvmTransition> hisPvmTransitionList = new ArrayList<PvmTransition>(0);
+		for (PvmTransition pvmTransition : currActiviti.getOutgoingTransitions()) {
+			hisPvmTransitionList.add(pvmTransition);
+		}
+		// 清空当前活动几点的所有流出项
+		currActiviti.getOutgoingTransitions().clear();
+		// 为当前节点动态创建新的流出项
+		TransitionImpl newTransitionImpl = currActiviti.createOutgoingTransition();
+		// 为当前活动节点新的流出目标指定流程目标
+		newTransitionImpl.setDestination(destActiviti);
+		// 执行当前任务
+		taskService.complete(taskId);
+
+		// 清除目标节点的新流入项
+		destActiviti.getIncomingTransitions().remove(newTransitionImpl);
+		// 清除原活动节点的临时流程项
+		currActiviti.getOutgoingTransitions().clear();
+		// 还原原活动节点流出项参数
+		currActiviti.getOutgoingTransitions().addAll(hisPvmTransitionList);
+		this.print("回退成功");
+	}
+
 	/**
 	 * 显示流程图
 	 */
@@ -193,21 +242,12 @@ public class FinancialReportTestAction extends MyBaseAction {
 		ProcessDefinitionEntity processDefinition = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService).getDeployedProcessDefinition(processInstance.getProcessDefinitionId());
 		List<ActivityImpl> activitiList = processDefinition.getActivities();// 获得当前任务的所有节点
 
-		List<Map<String, Object>> activityInfos = new ArrayList<Map<String, Object>>();
 		for (ActivityImpl activity : activitiList) {
-
-			boolean currentActiviti = false;
 			String id = activity.getId();
-
 			// 当前节点
 			if (id.equals(activityId)) {
-				currentActiviti = true;
 				highLightedActivities.add(id);
 			}
-
-			Map<String, Object> activityImageInfo = packageSingleActivitiInfo(activity, processInstance, currentActiviti);
-
-			activityInfos.add(activityImageInfo);
 		}
 
 		InputStream resourceAsStream = ProcessDiagramGenerator.generateDiagram(bpmnModel, "png", highLightedActivities);
@@ -234,20 +274,29 @@ public class FinancialReportTestAction extends MyBaseAction {
 		ProcessDefinitionEntity processDefinition = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService).getDeployedProcessDefinition(processInstance.getProcessDefinitionId());
 		List<ActivityImpl> activitiList = processDefinition.getActivities();// 获得当前任务的所有节点
 
+		// 历史
+		List<String> hisActivityIds = new ArrayList<>();
+		List<HistoricActivityInstance> hisActivityInstanceList = historyService.createHistoricActivityInstanceQuery().processInstanceId(processInstanceId).list();
+		for (HistoricActivityInstance hai : hisActivityInstanceList) {
+			if (hai.getEndTime() != null) {
+				hisActivityIds.add(hai.getActivityId());
+			}
+		}
+
 		List<Map<String, Object>> activityInfos = new ArrayList<Map<String, Object>>();
 		int minX = Integer.MAX_VALUE;
 		int minY = Integer.MAX_VALUE;
 		for (ActivityImpl activity : activitiList) {
-
 			boolean currentActiviti = false;
 			String id = activity.getId();
-
 			// 当前节点
 			if (id.equals(activityId)) {
 				currentActiviti = true;
 			}
 
-			Map<String, Object> activityImageInfo = packageSingleActivitiInfo(activity, processInstance, currentActiviti);
+			boolean inHistory = hisActivityIds.contains(id);
+
+			Map<String, Object> activityImageInfo = packageSingleActivitiInfo(activity, processInstance, currentActiviti, inHistory);
 
 			activityInfos.add(activityImageInfo);
 
@@ -260,7 +309,6 @@ public class FinancialReportTestAction extends MyBaseAction {
 		}
 		minX = minX - 5;
 		minY = minY - 5;
-		System.out.println("x:" + minX + ",y:" + minY);
 
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("top", -minY);
@@ -276,12 +324,14 @@ public class FinancialReportTestAction extends MyBaseAction {
 	 * @param activity
 	 * @param processInstance
 	 * @param currentActiviti
+	 * @param inHistory
 	 * @return
 	 */
-	private Map<String, Object> packageSingleActivitiInfo(ActivityImpl activity, ProcessInstance processInstance, boolean currentActiviti) throws Exception {
+	private Map<String, Object> packageSingleActivitiInfo(ActivityImpl activity, ProcessInstance processInstance, boolean currentActiviti, boolean inHistory) throws Exception {
 		Map<String, Object> vars = new HashMap<String, Object>();
 		Map<String, Object> activityInfo = new HashMap<String, Object>();
 		activityInfo.put("currentActiviti", currentActiviti);
+		activityInfo.put("inHistory", inHistory);
 		activityInfo.put("x", activity.getX());
 		activityInfo.put("y", activity.getY());
 		activityInfo.put("width", activity.getWidth());
