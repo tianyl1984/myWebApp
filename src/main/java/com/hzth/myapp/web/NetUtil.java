@@ -214,6 +214,51 @@ public class NetUtil {
 		return result;
 	}
 
+	public static String getUrlResponse(String url, String cookie) throws IOException {
+		HttpURLConnection conn = (HttpURLConnection) (new URL(checkUrl(url)).openConnection());
+		if (StringUtils.isNotBlank(cookie)) {// 设置cookie
+			conn.setRequestProperty("Cookie", cookie);
+		}
+
+		conn.setDoInput(true);
+		// POST必须大写
+		conn.setRequestMethod("GET");
+		conn.setUseCaches(false);
+		// 仅对当前请求自动重定向
+		conn.setInstanceFollowRedirects(false);
+		// header 设置编码
+		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+		// 连接
+		conn.connect();
+
+		if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+			System.out.println(conn.getResponseCode());
+			Map<String, List<String>> map = conn.getHeaderFields();
+			for (String key : map.keySet()) {
+				List<String> strList = map.get(key);
+				String msg = key;
+				if (strList != null) {
+					msg += ":";
+					for (String str : strList) {
+						msg += str;
+					}
+				}
+				System.out.println(msg);
+			}
+			// throw new IOException();
+		}
+		BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		String result = "";
+		String temp = null;
+		while ((temp = reader.readLine()) != null) {
+			result += temp + "\n";
+		}
+
+		reader.close();
+		conn.disconnect();
+		return result;
+	}
+
 	public static String getRedirectUrl(String url, String cookies, Map<String, ParameterValue> map, boolean isGet) throws IOException {
 		HttpURLConnection conn = (HttpURLConnection) (new URL(checkUrl(url)).openConnection());
 		conn.setDoInput(true);
@@ -325,6 +370,12 @@ public class NetUtil {
 		out.writeBytes(param);
 		out.flush();
 		out.close();
+	}
+
+	public static final void printParameters(Map<String, ParameterValue> parMap) {
+		for (String key : parMap.keySet()) {
+			System.out.println(key + ":" + parMap.get(key).getValueStr());
+		}
 	}
 
 	public static void main(String[] args) throws Exception {

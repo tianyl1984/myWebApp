@@ -14,14 +14,15 @@ import com.hzth.myapp.core.util.UUID;
 
 public class CreateInitDataSql {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		String moduleId = "20131023091823171427047778164178";
 		Connection conn = null;
 		Connection conn2 = null;
+		// System.setOut(new PrintStream(new File("e:/a.txt")));
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_vd", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_fe_test", "sa", "hzth-801");
 			// 标准库连接
 			conn2 = SqlHelper.getSqlServerConnection("192.168.30.123", "dc_develop", "sa", "hzth-801");
 			// createModule(moduleId, conn);
@@ -31,18 +32,23 @@ public class CreateInitDataSql {
 			// createAttachmentconfig(conn, conn2);
 			// createOperate(conn, conn2);
 
+			// System.setOut(new PrintStream("e:/sql.txt"));
+
 			// List<String> tables = new ArrayList<String>();
-			// tables.add("dataobject");
+			// tables.add("province");
+			// tables.add("city");
+			// tables.add("district");
 			// createTable(tables, conn, conn2);
 
-			// List<String> ids = new ArrayList<String>();
-			// ids.add("20140514133842028075408497156245");
-			// for (String id : ids) {
-			// createOperationById(id, conn);
-			// }
+			List<String> ids = new ArrayList<String>();
+			ids.add("20140614144417000602691588430339");
+			ids.add("20140612090216299653869934434656");
+			for (String id : ids) {
+				createOperationById(id, conn);
+			}
 
 			// List<String> ids2 = new ArrayList<String>();
-			// ids2.add("20140402150838009203527665644808");
+			// ids2.add("20140526141418273472200975310215");
 			// for (String id : ids2) {
 			// createDictById(id, conn);
 			// }
@@ -54,7 +60,7 @@ public class CreateInitDataSql {
 			// }
 
 			// List<String> ids3 = new ArrayList<String>();
-			// ids3.add("20131024091557468051760055961393");
+			// ids3.add("20140526142221385220397709139451");
 			// for (String id : ids3) {
 			// createAttachmentconfig(id, conn);
 			// }
@@ -67,16 +73,73 @@ public class CreateInitDataSql {
 			// }
 
 			// List<String> ids5 = new ArrayList<String>();
-			// ids5.add("20131023095143068938383947685133");
+			// ids5.add("20130606144207905516375601145758");
 			// for (String id : ids5) {
-			// updateSqlWithTableAndId("bd_operation", id, conn);
+			// updateSqlWithTableAndId("fw_attachmentconfig", id, conn);
 			// }
+
+			// String sql = "select * from qn_optionresults where id_questionresults in (select qq.id from qn_questionresults qq where id_question='20140520135758215421565988632372')";
+			// createInsertSql(conn, sql, "qn_optionresults");
 			System.out.println("-----end-----");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			SqlHelper.close(conn);
 			SqlHelper.close(conn2);
+		}
+	}
+
+	private static void createInsertSql(Connection conn, String sql, String table) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			ResultSetMetaData metaData = rs.getMetaData();
+			List<String> labelList = new ArrayList<String>();
+			Map<String, Integer> typeMap = new HashMap<String, Integer>();
+			for (int col = 1; col <= metaData.getColumnCount(); col++) {
+				String label = metaData.getColumnLabel(col);
+				labelList.add(label);
+				typeMap.put(label, metaData.getColumnType(col));
+			}
+			while (rs.next()) {
+				String sql2 = "insert into " + table + "(";
+				for (String label : labelList) {
+					sql2 += label + ",";
+				}
+				sql2 = sql2.substring(0, sql2.length() - 1);
+				sql2 += ") values(";
+				for (String label : labelList) {
+					if (typeMap.get(label) - Types.INTEGER == 0) {// int型
+						Integer intResult = rs.getInt(label);
+						if (rs.wasNull()) {
+							intResult = null;
+						}
+						sql2 += intResult + ",";
+					} else if (typeMap.get(label) - Types.CHAR == 0 || typeMap.get(label) - Types.VARCHAR == 0) {// char varchar
+						String str = rs.getString(label);
+						if (rs.wasNull()) {
+							str = null;
+						}
+						if (str == null) {
+							sql2 += str + ",";
+						} else {
+							sql2 += "'" + str + "',";
+						}
+					} else {
+						throw new RuntimeException("不支持的数据类型：" + typeMap.get(label));
+					}
+				}
+				sql2 = sql2.substring(0, sql2.length() - 1);
+				sql2 += ");";
+				System.out.println(sql2);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			SqlHelper.close(rs);
+			SqlHelper.close(ps);
 		}
 	}
 

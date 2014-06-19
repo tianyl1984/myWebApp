@@ -66,6 +66,10 @@ public class SqlHelper {
 		return getSqlServerConnection(ip, database, "sa", "hzth-801");
 	}
 
+	public static Connection getSqlServerSaLocalConnection(String database) throws ClassNotFoundException, SQLException {
+		return getSqlServerConnection("127.0.0.1", database, "sa", "hzth-801");
+	}
+
 	public static Connection getSqlServerConnection(String ip, String database, String userName, String password) throws ClassNotFoundException, SQLException {
 		String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 		String url = "jdbc:sqlserver://" + ip + ";database=" + database + ";sendStringParametersAsUnicode=false";
@@ -87,6 +91,11 @@ public class SqlHelper {
 	public static Connection getConnection(String driver, String url, String userName, String password) throws ClassNotFoundException, SQLException {
 		Class.forName(driver);
 		return DriverManager.getConnection(url, userName, password);
+	}
+
+	public static ResultSet getResultSet(Connection conn, String sql) throws ClassNotFoundException, SQLException {
+		PreparedStatement ps = conn.prepareStatement(sql);
+		return ps.executeQuery();
 	}
 
 	public static void close(Connection conn) {
@@ -370,7 +379,7 @@ public class SqlHelper {
 		}
 	}
 
-	public static List<String> executeSimpleSqlAndCloseConn(Connection conn, String sql) throws Exception {
+	public static List<String> simpleSqlQueryAndCloseConn(Connection conn, String sql) throws Exception {
 		PreparedStatement ps = conn.prepareStatement(sql);
 		ResultSet rs = ps.executeQuery();
 		List<String> result = new ArrayList<>();
@@ -379,5 +388,12 @@ public class SqlHelper {
 		}
 		close(conn);
 		return result;
+	}
+
+	public static void executeSimpleSqlsAndCloseConn(Connection conn, String... sqls) throws Exception {
+		for (String sql : sqls) {
+			conn.prepareStatement(sql).execute();
+		}
+		close(conn);
 	}
 }

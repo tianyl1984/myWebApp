@@ -1,11 +1,11 @@
 package com.hzth.myapp.core.util;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Properties;
@@ -61,25 +61,27 @@ public class PropertyUtil {
 		return str;
 	}
 
-	/**
-	 * 保存属性文件的值
-	 */
-	public static void storeProperty(String fileName, String key, String value) {
-		ClassLoader cl = PropertyUtil.class.getClassLoader();
-		String common = "gen date:" + DateUtil.getCurrentDate();
+	public static String getProperty2(String fileName, String name) {
 		InputStream is = null;
-		OutputStream out = null;
+		String str = null;
 		try {
-			is = new FileInputStream(cl.getResource("/" + fileName).getFile());
-			Properties props = new Properties();
-			props.load(is);
-			out = new FileOutputStream(cl.getResource("/" + fileName).getFile());
-			if (out != null) {
-				props.setProperty(key, value);
-				props.store(out, common);
+			is = new FileInputStream(new File(fileName));
+			if (is != null) {
+				Properties props = new Properties();
+				try {
+					props.load(is);
+				} catch (IOException e) {
+					props = null;
+				}
+				if (props != null) {
+					str = props.getProperty(name);
+					if (str != null) {
+						str = str.trim();
+					}
+				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
 		} finally {
 			if (is != null) {
 				try {
@@ -88,14 +90,8 @@ public class PropertyUtil {
 					e.printStackTrace();
 				}
 			}
-			if (out != null) {
-				try {
-					out.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		}
+		return str;
 	}
 
 	private Properties propertie;

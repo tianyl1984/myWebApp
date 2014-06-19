@@ -60,6 +60,103 @@ public class DcUtil {
 		return result;
 	}
 
+	private static String getLoginPageCookie(String url) throws Exception {
+		String baseUrl = checkUrl(url);
+		String loginUrl = baseUrl + "/bd/welcome!welcome.action";
+		HttpURLConnection conn = (HttpURLConnection) (new URL(loginUrl).openConnection());
+		conn.setDoOutput(true);
+		conn.setDoInput(true);
+		// POST必须大写
+		conn.setRequestMethod("POST");
+		conn.setUseCaches(false);
+		// 仅对当前请求自动重定向
+		conn.setInstanceFollowRedirects(false);
+		// header 设置编码
+		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+		conn.setRequestProperty("User-agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0");
+		// 连接
+		conn.connect();
+
+		Map<String, List<String>> headerMap = conn.getHeaderFields();
+		String cookies = "";
+		for (String key : headerMap.keySet()) {
+			if (key != null && key.toLowerCase().equals("set-cookie")) {
+				cookies = conn.getHeaderField(key);
+			}
+		}
+		for (String str : cookies.split(";")) {
+			if (str.contains("=")) {
+				String key = str.split("=")[0];
+				if (key.trim().toLowerCase().equals("path")) {// cookie中的path不能提交
+					continue;
+				}
+				if (key.equals("JSESSIONID")) {
+					return "JSESSIONID=" + str.split("=")[1].trim();
+				}
+			}
+		}
+
+		if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+			throw new IOException("response code:" + conn.getResponseCode());
+		}
+		conn.disconnect();
+		return "";
+	}
+
+	public static String getLoginCookie(String url, String userName, String password) throws Exception {
+		String loginPageCookie = getLoginPageCookie(url);
+
+		String baseUrl = checkUrl(url);
+		String loginUrl = baseUrl + "j_spring_security_check";
+		HttpURLConnection conn = (HttpURLConnection) (new URL(loginUrl).openConnection());
+		conn.setDoOutput(true);
+		conn.setDoInput(true);
+		// POST必须大写
+		conn.setRequestMethod("POST");
+		conn.setUseCaches(false);
+		// 仅对当前请求自动重定向
+		conn.setInstanceFollowRedirects(false);
+		// header 设置编码
+		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+		conn.setRequestProperty("Cookie", loginPageCookie);
+		// conn.setRequestProperty("User-agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0");
+
+		// 连接
+		conn.connect();
+
+		String content = "j_username=" + URLEncoder.encode(userName.toString().trim(), "utf-8");
+		content += "&j_password=" + URLEncoder.encode(password.toString().trim(), "utf-8");
+		DataOutputStream out = new DataOutputStream(conn.getOutputStream());
+		out.writeBytes(content);
+		out.flush();
+		out.close();
+
+		Map<String, List<String>> headerMap = conn.getHeaderFields();
+		String cookies = "";
+		for (String key : headerMap.keySet()) {
+			if (key != null && key.toLowerCase().equals("set-cookie")) {
+				cookies = conn.getHeaderField(key);
+			}
+		}
+		for (String str : cookies.split(";")) {
+			if (str.contains("=")) {
+				String key = str.split("=")[0];
+				if (key.trim().toLowerCase().equals("path")) {// cookie中的path不能提交
+					continue;
+				}
+				if (key.equals("JSESSIONID")) {
+					return "JSESSIONID=" + str.split("=")[1].trim();
+				}
+			}
+		}
+
+		if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+			throw new IOException("response code:" + conn.getResponseCode());
+		}
+		conn.disconnect();
+		return "";
+	}
+
 	private static String ssoGetLoginLocation(String ssoLoginUrl, String castgc) throws Exception {
 		HttpURLConnection conn = (HttpURLConnection) (new URL(ssoLoginUrl).openConnection());
 		conn.setDoOutput(true);
@@ -296,8 +393,8 @@ public class DcUtil {
 		conn.setInstanceFollowRedirects(false);
 		// header 设置编码
 		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-		// conn.setRequestProperty("Cookie", getCookies());
-		conn.setRequestProperty("Cookie", "JSESSIONID=65903E8A9C89F88275F0BA6594E87B47");
+		conn.setRequestProperty("Cookie", getCookies());
+		// conn.setRequestProperty("Cookie", "JSESSIONID=65903E8A9C89F88275F0BA6594E87B47");
 		// 连接
 		conn.connect();
 
@@ -588,9 +685,12 @@ public class DcUtil {
 		bis.close();
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		// testUploadFile();
-		simpleTest();
+		// simpleTest();
+		// login("http://192.168.30.82:8092/dc-questionnaire/", "20121015720j", "000000", "dataSource1");
+		String result = getLoginCookie("http://192.168.30.82:8092/dc-questionnaire/", "20121015720j", "000000");
+		System.out.println(result);
 	}
 
 	private static void simpleTest() throws IOException {

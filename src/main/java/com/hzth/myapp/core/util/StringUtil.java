@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 public class StringUtil {
+
 	public static final String getRandomStr() {
 		return getRandomStr(5);
 	}
@@ -33,8 +34,6 @@ public class StringUtil {
 	}
 
 	public static String getRandomChineseStr(int count) {
-		char start = 19968;
-		char end = (char) 171941;
 		String result = "";
 		for (int i = 0; i < count; i++) {
 			Double d = Math.random() * (0x4e00 + 500 - 0x4e00) + 0x4e00;
@@ -57,5 +56,9 @@ public class StringUtil {
 
 	public static String[] strToStrArray(String str) {
 		return str.split(",");
+	}
+
+	public static void noop(String str) {
+
 	}
 }

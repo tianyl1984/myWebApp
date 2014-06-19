@@ -27,6 +27,17 @@ public class ParameterValue {
 		this.values = values;
 	}
 
+	public String getValueStr() {
+		String val = "";
+		for (String str : values) {
+			val += str + ",";
+		}
+		if (val.length() > 0) {
+			val = val.substring(0, val.length() - 1);
+		}
+		return val;
+	}
+
 	public String getFirstValue() {
 		return values.size() > 0 ? values.get(0) : "";
 	}

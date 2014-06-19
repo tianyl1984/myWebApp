@@ -94,6 +94,8 @@ public class CheckPdm {
 		abbreviationList.add("qa");
 		abbreviationList.add("pf");
 		abbreviationList.add("em");
+		abbreviationList.add("lr");
+		abbreviationList.add("pa");
 
 		// abbreviationList.add("om");
 		// abbreviationList.add("da");
@@ -143,14 +145,14 @@ public class CheckPdm {
 		mysqlInclued.add("fw");
 		mysqlInclued.add("bd");
 		mysqlInclued.add("ma");
-		mysqlInclued.add("em");
+		mysqlInclued.add("pa");
 
 		// mysqlInclued.clear();
 	}
 
 	public static void main(String[] args) {
 		String dbType = "sqlserver";
-		// dbType = "mysql";
+		dbType = "mysql";
 		// dbType = "oracle";
 		File file = new File("C:/Users/tianyl/Desktop/sql/dc-" + dbType + ".sql");
 		List<String> errorMsgs = checkGrammar(file);
