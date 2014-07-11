@@ -61,6 +61,7 @@
 	  	<li><a href="${path}/ws/ws_demo.jsp">WebSocket测试</a></li>
 	  	<li><a href="${path}/highcharts/demo.jsp">Highcharts测试</a></li>
 	  	<li><a href="${path}/angularJS/demo.jsp">AngularJS Demo</a></li>
+	  	<li><a href="${path}/flash/demo.jsp">flash Demo</a></li>
 	</ul>
   
   <div>

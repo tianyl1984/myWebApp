@@ -43,15 +43,15 @@ public class CreateDBSchema {
 		Connection conn2 = null;
 		try {
 			// 标准库
-			conn = SqlHelper.getSqlServerConnection("127.0.0.1", "aa", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("127.0.0.1", "c", "sa", "hzth-801");
 			// 需对比的库
-			conn2 = SqlHelper.getSqlServerConnection("127.0.0.1", "dc_empty", "sa", "hzth-801");
+			conn2 = SqlHelper.getSqlServerConnection("127.0.0.1", "a", "sa", "hzth-801");
 			Map<String, TableInfo> tableMap = SqlHelper.getTableInfo(conn);
 			Map<String, TableInfo> tableMap2 = SqlHelper.getTableInfo(conn2);
 			showTableDiff(tableMap, tableMap2);
 			showColumnDiff(tableMap, tableMap2);
-			showData(conn, conn2);
-			// showPKDiff(tableMap, tableMap2);
+			// showData(conn, conn2);
+			showPKDiff(tableMap, tableMap2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -184,7 +184,7 @@ public class CreateDBSchema {
 	private static void addSqlToFile(List<String> sqls) {
 		PrintWriter pw = null;
 		try {
-			pw = new PrintWriter(new FileWriter(new File("E:/workspace3.7/myWebApp/src/main/java/com/hzth/myapp/sql/all2.sql"), true));
+			pw = new PrintWriter(new FileWriter(new File("C:/Users/tianyl/Desktop/all2.sql"), true));
 			for (String sql : sqls) {
 				pw.println(sql);
 				pw.println("GO");
@@ -216,7 +216,7 @@ public class CreateDBSchema {
 	}
 
 	private static void printSql(List<String> notExistTab) {
-		File file = new File("E:/workspace3.7/myWebApp/src/main/java/com/hzth/myapp/sql/all.sql");
+		File file = new File("C:/Users/tianyl/Desktop/all.sql");
 		BufferedReader br = null;
 
 		List<String> createSql = new ArrayList<String>();
@@ -225,7 +225,12 @@ public class CreateDBSchema {
 			br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 			String temp = null;
 			String sql = "";
+			int num = 0;
 			while ((temp = br.readLine()) != null) {
+				num++;
+				if (num == 79) {
+					System.out.println();
+				}
 				temp = temp.trim();
 				if (StringUtils.isBlank(temp)) {
 					continue;
@@ -241,13 +246,13 @@ public class CreateDBSchema {
 					sql = sql.trim();
 					if (sql.toLowerCase().startsWith("alter table") || sql.toLowerCase().startsWith("create table")) {
 						String tableName = sql.trim().split(" ")[2].toLowerCase();
-						if (notExistTab.contains(tableName)) {
-							if (sql.toLowerCase().startsWith("alter table")) {
-								alterSql.add(sql);
-							} else {
-								createSql.add(sql);
-							}
+						// if (notExistTab.contains(tableName)) {
+						if (sql.toLowerCase().startsWith("alter table")) {
+							alterSql.add(sql);
+						} else {
+							createSql.add(sql);
 						}
+						// }
 					} else {
 						if (!sql.equals(";")) {
 							System.out.println("错误:" + sql);
@@ -258,7 +263,7 @@ public class CreateDBSchema {
 					sql += " " + temp;
 				}
 			}
-			addSqlToFile(createSql);
+			// addSqlToFile(createSql);
 			addSqlToFile(alterSql);
 		} catch (Exception e) {
 			e.printStackTrace();

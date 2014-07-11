@@ -15,16 +15,18 @@ import com.hzth.myapp.core.util.UUID;
 public class CreateInitDataSql {
 
 	public static void main(String[] args) throws Exception {
-		String moduleId = "20131023091823171427047778164178";
+		String moduleId = "20140529154228609942351339341682";
 		Connection conn = null;
 		Connection conn2 = null;
 		// System.setOut(new PrintStream(new File("e:/a.txt")));
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_fe_test", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_bd_zd", "sa", "hzth-801");
 			// 标准库连接
-			conn2 = SqlHelper.getSqlServerConnection("192.168.30.123", "dc_develop", "sa", "hzth-801");
+			conn2 = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_bd_zd", "sa", "hzth-801");
+
+			// conn = SqlHelper.getMysqlConnection("192.168.1.8", "minicourse", "hzth", "hzth-801");
 			// createModule(moduleId, conn);
 			// createOperation(moduleId, conn);
 			// createConfiguration(conn, conn2);
@@ -35,42 +37,46 @@ public class CreateInitDataSql {
 			// System.setOut(new PrintStream("e:/sql.txt"));
 
 			// List<String> tables = new ArrayList<String>();
-			// tables.add("province");
-			// tables.add("city");
-			// tables.add("district");
+			// tables.add("privilegeoperation");
+			// tables.add("bd_user");
+			// tables.add("bd_student");
 			// createTable(tables, conn, conn2);
 
-			List<String> ids = new ArrayList<String>();
-			ids.add("20140614144417000602691588430339");
-			ids.add("20140612090216299653869934434656");
-			for (String id : ids) {
-				createOperationById(id, conn);
+			// List<String> ids = new ArrayList<String>();
+			// ids.add("20140610165917734216100815860307");
+			// ids.add("20140610170412763651448118705719");
+			// ids.add("20140610170529946599954243874740");
+			// for (String id : ids) {
+			// createOperationById(id, conn);
+			// }
+
+			List<String> ids2 = new ArrayList<String>();
+			ids2.add("20140709145856678739868013273950");
+			ids2.add("20140709150106207572767767975825");
+			ids2.add("20140709150526066804069545265913");
+			ids2.add("20140709150831596745621490120791");
+			for (String id : ids2) {
+				createDictById(id, conn);
 			}
 
-			// List<String> ids2 = new ArrayList<String>();
-			// ids2.add("20140526141418273472200975310215");
-			// for (String id : ids2) {
-			// createDictById(id, conn);
-			// }
-
-			// List<String> ids21 = new ArrayList<String>();
-			// ids21.add("20140415102549055794165695170050");
-			// for (String id : ids21) {
-			// createDictValueById(id, conn);
-			// }
+			List<String> ids21 = new ArrayList<String>();
+			ids21.add("20140709145437403129370569614876");
+			ids21.add("20140709145444835438778907624818");
+			for (String id : ids21) {
+				createDictValueById(id, conn);
+			}
 
 			// List<String> ids3 = new ArrayList<String>();
-			// ids3.add("20140526142221385220397709139451");
+			// ids3.add("20140611170129968349492475917699");
 			// for (String id : ids3) {
 			// createAttachmentconfig(id, conn);
 			// }
 
-			// List<String> ids4 = new ArrayList<String>();
-			// ids4.add("20140423104006253220207883480305");
-			// ids4.add("20140423163915415291853576272885");
-			// for (String id : ids4) {
-			// createConfiguration(id, conn);
-			// }
+			List<String> ids4 = new ArrayList<String>();
+			ids4.add("20140709163356413826318332177894");
+			for (String id : ids4) {
+				createConfiguration(id, conn);
+			}
 
 			// List<String> ids5 = new ArrayList<String>();
 			// ids5.add("20130606144207905516375601145758");
@@ -79,7 +85,7 @@ public class CreateInitDataSql {
 			// }
 
 			// String sql = "select * from qn_optionresults where id_questionresults in (select qq.id from qn_questionresults qq where id_question='20140520135758215421565988632372')";
-			// createInsertSql(conn, sql, "qn_optionresults");
+			// createInsertSql(conn, sql, "bd_dictionaryvalue");
 			System.out.println("-----end-----");
 		} catch (Exception e) {
 			e.printStackTrace();
