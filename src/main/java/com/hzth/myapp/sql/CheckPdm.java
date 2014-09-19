@@ -145,7 +145,7 @@ public class CheckPdm {
 		mysqlInclued.add("fw");
 		mysqlInclued.add("bd");
 		mysqlInclued.add("ma");
-		mysqlInclued.add("pa");
+		mysqlInclued.add("mt");
 
 		// mysqlInclued.clear();
 	}

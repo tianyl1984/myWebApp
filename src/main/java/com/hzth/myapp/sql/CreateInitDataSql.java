@@ -22,7 +22,7 @@ public class CreateInitDataSql {
 		try {
 			System.out.println("-----start-----");
 			// 有数据的连接
-			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_bd_zd", "sa", "hzth-801");
+			conn = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_bd_zxf", "sa", "hzth-801");
 			// 标准库连接
 			conn2 = SqlHelper.getSqlServerConnection("192.168.1.8", "dc_bd_zd", "sa", "hzth-801");
 
@@ -43,37 +43,31 @@ public class CreateInitDataSql {
 			// createTable(tables, conn, conn2);
 
 			// List<String> ids = new ArrayList<String>();
-			// ids.add("20140610165917734216100815860307");
-			// ids.add("20140610170412763651448118705719");
-			// ids.add("20140610170529946599954243874740");
+			// ids.add("20140728112911476065399671422353");
 			// for (String id : ids) {
 			// createOperationById(id, conn);
 			// }
 
-			List<String> ids2 = new ArrayList<String>();
-			ids2.add("20140709145856678739868013273950");
-			ids2.add("20140709150106207572767767975825");
-			ids2.add("20140709150526066804069545265913");
-			ids2.add("20140709150831596745621490120791");
-			for (String id : ids2) {
-				createDictById(id, conn);
-			}
+			// List<String> ids2 = new ArrayList<String>();
+			// ids2.add("20140709145856678739868013273950");
+			// for (String id : ids2) {
+			// createDictById(id, conn);
+			// }
 
-			List<String> ids21 = new ArrayList<String>();
-			ids21.add("20140709145437403129370569614876");
-			ids21.add("20140709145444835438778907624818");
-			for (String id : ids21) {
-				createDictValueById(id, conn);
-			}
+			// List<String> ids21 = new ArrayList<String>();
+			// ids21.add("20140715154650091505392415170085");
+			// for (String id : ids21) {
+			// createDictValueById(id, conn);
+			// }
 
 			// List<String> ids3 = new ArrayList<String>();
-			// ids3.add("20140611170129968349492475917699");
+			// ids3.add("20140402162028066679241789032434");
 			// for (String id : ids3) {
 			// createAttachmentconfig(id, conn);
 			// }
 
 			List<String> ids4 = new ArrayList<String>();
-			ids4.add("20140709163356413826318332177894");
+			ids4.add("20140718161543673842220339504041");
 			for (String id : ids4) {
 				createConfiguration(id, conn);
 			}
