@@ -1,34 +1,24 @@
 package com.hzth.myapp;
 
-import java.io.File;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.hzth.myapp.core.util.FileUtil;
-import com.hzth.myapp.core.util.PropertyUtil;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class Test {
 
 	public static void main(String[] args) throws Exception {
-		String pkg = "com.hzth.myapp";
-		// System.out.println(pkg.replaceAll("\\.", "\\\\"));
-		System.out.println(Integer.toHexString((int) '#'));
-	}
-
-	private static void m1() {
-		List<String> strs = FileUtil.readLines(new File("E:\\workspace3.7\\minicourse\\webapp\\framework\\component\\dataGrid\\js\\com.ue.datagrid.js"));
-		for (String str : strs) {
-			if (str.contains("jQuery.i18n.prop(")) {
-				Pattern pattern = Pattern.compile("jQuery.i18n.prop\\(.*?\\)");
-				Matcher matcher = pattern.matcher(str);
-				while (matcher.find()) {
-					String img = matcher.group();
-					String img1 = img.replace("jQuery.i18n.prop(\"", "").replace("\")", "");
-					String replacement = "\"" + PropertyUtil.getProperty2("E:\\workspace3.7\\dc-framework\\src\\main\\resources\\i18n\\dataGrid_zh.properties", img1) + "\"";
-					str = str.replace(img, replacement);
+		SimpleDateFormat sdf1 = new SimpleDateFormat("y");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("Y");
+		for (int i = 2014; i < 2015; i++) {
+			Calendar c1 = Calendar.getInstance();
+			c1.set(Calendar.YEAR, i);
+			for (int j = 0; j < 12; j++) {
+				c1.set(Calendar.MONTH, j);
+				for (int k = 0; k < 31; k++) {
+					c1.set(Calendar.DAY_OF_MONTH, k);
+					if (!sdf1.format(c1.getTime()).equals(sdf2.format(c1.getTime()))) {
+						System.out.println(i);
+					}
 				}
-				System.out.println(str);
 			}
 		}
 	}
