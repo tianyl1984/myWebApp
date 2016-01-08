@@ -6,6 +6,8 @@ import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashSet;
+import java.util.Set;
 
 public class HttpProxy extends Thread {
 	static public int CONNECT_RETRIES = 5;
@@ -16,6 +18,8 @@ public class HttpProxy extends Thread {
 	private static OutputStream log = null;
 	// 传入数据用的Socket
 	protected Socket socket;
+
+	private static Set<String> urls = new HashSet<>();
 
 	// 上级代理服务器，可选
 	// static private String parent = null;
@@ -43,7 +47,13 @@ public class HttpProxy extends Thread {
 	}
 
 	private String processHostName(String url, String host, int port, Socket sock) {
+		// System.out.println(url);
+		if (!urls.contains(url)) {
+			if (url.contains("api/sa")) {
+			}
+		}
 		System.out.println(url);
+		urls.add(url);
 		return host;
 	}
 

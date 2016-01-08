@@ -26,7 +26,7 @@ import com.hzth.myapp.web.NetUtil;
 // 5.保存session，以后再访问走session
 
 // 退出
-// cas server退出时会给登录过的client发送用户退出的请求，client销毁session
+// cas server退出时会给登录过的client发送用户退出的请求（请求中包含ticket值，根据ticket值找到session），client销毁session
 public class CasDemo {
 
 	private static String CAS_COOKIE = "JSESSIONID=56ABAA873D3A9D92D5E9104EBCB90E6A;CASTGC=TGT-8-fJLZjwEwTn01rvAYQx6z3SCjRY3Vt9AubLKvs64MEgAcs6FVXR-cas01.example.org";
