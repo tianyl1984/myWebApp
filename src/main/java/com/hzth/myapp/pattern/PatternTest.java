@@ -11,11 +11,12 @@ public class PatternTest {
 	// $ 结束
 
 	public static void main(String[] args) {
-		Pattern pattern = Pattern.compile("\\d*");
-		String aaa = "a1b-2c3d456e78f999y34/d23";
+		Pattern pattern = Pattern.compile("\\d+");
+		String aaa = "1ab-2c3d456e78f999y34/d23";
 		Matcher matcher = pattern.matcher(aaa);
 		while (matcher.find()) {
 			System.out.println(matcher.group());
 		}
+		System.out.println("".matches("\\d+"));
 	}
 }
