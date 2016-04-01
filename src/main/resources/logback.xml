@@ -32,7 +32,16 @@
 <!-- 	    <level value="INFO"/> -->
 <!-- 	    <appender-ref ref="STDOUT"/> -->
 <!-- 	</logger> -->
-	
+
+	<logger name="druid.sql.Statement" additivity="false">
+	    <level value="DEBUG"/>
+	    <appender-ref ref="STDOUT"/>
+	</logger>
+	<logger name="druid.sql.ResultSet" additivity="false">
+	    <level value="ERROR"/>
+	    <appender-ref ref="STDOUT"/>
+	</logger>
+
 	<root>
 		<level value="ERROR" />
 		<appender-ref ref="STDOUT" />

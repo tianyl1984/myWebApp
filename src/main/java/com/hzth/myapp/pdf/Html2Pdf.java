@@ -5,9 +5,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.util.ArrayList;
 
-import org.xhtmlrenderer.pdf.ITextFontResolver;
-import org.xhtmlrenderer.pdf.ITextRenderer;
-
 import com.hzth.myapp.html.HtmlDemoUtil;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
@@ -32,18 +29,18 @@ public class Html2Pdf {
 	}
 
 	private static void m2() throws Exception {
-		ITextRenderer renderer = new ITextRenderer();
-		renderer.getSharedContext().setBaseURL("http://www.baidu.com/");
-		ITextFontResolver fontResolver = renderer.getFontResolver();
-		// fontResolver.addFont("STSong-Light.ttc", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
-		// renderer.setDocument(HtmlDemoUtil.getHtmlFile());
-		String content = HtmlDemoUtil.getHtmlStr();
-		// content = process(content);
-		renderer.setDocumentFromString(content);
-		fontResolver.addFont("C:/Windows/Fonts/simsun.ttc", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-		renderer.layout();
-		renderer.createPDF(new FileOutputStream("E:/测试文件/html2pdf.pdf"));
-		renderer.finishPDF();
+		// ITextRenderer renderer = new ITextRenderer();
+		// renderer.getSharedContext().setBaseURL("http://www.baidu.com/");
+		// ITextFontResolver fontResolver = renderer.getFontResolver();
+		// // fontResolver.addFont("STSong-Light.ttc", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+		// // renderer.setDocument(HtmlDemoUtil.getHtmlFile());
+		// String content = HtmlDemoUtil.getHtmlStr();
+		// // content = process(content);
+		// renderer.setDocumentFromString(content);
+		// fontResolver.addFont("C:/Windows/Fonts/simsun.ttc", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+		// renderer.layout();
+		// renderer.createPDF(new FileOutputStream("E:/测试文件/html2pdf.pdf"));
+		// renderer.finishPDF();
 	}
 
 	private static String process(String content) {

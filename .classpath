@@ -22,14 +22,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/antlr-runtime-3.4.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/apktool.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bcmail-jdk14-138.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bcprov-jdk14-138.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/btrace-boot.jar"/>
@@ -59,9 +52,15 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/trilead-ssh2-1.0.0-build217.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/websocket4j-1.3.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/wrapper.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/apktool.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0_45">
 		<attributes>
-			<attribute name="owner.project.facets" value="java"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
