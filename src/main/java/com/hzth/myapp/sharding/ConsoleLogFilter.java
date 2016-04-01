@@ -129,6 +129,13 @@ public class ConsoleLogFilter extends LogFilter {
 		}
 	}
 
+	protected void statementPrepareAfter(PreparedStatementProxy statement) {
+		if (isStatementPrepareAfterLogEnabled() && isStatementLogEnabled()) {
+			statementLog("{ds:" + statement.getConnectionProxy().getDirectDataSource().getName() + ", conn:" + statement.getConnectionProxy().getId() + ", pstmt:" + statement.getId()
+					+ "} created. \n" + statement.getSql());
+		}
+	}
+
 	private void logExecutableSql(StatementProxy statement, String sql) {
 		if (!isStatementExecutableSqlLogEnable()) {
 			return;

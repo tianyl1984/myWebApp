@@ -23,6 +23,17 @@ import com.dangdang.ddframe.rdb.sharding.api.rule.TableRule;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.database.DatabaseShardingStrategy;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.table.TableShardingStrategy;
 
+/**
+ * 使用sharding-jdbc进行分库、分表demo
+ * 
+ * CREATE TABLE `t_order_0` ( `order_id` INT(11) NOT NULL, `user_id` INT(11) NOT NULL, `aaa` INT(11) NULL DEFAULT NULL, `bbb` INT(11) NULL DEFAULT NULL ) COLLATE='utf8_general_ci' ENGINE=InnoDB ;
+ * 
+ * CREATE TABLE `t_order_item_0` ( `item_id` INT(11) NOT NULL, `order_id` INT(11) NOT NULL, `user_id` INT(11) NOT NULL ) COLLATE='utf8_general_ci' ENGINE=InnoDB ;
+ * 
+ * 
+ * @author tianyl
+ * 
+ */
 public class ShardingDemo {
 
 	public static void main(String[] args) throws Exception {
@@ -41,13 +52,19 @@ public class ShardingDemo {
 		DataSource dataSource = new ShardingDataSource(shardingRule);
 		Connection conn = dataSource.getConnection();
 		// insert(conn);
+		// update(conn);
 		// delete(conn);
 		select(conn);
 		conn.close();
 	}
 
+	private static void update(Connection conn) throws Exception {
+		String sql = "update t_order set order_id = 2 where aaa = 1";
+		conn.prepareStatement(sql).execute();
+	}
+
 	private static void select(Connection conn) throws Exception {
-		String sql = "select * from t_order";
+		String sql = "select * from t_order where order_id = 2 limit 2,3";
 		ResultSet rs = conn.prepareStatement(sql).executeQuery();
 		printRs(rs);
 	}
@@ -103,9 +120,10 @@ public class ShardingDemo {
 		ConsoleLogFilter filter = new ConsoleLogFilter();
 		filter.setStatementLogEnabled(true);
 		filter.setStatementExecuteQueryAfterLogEnabled(true);
+		filter.setStatementExecuteUpdateAfterLogEnabled(true);
+		filter.setStatementPrepareAfterLogEnabled(true);
 
 		// filter.setStatementParameterSetLogEnabled(false);
-		// filter.setStatementPrepareAfterLogEnabled(false);
 		// filter.setStatementCloseAfterLogEnabled(false);
 		// filters.add(new CommonsLogFilter());
 		filters.add(filter);
