@@ -28,4 +28,19 @@ public class ThreadUtil {
 		stopTo("09:32");
 		System.out.println(DateUtil.getCurrentDate());
 	}
+
+	public static void hold() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (true) {
+					try {
+						Thread.sleep(1000000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}).start();
+	}
 }
