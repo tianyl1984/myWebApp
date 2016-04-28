@@ -8,6 +8,8 @@ import java.util.concurrent.TimeUnit;
 
 import redis.clients.jedis.Jedis;
 
+import com.hzth.myapp.core.util.ThreadUtil;
+
 /**
  * redis的demo
  * 
@@ -23,8 +25,35 @@ public class RedisDemo {
 		// stringDemo(jedis);
 		// listDemo(jedis);
 		// setDemo(jedis);
-		hashDemo(jedis);
+		// hashDemo(jedis);
+		blockDemo(jedis);
 		jedis.close();
+	}
+
+	private static void blockDemo(final Jedis jedis) {
+		final String key = "mqDemo";
+		jedis.del(key);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Jedis jedis = RedisUtil.getJedis();
+				ThreadUtil.sleep(2000);
+				System.out.println("添加数据");
+				jedis.lpush(key, "msg10000");
+				jedis.close();
+				System.out.println("完成添加数据");
+			}
+		}).start();
+		List<String> msgs = jedis.brpop(10, key);
+		if (msgs != null) {
+			System.out.println("读取到数据");
+			// msgs中0为key1为value
+			for (String str : msgs) {
+				System.out.println(str);
+			}
+		} else {
+			System.out.println("msgs is empry!");
+		}
 	}
 
 	private static void hashDemo(Jedis jedis) {
@@ -73,7 +102,7 @@ public class RedisDemo {
 	private static void listDemo(Jedis jedis) {
 		String key = "listDemo";
 		jedis.del(key);
-		jedis.lpush(key, "a", "b", "c");
+		jedis.lpush(key, "aaaa", "b", "c");
 		printList(jedis, key);
 		jedis.lpush(key, "d");
 		printList(jedis, key);
