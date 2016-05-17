@@ -9,12 +9,35 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import com.hzth.myapp.core.util.TimeJobUtil;
+
 public class ExecutorServiceDemo {
 
 	public static void main(String[] args) throws Exception {
 		// oneTask();
 		// groupTaks();
-		threadTask();
+		// threadTask();
+		shutDownNow();
+	}
+
+	private static void shutDownNow() {
+		ExecutorService threadPool = Executors.newCachedThreadPool();
+		threadPool.execute(new Runnable() {
+			@Override
+			public void run() {
+				TimeJobUtil.startPrintTimeSlow();
+			}
+		});
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		// 不保证一运行的线程能终止
+		threadPool.shutdownNow();
+		System.out.println("over");
+		System.out.println("over");
+		System.out.println("over");
 	}
 
 	private static void groupTaks() throws Exception {

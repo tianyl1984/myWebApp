@@ -1,10 +1,41 @@
 package com.hzth.myapp.thread;
 
+import java.util.Date;
+
 public class ThreadTest {
 
 	public static void main(String[] args) {
 		// m1();
-		m2();
+		// m2();
+		// interruptedDemo();
+		threadStartTest();
+	}
+
+	private static void threadStartTest() {
+		Thread t = new ThreadDemo();
+		System.out.println("threadStartTest:" + Thread.currentThread().getName());
+		// t.run();
+		t.start();
+	}
+
+	private static void interruptedDemo() {
+		Thread t1 = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				for (;;) {
+					System.out.println("time:" + new Date().getTime());
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+						break;
+					}
+				}
+			}
+		});
+		t1.start();
+		t1.interrupt();//
+		System.out.println("OK!");
 	}
 
 	private static void m2() {
@@ -42,4 +73,21 @@ public class ThreadTest {
 		System.out.println(new String[] {}[1]);
 		System.out.println("456");
 	}
+}
+
+class ThreadDemo extends Thread {
+
+	public ThreadDemo() {
+		m1();
+	}
+
+	private void m1() {
+		System.out.println("m1:" + Thread.currentThread().getName());
+	}
+
+	@Override
+	public void run() {
+		System.out.println("run:" + Thread.currentThread().getName());
+	}
+
 }
