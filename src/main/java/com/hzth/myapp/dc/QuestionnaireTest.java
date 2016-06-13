@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -12,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 
 import com.hzth.myapp.sql.SqlHelper;
 import com.hzth.myapp.web.NetUtil;
-import com.sun.tools.jdi.LinkedHashMap;
 
 public class QuestionnaireTest {
 
