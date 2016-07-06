@@ -481,7 +481,11 @@
 			<version>3.4.8</version>
 		</dependency>
 		
-		
+		<dependency>
+			<groupId>com.github.jsqlparser</groupId>
+			<artifactId>jsqlparser</artifactId>
+			<version>0.9.5</version>
+		</dependency>
 		<!-- javaee -->
 		<!-- <dependency> -->
 		<!-- <groupId>org.apache.openejb</groupId> -->

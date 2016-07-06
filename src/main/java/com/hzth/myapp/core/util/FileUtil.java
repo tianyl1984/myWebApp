@@ -12,6 +12,8 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.filechooser.FileSystemView;
+
 public class FileUtil {
 
 	public static void append(String fileName, String msg) {
@@ -144,6 +146,11 @@ public class FileUtil {
 				}
 			}
 		}
+	}
+
+	public static String getDesktop() {
+		FileSystemView fsv = FileSystemView.getFileSystemView();
+		return fsv.getHomeDirectory().getAbsolutePath();
 	}
 
 	public static void main(String[] args) {
