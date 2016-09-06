@@ -9,7 +9,10 @@
 	</head>
 	<body>
 		Hello World!${currentUser.name }你好！<a href="${path}/um/user!logout.action">退出</a><br>
-	<input id="aaaaa" type="text" value="sadf45sfd">
+		<%
+			request.setAttribute("ppp", org.apache.commons.lang.StringEscapeUtils.escapeXml("<aa>yyy</aa>"));
+		%>
+	<input id="aaaaa" type="text" value="${ppp }">${ppp }<textarea rows="" cols="">${ppp }</textarea>
 	<select name="userType" onchange="submitUserTypeChange(this)">
 		<option value="">请选择</option>
 		<option value="user1" <c:if test="${userType eq 'user1'}">selected="selected"</c:if>>用户1</option>

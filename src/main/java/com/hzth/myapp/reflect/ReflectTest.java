@@ -9,7 +9,12 @@ public class ReflectTest {
 
 	public static void main(String[] args) throws Exception {
 		// m1();
-		m2();
+		// m2();
+		m3();
+	}
+
+	private static void m3() throws Exception {
+		Class.forName("org.springframework.stereotype.Controller");
 	}
 
 	private static void m2() throws Exception {

@@ -153,7 +153,12 @@ public class FileUtil {
 		return fsv.getHomeDirectory().getAbsolutePath();
 	}
 
-	public static void main(String[] args) {
-		createFile(1024);
+	public static void main(String[] args) throws Exception {
+		String sql = "insert into foo(name,age) values('abcdefhihk',12);";
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < 500000; i++) {
+			sb.append(sql);
+		}
+		FileUtil.saveToFile(sb.toString().getBytes("utf-8"), new File(FileUtil.getDesktop() + "/a.sql"));
 	}
 }

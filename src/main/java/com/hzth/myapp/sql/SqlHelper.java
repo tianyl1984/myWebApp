@@ -399,7 +399,7 @@ public class SqlHelper {
 
 	public static Connection getMysqlConnection(String ip, int port, String database, String userName, String password) throws Exception {
 		String driver = "com.mysql.jdbc.Driver";
-		String url = "jdbc:mysql://" + ip + ":" + port + "/" + database + "?useUnicode=true&characterEncoding=utf-8";
+		String url = "jdbc:mysql://" + ip + ":" + port + "/" + database + "?useUnicode=true&characterEncoding=utf-8&treatUtilDateAsTimestamp";
 		return getConnection(driver, url, userName, password);
 	}
 }
